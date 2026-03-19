@@ -1,8 +1,71 @@
+import { useEffect, useState } from 'react'
 import Layout from '../components/layout/Layout'
+import { useAuth } from '../context/AuthContext'
+import { supabase } from '../lib/supabase'
+
+const CONDICIONES = [
+  { num: 1, icon: '🌑', name: 'Semilla',     color: '#6B7280', xpMax: 100  },
+  { num: 2, icon: '⚠️', name: 'Alerta Roja', color: '#C0392B', xpMax: 250  },
+  { num: 3, icon: '🆘', name: 'Emergencia',  color: '#E67E22', xpMax: 500  },
+  { num: 4, icon: '📊', name: 'Tracción',    color: '#F39C12', xpMax: 1000 },
+  { num: 5, icon: '📈', name: 'Escala',      color: '#3498DB', xpMax: 2000 },
+  { num: 6, icon: '👑', name: 'Dominio',     color: '#27AE60', xpMax: 5000 },
+]
+
+const XP_RANGES = [
+  [0,100],[100,250],[250,500],[500,1000],[1000,2000],[2000,5000]
+]
 
 export default function Home({ onNavigate, currentPage }) {
+  const { user, racha, xp, condicion } = useAuth()
+  const [finanzas, setFinanzas] = useState({ ingresos: 0, gastos: 0, countIng: 0, countGas: 0 })
+  const [loading, setLoading] = useState(true)
+
+  const condIdx    = Math.min((condicion || 1) - 1, 5)
+  const condActual = CONDICIONES[condIdx]
+  const [xpMin, xpMax] = XP_RANGES[condIdx]
+  const xpActual = xp || 0
+  const pct = xpMax > xpMin
+    ? Math.min(Math.round(((xpActual - xpMin) / (xpMax - xpMin)) * 100), 100)
+    : 0
+
+  // ─── Cargar resumen financiero del mes actual ──────────────────
+  useEffect(() => {
+    if (user) cargarFinanzas()
+  }, [user])
+
+  const cargarFinanzas = async () => {
+    setLoading(true)
+    const ahora = new Date()
+    const primerDia = new Date(ahora.getFullYear(), ahora.getMonth(), 1)
+      .toISOString().split('T')[0]
+    const ultimoDia = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0)
+      .toISOString().split('T')[0]
+
+    const { data, error } = await supabase
+      .from('transactions')
+      .select('tipo, importe')
+      .eq('user_id', user.id)
+      .gte('fecha', primerDia)
+      .lte('fecha', ultimoDia)
+
+    if (!error && data) {
+      const ingresos = data.filter(t => t.tipo === 'ingreso')
+      const gastos   = data.filter(t => t.tipo === 'gasto')
+      setFinanzas({
+        ingresos:  ingresos.reduce((s, t) => s + parseFloat(t.importe || 0), 0),
+        gastos:    gastos.reduce((s, t) => s + parseFloat(t.importe || 0), 0),
+        countIng:  ingresos.length,
+        countGas:  gastos.length,
+      })
+    }
+    setLoading(false)
+  }
+
+  const balance = finanzas.ingresos - finanzas.gastos
+
   return (
-    <Layout currentPage={currentPage || 'home'} onNavigate={onNavigate}>
+    <Layout currentPage={currentPage} onNavigate={onNavigate}>
 
       {/* Hero Andrea */}
       <div style={{
@@ -10,104 +73,136 @@ export default function Home({ onNavigate, currentPage }) {
         borderRadius: 'var(--radius)', padding: 28,
         display: 'flex', alignItems: 'center', gap: 22,
         position: 'relative', overflow: 'hidden',
-        boxShadow: 'var(--shadow)', marginBottom: 24
+        boxShadow: 'var(--shadow)', marginBottom: 28
       }}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at top right, rgba(240,180,41,0.07) 0%, transparent 60%)', pointerEvents: 'none' }} />
         <div style={{
           width: 72, height: 72, borderRadius: '50%',
           background: 'var(--andrea-dim)', border: '3px solid var(--andrea)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '2rem', flexShrink: 0, boxShadow: '0 0 30px rgba(240,180,41,0.2)'
+          fontSize: '2rem', flexShrink: 0,
+          boxShadow: '0 0 30px rgba(240,180,41,0.2)'
         }}>🧠</div>
         <div>
           <h2 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.4rem', letterSpacing: '-0.02em' }}>
             Hola, soy <span style={{ color: 'var(--andrea)' }}>Andrea</span>. ¿Qué hacemos hoy?
           </h2>
           <p style={{ fontSize: '0.9rem', color: 'var(--text-soft)', marginTop: 6 }}>
-            Tu foco de hoy es <strong style={{ color: 'var(--andrea)' }}>ordenar ventas y reducir ruido.</strong> Tienes energía — úsala bien.
+            Estás en condición <strong style={{ color: condActual.color }}>{condActual.icon} {condActual.name}</strong> — sigue aplicando la fórmula para avanzar.
           </p>
         </div>
       </div>
 
-      {/* Stat cards */}
+      {/* Stat cards — datos reales */}
       <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>
         Tu estado actual
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 28 }}>
-        {[
-          { label: 'NIVEL EMPRENDEDOR', value: 'Supervivencia', sub: 'Nivel 3 de 6', fill: 50, fillClass: 'fill-indigo' },
-          { label: 'RACHA ACTIVA',      value: '🔥 12 días',    sub: '¡Tu mejor racha hasta hoy!', fill: 80, fillClass: 'fill-gold' },
-          { label: 'EXPERIENCIA (XP)',  value: '320 XP',        sub: 'Próximo nivel a 500 XP', fill: 64, fillClass: 'fill-gold' },
-          { label: 'FOCO DEL DÍA',      value: 'Ventas + Orden', sub: 'Según el pulso de hoy', fill: null, fillClass: null, color: 'var(--jedi)' },
-        ].map(({ label, value, sub, fill, fillClass, color }) => (
-          <div key={label} style={{
-            background: 'var(--surface)', border: '1px solid var(--border)',
-            borderRadius: 'var(--radius)', padding: 20
-          }}>
-            <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 8 }}>{label}</div>
-            <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.3rem', color: color || 'var(--text)', marginBottom: 6 }}>{value}</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: fill ? 10 : 0 }}>{sub}</div>
-            {fill && (
-              <div style={{ background: 'var(--surface3)', borderRadius: 99, height: 5, overflow: 'hidden' }}>
-                <div className={fillClass} style={{ width: `${fill}%`, height: '100%', borderRadius: 99 }} />
-              </div>
-            )}
+
+        {/* Condición */}
+        <div style={{ background: 'var(--surface)', border: `1px solid ${condActual.color}44`, borderRadius: 'var(--radius)', padding: 20 }}>
+          <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 8 }}>
+            Condición emprendedor
           </div>
-        ))}
+          <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.2rem', color: condActual.color, marginBottom: 4 }}>
+            {condActual.icon} {condActual.name}
+          </div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 10 }}>
+            Condición {condActual.num} de 6
+          </div>
+          <div style={{ background: 'var(--surface3)', borderRadius: 99, height: 5, overflow: 'hidden' }}>
+            <div style={{ width: `${pct}%`, height: '100%', borderRadius: 99, background: `linear-gradient(90deg, ${condActual.color}, ${condActual.color}99)`, transition: 'width 1s ease' }} />
+          </div>
+        </div>
+
+        {/* Racha */}
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 20 }}>
+          <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 8 }}>
+            Racha activa
+          </div>
+          <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.3rem', color: 'var(--gold)', marginBottom: 4 }}>
+            🔥 {racha} días
+          </div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            {racha > 1 ? '¡Sigue así, vas bien!' : 'Primer día — ¡a por ello!'}
+          </div>
+        </div>
+
+        {/* XP */}
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 20 }}>
+          <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 8 }}>
+            Experiencia (XP)
+          </div>
+          <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.3rem', marginBottom: 4 }}>
+            {xpActual} XP
+          </div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 10 }}>
+            Próximo nivel a {xpMax} XP
+          </div>
+          <div style={{ background: 'var(--surface3)', borderRadius: 99, height: 5, overflow: 'hidden' }}>
+            <div style={{ width: `${pct}%`, height: '100%', borderRadius: 99, background: 'linear-gradient(90deg, var(--gold), #f5c04a)', transition: 'width 1s ease' }} />
+          </div>
+        </div>
+
+        {/* Foco */}
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 20 }}>
+          <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 8 }}>
+            Foco del día
+          </div>
+          <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1rem', color: 'var(--jedi)', marginBottom: 4 }}>
+            {condActual.num <= 2 ? 'Visibilidad' :
+             condActual.num === 3 ? 'Promoción' :
+             condActual.num === 4 ? 'Optimizar' :
+             condActual.num === 5 ? 'Escalar' : 'Sistematizar'}
+          </div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            Según tu condición actual
+          </div>
+        </div>
       </div>
 
-      {/* Accesos rápidos — 8 items */}
+      {/* Accesos rápidos */}
       <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>
         Accesos rápidos
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 28 }}>
         {[
-          { icon: '📡', label: 'Pulso del negocio',    page: 'pulso' },
-          { icon: '💡', label: 'Capturar pensamiento', page: 'pensamiento' },
-          { icon: '📈', label: 'Registrar ingreso',    page: 'ingreso' },
-          { icon: '📉', label: 'Registrar gasto',      page: 'gasto' },
-          { icon: '🗂️', label: 'Proyectos',           page: 'proyectos' },
-          { icon: '📋', label: 'Plan del negocio',     page: 'plan' },
-          { icon: '🧠', label: 'Mentores',             page: 'mentores' },
-          { icon: '📊', label: 'Mi progreso',          page: 'progreso' },
-        ].map(({ icon, label, page }) => (
-          <button
-            key={page}
-            onClick={() => onNavigate(page)}
-            style={{
-              background: 'var(--surface)', border: '1px solid var(--border)',
-              borderRadius: 'var(--radius)', padding: '20px 14px',
-              cursor: 'pointer', textAlign: 'center',
-              transition: 'all var(--transition)',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border2)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'none' }}
-          >
+          { icon: '📡', label: 'Pulso del negocio',    page: 'pulso',       color: 'var(--gold)' },
+          { icon: '💡', label: 'Capturar pensamiento', page: 'pensamiento', color: 'var(--indigo)' },
+          { icon: '📈', label: 'Registrar ingreso',    page: 'ingreso',     color: 'var(--jedi)' },
+          { icon: '📉', label: 'Registrar gasto',      page: 'gasto',       color: 'var(--leo)' },
+          { icon: '🗂️', label: 'Proyectos',           page: 'proyectos',   color: 'var(--gold)' },
+          { icon: '📋', label: 'Plan del negocio',     page: 'plan',        color: 'var(--andrea)' },
+          { icon: '🧠', label: 'Mentores',             page: 'mentores',    color: 'var(--jedi)' },
+          { icon: '🏆', label: 'Mi progreso',          page: 'progreso',    color: 'var(--indigo)' },
+        ].map(({ icon, label, page, color }) => (
+          <button key={page} onClick={() => onNavigate(page)}
+            style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: '20px 14px', cursor: 'pointer', textAlign: 'center', transition: 'all var(--transition)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = color; e.currentTarget.style.transform = 'translateY(-2px)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'none' }}>
             <span style={{ fontSize: '1.6rem' }}>{icon}</span>
             <span style={{ fontSize: '0.82rem', fontWeight: 500, color: 'var(--text)' }}>{label}</span>
           </button>
         ))}
       </div>
 
-      {/* Resumen financiero */}
+      {/* Resumen financiero — datos reales */}
       <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>
         Resumen financiero del mes
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
         {[
-          { label: 'Ingresos este mes', value: '€0,00', sub: '0 registros', color: 'var(--jedi)',   border: 'var(--jedi)' },
-          { label: 'Gastos este mes',   value: '€0,00', sub: '0 registros', color: 'var(--leo)',    border: 'var(--leo)' },
-          { label: 'Balance neto',      value: '€0,00', sub: '¡Positivo! Buen trabajo.', color: 'var(--gold)', border: 'var(--gold)' },
+          { label: 'Ingresos este mes', value: `€${finanzas.ingresos.toFixed(2)}`, sub: `${finanzas.countIng} registros`, color: 'var(--jedi)',  border: 'var(--jedi)' },
+          { label: 'Gastos este mes',   value: `€${finanzas.gastos.toFixed(2)}`,   sub: `${finanzas.countGas} registros`, color: 'var(--leo)',   border: 'var(--leo)' },
+          { label: 'Balance neto',      value: `€${balance.toFixed(2)}`,           sub: balance >= 0 ? '¡Positivo! Buen trabajo.' : 'Revisa tus gastos.',
+            color: balance >= 0 ? 'var(--gold)' : 'var(--leo)', border: 'var(--gold)' },
         ].map(({ label, value, sub, color, border }) => (
-          <div key={label} style={{
-            background: 'var(--surface)', border: '1px solid var(--border)',
-            borderLeft: `3px solid ${border}`,
-            borderRadius: 'var(--radius)', padding: 22
-          }}>
+          <div key={label} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderLeft: `3px solid ${border}`, borderRadius: 'var(--radius)', padding: 22 }}>
             <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 8 }}>{label}</div>
-            <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.6rem', color, marginBottom: 4 }}>{value}</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{sub}</div>
+            <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.6rem', color, marginBottom: 4 }}>
+              {loading ? '...' : value}
+            </div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{loading ? 'Cargando...' : sub}</div>
           </div>
         ))}
       </div>
