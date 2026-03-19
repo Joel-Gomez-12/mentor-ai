@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* ============================================================
+   VARIABLES Y RESET
+   ============================================================ */
+:root {
+  --bg:          #080A12;
+  --surface:     #0F1120;
+  --surface2:    #161929;
+  --surface3:    #1D2035;
+  --border:      rgba(255,255,255,0.07);
+  --border2:     rgba(255,255,255,0.12);
+  --text:        #E8EAF6;
+  --text-muted:  #6B7280;
+  --text-soft:   #9CA3AF;
+
+  --gold:        #F0B429;
+  --gold-dim:    rgba(240,180,41,0.15);
+  --indigo:      #6366F1;
+  --indigo-dim:  rgba(99,102,241,0.15);
+
+  --andrea:      #F0B429;
+  --andrea-dim:  rgba(240,180,41,0.12);
+  --jedi:        #34D399;
+  --jedi-dim:    rgba(52,211,153,0.12);
+  --steve:       #C7D2FE;
+  --steve-dim:   rgba(199,210,254,0.10);
+  --leo:         #F87171;
+  --leo-dim:     rgba(248,113,113,0.12);
+
+  --radius:      14px;
+  --radius-sm:   8px;
+  --shadow:      0 4px 24px rgba(0,0,0,0.5);
+  --shadow-lg:   0 8px 48px rgba(0,0,0,0.7);
+  --transition:  0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --sidebar-w:   240px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* Animación fadeIn para pantallas */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Pulse para status dot */
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.status-dot {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--jedi);
+  margin-right: 4px;
+  animation: pulse 2s infinite;
+}
+
+/* Avatares de mentor */
+.av-andrea { background: var(--andrea-dim); border: 2px solid var(--andrea); color: var(--andrea); }
+.av-jedi   { background: var(--jedi-dim);   border: 2px solid var(--jedi);   color: var(--jedi); }
+.av-steve  { background: var(--steve-dim);  border: 2px solid var(--steve);  color: var(--steve); }
+.av-leo    { background: var(--leo-dim);    border: 2px solid var(--leo);    color: var(--leo); }
+
+/* XP bar */
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--indigo));
+  border-radius: 99px;
+  transition: width 1s ease;
+}
+
+/* Progress fills */
+.fill-gold   { background: linear-gradient(90deg, var(--gold), #f5c04a); }
+.fill-indigo { background: linear-gradient(90deg, var(--indigo), #818cf8); }
+.fill-green  { background: linear-gradient(90deg, var(--jedi), #6ee7b7); }
+.fill-red    { background: linear-gradient(90deg, var(--leo), #fca5a5); }
+
+/* Scrollbar personalizado para sidebar y paneles */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface3);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border2);
+}
