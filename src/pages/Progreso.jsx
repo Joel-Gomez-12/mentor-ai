@@ -4,109 +4,100 @@ import Layout from '../components/layout/Layout'
 const CONDICIONES = [
   {
     num: 1,
-    icon: '🌑',
-    name: 'Semilla',
-    desc: 'Sin presencia, sin datos, sin ventas. El proyecto solo existe en tu mente.',
+    icon: '💀',
+    name: 'Inexistencia',
+    desc: 'El proyecto no existe en el mercado. Sin presencia, sin clientes, sin datos.',
     color: '#6B7280',
     colorDim: 'rgba(107,114,128,0.15)',
     xpMin: 0, xpMax: 100,
     formula: [
-      'Crea tu canal: elige dónde vas a aparecer',
-      'Construye tu Marca Personal: bio, historia y pitch',
-      'Valida el problema: habla con 10 personas',
+      'Crea tu canal: elige dónde vas a aparecer (Instagram, LinkedIn, YouTube...)',
+      'Construye tu Marca Personal: prepara tu bio, tu historia y tu pitch de 30 segundos',
+      'Valida el problema: habla con 10 personas de tu público objetivo antes de producir nada',
       'Lanza un MVP: algo real que puedas mostrar hoy',
     ]
   },
   {
     num: 2,
-    icon: '⚠️',
-    name: 'Alerta Roja',
-    desc: 'Caída pronunciada o alguien asumiendo tu rol. Situación de emergencia.',
-    color: '#C0392B',
-    colorDim: 'rgba(192,57,43,0.15)',
-    xpMin: 100, xpMax: 250,
+    icon: '🌱',
+    name: 'Nacimiento',
+    desc: 'Primeras señales reales de interés. Ya existen indicios de que el mercado responde.',
+    color: '#16A34A',
+    colorDim: 'rgba(22,163,74,0.15)',
+    xpMin: 100, xpMax: 500,
     formula: [
-      'Para todo. Cancela la agenda normal. Modo crisis activado.',
-      'Identifica el problema raíz con datos reales, no suposiciones',
-      'Declara el estado de peligro: sé honesto contigo',
-      'Auditoría de ética: ¿qué has hecho mal o evitado hacer?',
-      'Rediseña tu rutina para que este peligro no pueda volver',
-      'Escribe tu nueva política: 3 reglas no negociables',
+      'Consigue tus primeros 3 clientes o usuarios reales, aunque sea gratis',
+      'Recoge feedback activo: pregunta qué valoran y qué mejorarían',
+      'Documenta tu propuesta de valor en una sola frase clara',
+      'Identifica el canal que más conversión te da y dóblalo',
     ]
   },
   {
     num: 3,
-    icon: '🆘',
-    name: 'Emergencia',
-    desc: 'Estadísticas bajando o estancadas. Sin crecimiento, el negocio se contrae.',
-    color: '#E67E22',
-    colorDim: 'rgba(230,126,34,0.15)',
-    xpMin: 250, xpMax: 500,
+    icon: '⚔️',
+    name: 'Supervivencia',
+    desc: 'El negocio cubre o se acerca a cubrir sus costes. La batalla por el break-even.',
+    color: '#C0392B',
+    colorDim: 'rgba(192,57,43,0.15)',
+    xpMin: 500, xpMax: 1500,
     formula: [
-      'Activa la promoción: publica contenido hoy, ahora. Llama a 5 contactos.',
-      'Cambia el enfoque: ¿qué has dejado de hacer que antes funcionaba?',
-      'Recorta gastos no esenciales. Solo lo que genera ingreso directo.',
-      'Prepara la capacidad: ¿puedes entregar más si consigues clientes?',
-      'Endurece la rutina: horarios fijos, métricas diarias, sin excusas.',
+      'Calcula tu punto de equilibrio exacto: ¿cuánto necesitas facturar para no perder?',
+      'Implementa un sistema básico de control de caja: ingresos vs gastos semanales',
+      'Crea una reserva mínima: separa un porcentaje fijo antes de cualquier gasto',
+      'Elimina todos los gastos que no generan ingreso directo',
+      'Establece 3 meses seguidos cubriendo costes fijos como objetivo',
     ]
   },
   {
     num: 4,
     icon: '📊',
-    name: 'Tracción',
-    desc: 'Crecimiento gradual estable. Las cosas van bien pero sin grandes picos.',
+    name: 'Estabilidad',
+    desc: 'El proyecto funciona con cierto orden y repetibilidad. Los ingresos son más predecibles.',
     color: '#F39C12',
     colorDim: 'rgba(243,156,18,0.15)',
-    xpMin: 500, xpMax: 1000,
+    xpMin: 1500, xpMax: 4000,
     formula: [
-      'No rompas lo que funciona. Identifica tus 3 acciones ganadoras.',
-      'Cuando algo sube, analiza el por qué y multiplícalo.',
-      'Cuando algo baja, actúa rápido antes de que se convierta en emergencia.',
-      'Potencia lo que sube, repara lo que baja.',
+      'Documenta tus procesos clave: que alguien más pueda ejecutarlos',
+      'Crea un sistema de seguimiento de clientes (CRM básico)',
+      'Identifica tus 3 fuentes de ingreso más estables y protégelas',
+      'Empieza a delegar tareas operativas para liberar tu tiempo estratégico',
     ]
   },
   {
     num: 5,
-    icon: '📈',
-    name: 'Escala',
-    desc: 'Crecimiento explosivo. Más demanda de la que puedes gestionar.',
+    icon: '🚀',
+    name: 'Expansión',
+    desc: 'El sistema funciona bien. Es momento de crecer con intención y estructura.',
     color: '#3498DB',
     colorDim: 'rgba(52,152,219,0.15)',
-    xpMin: 1000, xpMax: 2000,
+    xpMin: 4000, xpMax: 10000,
     formula: [
-      'Frena el gasto. No hagas compromisos nuevos aunque el dinero entre.',
-      'Cancela deudas. Esta es la ventana para quedar a cero.',
-      'Invierte en capacidad de entrega, no en lujos.',
-      'Encuentra el driver de esta escala. Multiplícalo.',
+      'Identifica el driver principal de crecimiento y multiplícalo',
+      'Incorpora personas o herramientas que escalen sin que estés tú',
+      'Abre un nuevo canal o mercado basándote en datos reales, no suposiciones',
+      'Invierte en capacidad de entrega antes de invertir en captación',
     ]
   },
   {
     num: 6,
     icon: '👑',
     name: 'Dominio',
-    desc: 'Nivel alto sostenido. Una caída puntual no amenaza tu supervivencia.',
+    desc: 'Sistema autónomo. El negocio funciona con abundancia y sin depender del fundador.',
     color: '#27AE60',
     colorDim: 'rgba(39,174,96,0.15)',
-    xpMin: 2000, xpMax: 5000,
+    xpMin: 10000, xpMax: 99999,
     formula: [
-      'No cortes conexiones clave. Hazlas propias y formales.',
-      'Documenta todo tu sistema. Que funcione sin que estés tú.',
-      'Escribe los manuales de tu negocio. Cada proceso, cada decisión.',
-      'Construye el equipo que puede reemplazarte en cada función.',
+      'Documenta todo el sistema: que funcione sin que estés tú presente',
+      'Construye el equipo que puede reemplazarte en cada función clave',
+      'Crea manuales de operación para cada proceso crítico del negocio',
+      'Enfócate en visión y relaciones estratégicas, no en operaciones',
     ]
   },
 ]
 
-const AREAS = [
-  { name: 'Visibilidad',  value: 0,  gradient: 'linear-gradient(90deg, #6B7280, #9CA3AF)' },
-  { name: 'Ventas',       value: 0,  gradient: 'linear-gradient(90deg, #F39C12, #f5c04a)' },
-  { name: 'Finanzas',     value: 0,  gradient: 'linear-gradient(90deg, #27AE60, #6ee7b7)' },
-  { name: 'Operaciones',  value: 0,  gradient: 'linear-gradient(90deg, #3498DB, #818cf8)' },
-  { name: 'Equipo',       value: 0,  gradient: 'linear-gradient(90deg, #C0392B, #fca5a5)' },
-]
 
 export default function Progreso({ onNavigate, currentPage }) {
-  const { racha, xp, condicion } = useAuth()
+  const { xp, condicion } = useAuth()
 
   const condicionActual = CONDICIONES[Math.min((condicion || 1) - 1, 5)]
   const condicionSiguiente = CONDICIONES[Math.min((condicion || 1), 5)]
@@ -171,30 +162,46 @@ export default function Progreso({ onNavigate, currentPage }) {
           </div>
         </div>
 
-        {/* Card 2 — Racha */}
+        {/* Card 2 — Próximo nivel */}
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 28 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-            <span style={{ fontSize: '1.2rem' }}>🔥</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+            <span style={{ fontSize: '1.2rem' }}>🎯</span>
             <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Racha activa: {racha} días
+              Próximo nivel
             </span>
           </div>
-          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: 20 }}>
-            Cada día que usas la app, construyes disciplina.
-          </p>
-          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 16 }}>
-            {Array.from({ length: 30 }, (_, i) => (
-              <div key={i} style={{
-                width: 26, height: 26, borderRadius: 6,
-                background: i < racha ? 'var(--indigo)' : 'var(--surface2)',
-                border: `1px solid ${i < racha ? 'var(--indigo)' : 'var(--border)'}`,
-              }} />
-            ))}
-          </div>
-          <div style={{ display: 'flex', gap: 16, fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-            <span>⚡ Hoy: <strong style={{ color: 'var(--jedi)' }}>Activo</strong></span>
-            <span>📊 XP total: <strong style={{ color: 'var(--gold)' }}>{xpActual} XP</strong></span>
-          </div>
+          {condicion < 6 ? (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
+                <div style={{ fontSize: '2.5rem' }}>{condicionSiguiente.icon}</div>
+                <div>
+                  <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.1rem', color: condicionSiguiente.color }}>
+                    {condicionSiguiente.name}
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 2 }}>
+                    Faltan <strong style={{ color: 'var(--gold)' }}>{condicionSiguiente.xpMin - xpActual} XP</strong> para llegar
+                  </div>
+                </div>
+              </div>
+              <div style={{ background: 'var(--surface3)', borderRadius: 99, height: 8, overflow: 'hidden', marginBottom: 12 }}>
+                <div style={{ width: `${pct}%`, height: '100%', borderRadius: 99, background: `linear-gradient(90deg, ${condicionActual.color}, ${condicionSiguiente.color})`, transition: 'width 1s ease' }} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                <span>{xpActual} XP actuales</span>
+                <span>{condicionSiguiente.xpMin} XP objetivo</span>
+              </div>
+            </>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '20px 0' }}>
+              <div style={{ fontSize: '3rem', marginBottom: 10 }}>👑</div>
+              <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, color: '#27AE60' }}>
+                Nivel máximo alcanzado
+              </div>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 6 }}>
+                Eres Dominio. El sistema trabaja para ti.
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Card 3 — Fórmula de tu condición */}

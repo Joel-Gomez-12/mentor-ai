@@ -1,8 +1,4 @@
-import { useAuth } from '../../context/AuthContext'
-
 export default function Topbar({ title, onMenuClick }) {
-  const { racha } = useAuth()   // ← dinámico
-
   const now = new Date()
   const fechaCorta = now.toLocaleDateString('es-ES', {
     weekday: 'short', day: 'numeric', month: 'short'
@@ -27,14 +23,6 @@ export default function Topbar({ title, onMenuClick }) {
         </span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          fontSize: '0.78rem', color: 'var(--text-soft)',
-          background: 'var(--surface2)', border: '1px solid var(--border)',
-          padding: '5px 12px', borderRadius: 99
-        }}>
-          🔥 Racha: <strong style={{ color: 'var(--gold)' }}>{racha} días</strong>
-        </div>
         <div style={{
           display: 'flex', alignItems: 'center', gap: 6,
           fontSize: '0.78rem', color: 'var(--text-soft)',

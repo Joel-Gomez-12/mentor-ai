@@ -6,9 +6,9 @@ const AuthContext = createContext({})
 export function AuthProvider({ children }) {
   const [user, setUser]           = useState(null)
   const [loading, setLoading]     = useState(true)
-  const [racha, setRacha]         = useState(0)
   const [xp, setXp]               = useState(0)
   const [condicion, setCondicion] = useState(1)
+  const [fullName, setFullName]   = useState('')
   const inicializado = useRef(false)
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
         setUser(session?.user ?? null)
         setLoading(false)
         if (session?.user) {
-          cargarRacha(session.user.id)
+          cargarPerfil(session.user.id)
         }
       })
       .catch(() => {
@@ -38,11 +38,11 @@ export function AuthProvider({ children }) {
       (_event, session) => {
         setUser(session?.user ?? null)
         if (session?.user) {
-          cargarRacha(session.user.id)
+          cargarPerfil(session.user.id)
         } else {
-          setRacha(0)
           setXp(0)
           setCondicion(1)
+          setFullName('')
         }
       }
     )
@@ -54,40 +54,19 @@ export function AuthProvider({ children }) {
   }, [])
 
   // ─── Cargar datos del usuario ────────────────────────────────────
-  const cargarRacha = async (userId) => {
+  const cargarPerfil = async (userId) => {
     try {
       const { data } = await supabase
         .from('users')
-        .select('racha, ultima_visita, mejor_racha, xp, condicion')
+        .select('xp, condicion, full_name')
         .eq('id', userId)
         .single()
 
       if (!data) return
 
-      setRacha(data.racha || 0)
       setXp(data.xp || 0)
       setCondicion(data.condicion || 1)
-
-      // Actualizar racha — fire and forget
-      const hoy  = new Date().toISOString().split('T')[0]
-      const ayer = new Date(Date.now() - 86400000).toISOString().split('T')[0]
-
-      if (data.ultima_visita === hoy) return
-
-      const nuevaRacha = data.ultima_visita === ayer
-        ? (data.racha || 0) + 1
-        : 1
-
-      const nuevaMejorRacha = Math.max(nuevaRacha, data.mejor_racha || 0)
-
-      supabase.from('users').update({
-        racha:         nuevaRacha,
-        ultima_visita: hoy,
-        mejor_racha:   nuevaMejorRacha,
-      }).eq('id', userId).then(() => {
-        setRacha(nuevaRacha)
-      })
-
+      setFullName(data.full_name || '')
     } catch (err) {
       console.error('Error cargando datos:', err)
     }
@@ -99,10 +78,10 @@ export function AuthProvider({ children }) {
     const nuevoXP = (xp || 0) + puntos
 
     let nuevaCondicion = 1
-    if (nuevoXP >= 2000)      nuevaCondicion = 6
-    else if (nuevoXP >= 1000) nuevaCondicion = 5
-    else if (nuevoXP >= 500)  nuevaCondicion = 4
-    else if (nuevoXP >= 250)  nuevaCondicion = 3
+    if (nuevoXP >= 10000)     nuevaCondicion = 6
+    else if (nuevoXP >= 4000) nuevaCondicion = 5
+    else if (nuevoXP >= 1500) nuevaCondicion = 4
+    else if (nuevoXP >= 500)  nuevaCondicion = 3
     else if (nuevoXP >= 100)  nuevaCondicion = 2
     else                      nuevaCondicion = 1
 
@@ -136,7 +115,6 @@ export function AuthProvider({ children }) {
   const signOut = async () => {
     await supabase.auth.signOut()
     setUser(null)
-    setRacha(0)
     setXp(0)
     setCondicion(1)
   }
@@ -144,7 +122,7 @@ export function AuthProvider({ children }) {
   return (
     <AuthContext.Provider value={{
       user, loading,
-      racha, xp, condicion,
+      xp, condicion, fullName,
       agregarXP,
       signUp, signIn, signOut,
     }}>

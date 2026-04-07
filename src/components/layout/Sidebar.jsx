@@ -2,19 +2,20 @@ import { useAuth } from '../../context/AuthContext'
 
 const NAV_ITEMS = [
   { section: 'Inicio', items: [
-    { icon: '⚡', label: 'Dashboard',           page: 'home' },
-    { icon: '📡', label: 'Pulso del negocio',   page: 'pulso' },
+    { icon: '⚡', label: 'SISI — IA Principal',  page: 'sisi'  },
+    { icon: '🏠', label: 'Dashboard',            page: 'home'  },
+    { icon: '📡', label: 'Pulso del negocio',    page: 'pulso' },
   ]},
   { section: 'Capturar', items: [
     { icon: '💡', label: 'Capturar pensamiento', page: 'pensamiento' },
-    { icon: '📈', label: 'Registrar ingreso',    page: 'ingreso' },
-    { icon: '📉', label: 'Registrar gasto',      page: 'gasto' },
+    { icon: '💰', label: 'Finanzas',             page: 'finanzas' },
   ]},
   { section: 'Estrategia', items: [
-    { icon: '🗂️', label: 'Proyectos',        page: 'proyectos' },
-    { icon: '📋', label: 'Plan del negocio',  page: 'plan' },
-    { icon: '🧠', label: 'Mentores',          page: 'mentores' },
-    { icon: '🎓', label: 'Formación',         page: 'formacion' },
+    { icon: '🗂️', label: 'Proyectos',           page: 'proyectos' },
+    { icon: '📋', label: 'Plan del negocio',     page: 'plan' },
+    { icon: '🧠', label: 'Mentores',             page: 'mentores' },
+    { icon: '📇', label: 'Contactos',            page: 'contactos' },
+    { icon: '🎓', label: 'Formación',            page: 'formacion' },
   ]},
   { section: 'Tú', items: [
     { icon: '🏆', label: 'Mi progreso', page: 'progreso' },
@@ -23,12 +24,12 @@ const NAV_ITEMS = [
 ]
 
 const CONDICIONES_NAMES = [
-  'Semilla', 'Alerta Roja', 'Emergencia',
-  'Tracción', 'Escala', 'Dominio'
+  'Inexistencia', 'Nacimiento', 'Supervivencia',
+  'Estabilidad', 'Expansión', 'Dominio'
 ]
 
 const CONDICIONES_COLORS = [
-  '#6B7280', '#C0392B', '#E67E22',
+  '#6B7280', '#16A34A', '#C0392B',
   '#F39C12', '#3498DB', '#27AE60'
 ]
 
@@ -50,7 +51,7 @@ const LOGO_SVG = (
 )
 
 export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
-  const { user, signOut, racha, xp, condicion } = useAuth()
+  const { signOut, xp, condicion } = useAuth()
 
   const condIdx    = Math.min((condicion || 1) - 1, 5)
   const condNombre = CONDICIONES_NAMES[condIdx]
@@ -58,8 +59,8 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
 
   // XP progress bar dentro de la condición actual
   const XP_RANGES = [
-    [0, 100], [100, 250], [250, 500],
-    [500, 1000], [1000, 2000], [2000, 5000]
+    [0, 100], [100, 500], [500, 1500],
+    [1500, 4000], [4000, 10000], [10000, 99999]
   ]
   const [xpMin, xpMax] = XP_RANGES[condIdx]
   const pct = xpMax > xpMin
@@ -79,8 +80,10 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
         />
       )}
 
-      <aside style={{
-        width: 'var(--sidebar-w)',
+      <aside
+        className={isOpen ? 'open' : ''}
+        style={{
+        width: 240,
         height: '100vh',
         background: 'var(--surface)',
         borderRight: '1px solid var(--border)',
@@ -110,12 +113,14 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
         <div style={{ padding: '18px 22px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
           <div style={{
             width: 38, height: 38, borderRadius: '50%',
-            background: 'var(--andrea-dim)', border: '2px solid var(--andrea)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '1.1rem', flexShrink: 0
-          }}>🧠</div>
+            border: '2px solid rgba(124,58,237,0.5)',
+            overflow: 'hidden', flexShrink: 0,
+            boxShadow: '0 0 10px rgba(124,58,237,0.3)'
+          }}>
+            <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
           <div>
-            <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--andrea)' }}>Andrea</div>
+            <div style={{ fontSize: '0.82rem', fontWeight: 600 }}>SISI</div>
             <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
               <span className="status-dot" />En línea contigo
             </div>
@@ -164,16 +169,15 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
           ))}
         </nav>
 
-        {/* Footer — Condición + XP + Racha */}
+        {/* Footer — Condición + XP */}
         <div style={{ padding: '16px 22px', borderTop: '1px solid var(--border)', fontSize: '0.72rem', color: 'var(--text-muted)', flexShrink: 0 }}>
 
-          {/* Condición y racha */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+          {/* Condición */}
+          <div style={{ marginBottom: 4 }}>
             <span>
-              Cond. {condicion} —{' '}
+              Nivel {condicion} —{' '}
               <span style={{ color: condColor, fontWeight: 600 }}>{condNombre}</span>
             </span>
-            <span style={{ color: 'var(--gold)' }}>{racha} días 🔥</span>
           </div>
 
           {/* XP actual */}

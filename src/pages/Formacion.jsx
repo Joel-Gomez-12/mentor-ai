@@ -1,326 +1,548 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Layout from '../components/layout/Layout'
+import { supabase } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
 
+// ─── Contenido de las 9 verticales ────────────────────────────────────────────
 const VERTICALES = [
   {
-    id: 'impuestos', icon: '📊', color: '#6366F1', badge: 'nuevo',
-    titulo: 'Gestión de impuestos',
-    desc: 'IVA, IRPF, retenciones y deducciones. Deja de perder dinero con Hacienda.',
-    contenido: {
-      intro: '¿Por qué importa entender los impuestos?',
-      texto: 'Como emprendedor, los impuestos no son solo una obligación: son una palanca estratégica. Quien los entiende, paga lo justo y no un céntimo más. Quien los ignora, financia al Estado sin darse cuenta.',
-      secciones: [
-        { titulo: '📌 IVA (Impuesto sobre el Valor Añadido)', color: '#6366F1', texto: 'El IVA no es tuyo. Lo cobras a tus clientes y se lo entregas a Hacienda cada trimestre. Tipos: general 21%, reducido 10%, superreducido 4%. Presenta el Modelo 303 cada trimestre y el resumen anual con el Modelo 390.' },
-        { titulo: '📌 IRPF para autónomos', color: '#6366F1', texto: 'Si eres autónomo, aplicas una retención del 15% (7% los dos primeros años) en tus facturas a empresas. Presentas pagos fraccionados con el Modelo 130 cada trimestre.' },
-        { titulo: '📌 Gastos deducibles clave', color: '#34D399', lista: ['Cuota de autónomos o salarios', 'Alquiler de oficina o parte proporcional del hogar', 'Software, herramientas y suscripciones', 'Formación relacionada con tu actividad', 'Viajes y dietas con justificante', 'Material informático y equipamiento'] },
-      ],
-      consejo: { mentor: '⚡ Consejo de Andrea', texto: '"Guarda todos los justificantes, aunque parezcan pequeños. Y separa desde el primer día una cuenta solo para impuestos: aparta el 25–30% de cada ingreso. Hacienda no avisa cuando llega."' }
-    },
-    videos: ['IVA explicado en 10 minutos', 'Cómo presentar el Modelo 303', 'IRPF para autónomos paso a paso', 'Los 10 gastos más deducibles', 'Hacienda digital: acceso y gestión']
+    id: 'fiscal',
+    icon: '🏛️',
+    color: '#6366F1',
+    titulo: 'Gestión fiscal e impuestos',
+    desc: 'Aprende a gestionar tus obligaciones fiscales como emprendedor.',
+    lecciones: [
+      {
+        id: 'fiscal-1',
+        titulo: 'Entendiendo las obligaciones fiscales',
+        contenido: 'Todo negocio tiene obligaciones fiscales que varían según el país y la estructura jurídica elegida. Es fundamental entender qué impuestos aplican a tu actividad: impuesto sobre la renta, impuestos sobre ventas/valor añadido, retenciones, y cotizaciones sociales. Consulta con un asesor fiscal local para conocer tus obligaciones específicas.',
+      },
+      {
+        id: 'fiscal-2',
+        titulo: 'Planificación fiscal básica',
+        contenido: 'La planificación fiscal no es evasión, es inteligencia financiera. Separa desde el primer día una cuenta exclusiva para impuestos y aparta entre el 25% y el 30% de cada ingreso. Lleva un registro mensual de ingresos y gastos deducibles. La organización preventiva evita sustos al final del trimestre.',
+      },
+      {
+        id: 'fiscal-3',
+        titulo: 'Facturación y documentación',
+        contenido: 'Una factura correcta debe incluir: número de factura correlativo, fecha de emisión, datos del emisor y receptor (nombre, NIF/CIF, dirección), descripción del servicio o producto, base imponible, tipo de IVA aplicado y total. Guarda todas tus facturas de gastos: son la base de tus deducciones fiscales.',
+      },
+    ],
+    quiz: [
+      { pregunta: '¿Cuál es la mejor práctica para gestionar impuestos?', opciones: ['Improvisar cada trimestre', 'Hacer provisiones mensuales', 'Ignorarlos hasta fin de año'], correcta: 1 },
+      { pregunta: '¿Qué debes separar siempre?', opciones: ['Cuentas personales y de negocio', 'Ingresos y gastos', 'Clientes nuevos y antiguos'], correcta: 0 },
+    ],
   },
   {
-    id: 'empresa', icon: '🏢', color: '#8B5CF6', badge: 'nuevo',
-    titulo: 'Creación y gestión de empresa',
-    desc: 'Desde la idea hasta la estructura legal. Todo lo que necesitas saber antes de constituir.',
-    contenido: {
-      intro: '¿Cuándo crear una empresa?',
-      texto: 'Crear una empresa no es el primer paso. Es una decisión estratégica que depende de tus ingresos, tu exposición fiscal y tus socios. Entiende cuándo vale la pena dar el salto.',
-      secciones: [
-        { titulo: '📌 Autónomo vs Sociedad Limitada', color: '#8B5CF6', texto: 'El autónomo tributa en IRPF (escala progresiva hasta 47%). La SL tributa al 25% en Impuesto de Sociedades. El punto de equilibrio suele estar en torno a 40.000€ de beneficio neto.' },
-      ],
-      consejo: { mentor: '⚡ Consejo de Andrea', texto: '"No montes una SL por imagen. Móntala cuando la fiscalidad lo justifique o cuando el riesgo legal lo exija. Antes, factura como autónomo y aprende el negocio."' }
-    },
-    videos: ['Autónomo vs SL: ventajas y desventajas', 'Cómo constituir una SL paso a paso', 'Pacto de socios: qué incluir', 'Holding y estructuras fiscales', 'Cómo contratar a tus primeros empleados']
+    id: 'equipo',
+    icon: '👥',
+    color: '#8B5CF6',
+    titulo: 'Construir equipo',
+    desc: 'Cómo encontrar, contratar y liderar a las personas correctas.',
+    lecciones: [
+      {
+        id: 'equipo-1',
+        titulo: 'Cuándo contratar tu primer empleado',
+        contenido: 'El primer contrato es una decisión estratégica, no solo operativa. Contrata cuando el coste del empleado sea menor que el valor que genera, o cuando tu tiempo en tareas operativas te impida crecer. Antes de contratar, documenta claramente el rol, las responsabilidades y los indicadores de éxito del puesto.',
+      },
+      {
+        id: 'equipo-2',
+        titulo: 'Proceso de selección efectivo',
+        contenido: 'Un buen proceso de selección tiene tres fases: atracción (dónde publicas y cómo describes el puesto), filtro (preguntas específicas sobre situaciones reales) y decisión (prueba práctica). Contrata por actitud y valores, forma en habilidades técnicas. Una mala contratación cuesta entre 3 y 6 veces el salario anual del puesto.',
+      },
+      {
+        id: 'equipo-3',
+        titulo: 'Cultura de equipo desde el día uno',
+        contenido: 'La cultura no se declara, se demuestra con comportamientos diarios. Define 3 o 4 valores concretos y no negociables. Crea rituales de equipo: reuniones semanales de estado, celebración de logros, feedback regular. Un equipo con cultura clara toma mejores decisiones sin necesitar supervisión constante.',
+      },
+    ],
+    quiz: [
+      { pregunta: '¿Cuándo es el momento correcto para contratar?', opciones: ['Cuando el negocio empieza', 'Cuando el coste es menor que el valor generado', 'Cuando tienes tiempo libre'], correcta: 1 },
+      { pregunta: '¿Qué prioridad debes tener al contratar?', opciones: ['Experiencia técnica', 'Actitud y valores', 'Salario bajo'], correcta: 1 },
+    ],
   },
   {
-    id: 'modelos', icon: '🎯', color: '#F59E0B', badge: 'nuevo',
+    id: 'modelos',
+    icon: '🗂️',
+    color: '#F59E0B',
     titulo: 'Modelos de negocio',
-    desc: 'Diseña un negocio que escale. Los modelos que generan dinero mientras duermes.',
-    contenido: {
-      intro: '¿Qué hace que un modelo de negocio funcione?',
-      texto: 'Un buen modelo de negocio resuelve un problema real, tiene márgenes saludables y puede escalar sin que tú trabajes el doble.',
-      secciones: [
-        { titulo: '📌 Los modelos más rentables', color: '#F59E0B', lista: ['SaaS (Software as a Service)', 'Marketplace con comisión', 'Consultoría productizada', 'Contenido + membresía', 'Agencia con procesos sistemáticos'] },
-      ],
-      consejo: { mentor: '⚡ Consejo de Steve', texto: '"El mejor modelo de negocio es el que puedes explicar en una frase y que el cliente paga sin dudar. Si necesitas 10 minutos para explicarlo, rediseñalo."' }
-    },
-    videos: ['Los 7 modelos de negocio más rentables', 'Cómo productizar tu servicio', 'De freelance a agencia', 'Modelos SaaS para no técnicos', 'Cómo validar tu modelo antes de construir']
+    desc: 'Encuentra el modelo que mejor se adapta a tu negocio.',
+    lecciones: [
+      {
+        id: 'modelos-1',
+        titulo: 'Qué es un modelo de negocio',
+        contenido: 'Un modelo de negocio describe cómo tu empresa crea, entrega y captura valor. No es el producto ni el servicio: es la lógica completa de cómo ganas dinero. Los 9 bloques del Business Model Canvas (clientes, propuesta de valor, canales, relaciones, fuentes de ingreso, recursos, actividades, socios y costes) te dan una visión completa.',
+      },
+      {
+        id: 'modelos-2',
+        titulo: 'Modelos de ingresos recurrentes vs transaccionales',
+        contenido: 'Los modelos transaccionales generan ingresos por cada venta individual: tienda, consultoría por proyecto, freelance. Los recurrentes generan ingresos continuos: suscripciones, retainers, licencias. Los negocios más valiosos combinan ambos: una entrada transaccional y una retención recurrente. Apunta a tener al menos el 30% de tus ingresos en formato recurrente.',
+      },
+      {
+        id: 'modelos-3',
+        titulo: 'Cómo escalar tu modelo actual',
+        contenido: 'Escalar significa crecer el ingreso sin crecer proporcionalmente los costes. Para escalar, primero sistematiza: documenta los procesos que generan valor. Segundo, automatiza lo automatizable. Tercero, apalanca: usa el tiempo de otros (empleados, partners, tecnología). Un negocio escalable tiene márgenes que mejoran con el volumen.',
+      },
+    ],
+    quiz: [
+      { pregunta: '¿Qué describe un modelo de negocio?', opciones: ['Solo el producto', 'Cómo se crea, entrega y captura valor', 'El plan de marketing'], correcta: 1 },
+      { pregunta: '¿Qué tipo de ingreso aporta más estabilidad?', opciones: ['Transaccional', 'Recurrente', 'Por proyecto'], correcta: 1 },
+    ],
   },
   {
-    id: 'sociedad', icon: '⚖️', color: '#EC4899', badge: 'nuevo',
-    titulo: 'Modelos de sociedad',
-    desc: 'SL, SA, cooperativa, holding. Elige la estructura que protege tu patrimonio y optimiza tu fiscalidad.',
-    contenido: {
-      intro: '¿Qué estructura legal necesitas?',
-      texto: 'La estructura legal de tu negocio afecta a tu fiscalidad, tu responsabilidad personal y tu capacidad de crecer con socios o inversores.',
-      secciones: [
-        { titulo: '📌 Tipos de sociedades en España', color: '#EC4899', lista: ['Autónomo (sin personalidad jurídica)', 'Sociedad Limitada (SL) — la más común', 'Sociedad Anónima (SA) — para grandes empresas', 'Cooperativa — para proyectos colectivos', 'Holding — para optimizar fiscalmente grupos'] },
-      ],
-      consejo: { mentor: '⚡ Consejo de Andrea', texto: '"La mayoría de emprendedores solo necesita una SL bien gestionada. El holding solo tiene sentido cuando tienes varias empresas rentables."' }
-    },
-    videos: ['Autónomo vs SL: ventajas y desventajas', 'Cómo constituir una SL paso a paso', 'Pacto de socios: qué incluir', 'Holding y estructuras fiscales avanzadas']
+    id: 'juridica',
+    icon: '⚖️',
+    color: '#10B981',
+    titulo: 'Estructura jurídica',
+    desc: 'Elige la estructura legal correcta para tu negocio.',
+    lecciones: [
+      {
+        id: 'juridica-1',
+        titulo: 'Autónomo vs Sociedad Limitada',
+        contenido: 'El autónomo es la forma más simple: tributas en IRPF sobre todos tus beneficios con una escala progresiva que puede llegar al 47%. La Sociedad Limitada tributa al 25% en Impuesto de Sociedades y protege tu patrimonio personal. El punto de inflexión suele estar entre 40.000€ y 50.000€ de beneficio neto anual. Antes de ese umbral, el autónomo suele ser más eficiente.',
+      },
+      {
+        id: 'juridica-2',
+        titulo: 'Protección del patrimonio personal',
+        contenido: 'Una de las ventajas clave de crear una sociedad es la responsabilidad limitada: en caso de deudas, el acreedor solo puede ir contra el patrimonio de la empresa, no contra el tuyo personal (casa, cuentas privadas). Hay excepciones: avales personales, deudas fiscales o de Seguridad Social. Nunca avales como persona física si puedes evitarlo.',
+      },
+    ],
+    quiz: [
+      { pregunta: '¿A partir de qué beneficio suele convenir una SL?', opciones: ['Desde el primer euro', 'Entre 40.000€ y 50.000€', 'Nunca'], correcta: 1 },
+      { pregunta: '¿Qué protege la responsabilidad limitada?', opciones: ['Las deudas fiscales', 'Tu patrimonio personal', 'Las deudas con empleados'], correcta: 1 },
+    ],
   },
   {
-    id: 'ventas', icon: '💼', color: '#10B981', badge: 'nuevo',
+    id: 'ventas',
+    icon: '🤝',
+    color: '#EF4444',
     titulo: 'Ventas y cierre',
-    desc: 'Sistema de ventas para emprendedores. Desde el primer contacto hasta el contrato firmado.',
-    contenido: {
-      intro: '¿Por qué fallan las ventas?',
-      texto: 'La mayoría de emprendedores no tiene un sistema de ventas. Improvisa en cada llamada, baja el precio cuando hay objeción y pierde clientes por falta de seguimiento.',
-      secciones: [
-        { titulo: '📌 El proceso de ventas en 6 pasos', color: '#10B981', lista: ['1. Prospección y calificación', '2. Primera toma de contacto', '3. Diagnóstico del problema', '4. Presentación de solución', '5. Gestión de objeciones', '6. Cierre y firma'] },
-      ],
-      consejo: { mentor: '⚡ Consejo de Leónidas', texto: '"Las ventas no se improvisan. Se entrenan. Graba tus llamadas, analízalas y mejora cada semana. El que más practica, más cierra."' }
-    },
-    videos: ['El proceso de ventas en 6 pasos', 'Cómo hacer una propuesta que no se rechaza', 'Objeciones más comunes y cómo gestionarlas', 'CRM: cuál usar y cómo estructurarlo']
+    desc: 'Domina el arte de vender y cerrar clientes.',
+    lecciones: [
+      {
+        id: 'ventas-1',
+        titulo: 'El proceso de venta en 5 pasos',
+        contenido: 'Toda venta profesional sigue un proceso: 1) Prospección (identificar clientes potenciales), 2) Cualificación (confirmar que tienen el problema, el dinero y la autoridad de decisión), 3) Presentación (mostrar cómo tu solución resuelve su problema específico), 4) Manejo de objeciones (transformar dudas en confirmaciones), 5) Cierre (pedir la decisión). Saltarse algún paso es la causa más común de pérdida de ventas.',
+      },
+      {
+        id: 'ventas-2',
+        titulo: 'Cómo manejar objeciones',
+        contenido: 'Una objeción no es un rechazo: es una petición de más información. Las cuatro objeciones más comunes son precio ("es muy caro"), tiempo ("no es el momento"), confianza ("no te conozco") y necesidad ("no lo necesito ahora"). Para cada una, la respuesta correcta empieza por validar ("entiendo perfectamente"), luego preguntar para profundizar, y finalmente reencuadrar desde el valor.',
+      },
+      {
+        id: 'ventas-3',
+        titulo: 'Técnicas de cierre efectivas',
+        contenido: 'El cierre más efectivo es el cierre directo: simplemente preguntar "¿Seguimos adelante?" o "¿Empezamos la semana que viene?". El cierre de alternativas da opciones equivalentes: "¿Prefieres el plan mensual o el anual?". El cierre de urgencia funciona cuando hay una razón real: "Esta semana tengo un hueco, después estaré lleno hasta el mes que viene". Nunca presiones sin valor real detrás.',
+      },
+    ],
+    quiz: [
+      { pregunta: '¿Qué es una objeción de venta?', opciones: ['Un rechazo definitivo', 'Una petición de más información', 'Una señal de no interés'], correcta: 1 },
+      { pregunta: '¿Cuál es el cierre más directo?', opciones: ['Dar un descuento', 'Preguntar "¿Seguimos adelante?"', 'Enviar un email de seguimiento'], correcta: 1 },
+    ],
   },
   {
-    id: 'finanzas', icon: '💰', color: '#F59E0B', badge: 'nuevo',
+    id: 'finanzas',
+    icon: '📊',
+    color: '#3B82F6',
     titulo: 'Finanzas para emprendedores',
-    desc: 'Control de caja, márgenes, previsiones. Deja de gestionar tu empresa a ciegas.',
-    contenido: {
-      intro: '¿Por qué mueren negocios rentables?',
-      texto: 'Muchos negocios facturan bien pero quiebran por falta de liquidez. La rentabilidad y la tesorería son cosas distintas. Aprende a gestionarlas.',
-      secciones: [
-        { titulo: '📌 Las 3 métricas que todo emprendedor debe conocer', color: '#F59E0B', lista: ['MRR (Monthly Recurring Revenue)', 'Margen bruto y margen neto', 'Runway: cuántos meses puedes sobrevivir'] },
-      ],
-      consejo: { mentor: '⚡ Consejo de Andrea', texto: '"Revisa tus números cada lunes. 15 minutos. Ingresos de la semana, gastos pendientes, saldo en cuenta. Los emprendedores que hacen esto no tienen sustos."' }
-    },
-    videos: ['Tesorería vs Rentabilidad', 'Cómo hacer una previsión financiera', 'Control de gastos para autónomos', 'Cuándo necesitas financiación externa', 'Métricas clave para tu negocio']
+    desc: 'Gestiona el dinero de tu negocio con inteligencia.',
+    lecciones: [
+      {
+        id: 'finanzas-1',
+        titulo: 'Los 3 estados financieros que debes entender',
+        contenido: 'Todo emprendedor debe leer tres documentos: la Cuenta de Resultados (ingresos – gastos = beneficio o pérdida), el Balance (activos vs pasivos + patrimonio neto) y el Flujo de Caja (dinero que entra y sale realmente). Un negocio puede ser rentable en la cuenta de resultados y quebrar por falta de liquidez en el flujo de caja. La caja es la realidad; el beneficio contable es una opinión.',
+      },
+      {
+        id: 'finanzas-2',
+        titulo: 'Break-even: el punto de equilibrio',
+        contenido: 'El punto de equilibrio es el nivel de ventas en el que tus ingresos cubren exactamente todos tus costes, fijos y variables. Por debajo de ese punto pierdes dinero; por encima, ganas. La fórmula es: Break-even = Costes fijos / (1 - Costes variables / Ingresos). Conocer tu break-even te da claridad sobre cuánto necesitas vender cada mes para sobrevivir.',
+      },
+      {
+        id: 'finanzas-3',
+        titulo: 'Cómo gestionar el flujo de caja',
+        contenido: 'El flujo de caja es el oxígeno del negocio. Reglas básicas: cobra antes de pagar cuando puedas, negocia plazos de pago con proveedores más largos que los de cobro con clientes, mantén una reserva de 3 meses de costes fijos, y haz previsiones de caja a 90 días. El 82% de los negocios que quiebran lo hacen por problemas de liquidez, no por falta de rentabilidad.',
+      },
+    ],
+    quiz: [
+      { pregunta: '¿Cuál es el documento que muestra el dinero real en caja?', opciones: ['Balance', 'Cuenta de resultados', 'Flujo de caja'], correcta: 2 },
+      { pregunta: '¿Qué indica el break-even?', opciones: ['El máximo beneficio posible', 'El punto donde ingresos = costes', 'El límite de deuda'], correcta: 1 },
+    ],
   },
   {
-    id: 'marketing', icon: '📣', color: '#F87171', badge: 'nuevo',
+    id: 'marketing',
+    icon: '📣',
+    color: '#F97316',
     titulo: 'Marketing y captación',
-    desc: 'Atrae clientes sin depender de referencias. Canales, mensajes y sistemas que funcionan.',
-    contenido: {
-      intro: '¿Cómo conseguir clientes de forma predecible?',
-      texto: 'El marketing no es magia. Es un sistema. Los emprendedores que crecen tienen canales de captación definidos y los optimizan semana a semana.',
-      secciones: [
-        { titulo: '📌 Los canales más efectivos para emprendedores', color: '#F87171', lista: ['LinkedIn (B2B)', 'Instagram / TikTok (B2C)', 'SEO y contenido orgánico', 'Email marketing', 'Referidos y partnerships'] },
-      ],
-      consejo: { mentor: '⚡ Consejo de Steve', texto: '"Elige UN canal y domínalo antes de diversificar. El emprendedor que está en todos lados no está en ninguno."' }
-    },
-    videos: ['Estrategia de contenido en LinkedIn', 'Email marketing desde cero', 'SEO básico para emprendedores', 'Cómo crear un sistema de referidos', 'Publicidad pagada: cuándo y cómo']
+    desc: 'Atrae clientes de forma consistente y escalable.',
+    lecciones: [
+      {
+        id: 'marketing-1',
+        titulo: 'Define tu cliente ideal (ICP)',
+        contenido: 'El Ideal Customer Profile es el perfil detallado del cliente que más se beneficia de tu oferta y que más valor genera para tu negocio. Incluye datos demográficos (edad, cargo, sector, tamaño de empresa), pero sobre todo psicográficos: qué problema tiene, qué ya ha intentado, qué miedos le frenan, qué resultado desea. Cuanto más específico sea tu ICP, más efectivas serán todas tus acciones de marketing.',
+      },
+      {
+        id: 'marketing-2',
+        titulo: 'Los canales de adquisición que funcionan',
+        contenido: 'No todos los canales funcionan igual para todos los negocios. Los principales son: contenido orgánico (SEO, redes sociales), publicidad de pago (Google Ads, Meta Ads), referidos (boca a boca sistematizado), partnerships (acuerdos con negocios complementarios) y outbound (contacto directo con prospectos). Elige uno o dos canales, domínalos completamente antes de diversificar.',
+      },
+      {
+        id: 'marketing-3',
+        titulo: 'Funnel de ventas básico',
+        contenido: 'Un funnel básico tiene tres etapas: TOFU (Top of Funnel) — generar atención y tráfico con contenido de valor; MOFU (Middle of Funnel) — convertir visitantes en leads con algo de valor a cambio de sus datos; BOFU (Bottom of Funnel) — convertir leads en clientes con una oferta específica y seguimiento. Mide la conversión en cada etapa para saber dónde optimizar.',
+      },
+    ],
+    quiz: [
+      { pregunta: '¿Qué es el ICP?', opciones: ['Un tipo de anuncio', 'El perfil del cliente ideal', 'Una métrica de ventas'], correcta: 1 },
+      { pregunta: '¿Cuántos canales deberías dominar primero?', opciones: ['Todos los posibles', 'Uno o dos', 'Al menos cinco'], correcta: 1 },
+    ],
   },
   {
-    id: 'liderazgo', icon: '🧠', color: '#C7D2FE', badge: 'nuevo',
-    titulo: 'Liderazgo y mentalidad',
-    desc: 'El negocio crece hasta donde crece el líder. Trabaja la mentalidad que lo sostiene todo.',
-    contenido: {
-      intro: '¿Por qué la mentalidad es el activo más importante?',
-      texto: 'Puedes tener el mejor producto del mundo, pero si tu mentalidad no está alineada con el crecimiento, sabotearás tu propio éxito.',
-      secciones: [
-        { titulo: '📌 Las creencias que frenan a los emprendedores', color: '#C7D2FE', lista: ['"No soy lo suficientemente bueno"', '"El mercado ya está saturado"', '"Necesito más formación antes de empezar"', '"Si bajo el precio, conseguiré más clientes"', '"No tengo tiempo"'] },
-      ],
-      consejo: { mentor: '⚡ Consejo de Jedi', texto: '"La mentalidad no se cambia leyendo libros. Se cambia actuando a pesar del miedo, y viendo que sobrevives. Cada acción valiente reprograma tu sistema de creencias."' }
-    },
-    videos: ['Mentalidad de crecimiento vs mentalidad fija', 'Cómo gestionar el síndrome del impostor', 'Productividad para emprendedores', 'Toma de decisiones bajo presión', 'Cómo construir hábitos de alto rendimiento']
+    id: 'liderazgo',
+    icon: '🏅',
+    color: '#EC4899',
+    titulo: 'Liderazgo y relaciones',
+    desc: 'Desarrolla las habilidades blandas que definen a los grandes líderes.',
+    lecciones: [
+      {
+        id: 'liderazgo-1',
+        titulo: 'Liderazgo vs gestión: la diferencia clave',
+        contenido: 'Gestionar es asegurarse de que las cosas se hacen correctamente. Liderar es asegurarse de que se hacen las cosas correctas. Un gestor controla procesos; un líder inspira dirección. En las primeras etapas del negocio necesitas las dos habilidades, pero a medida que creces, el liderazgo se vuelve crítico: tu capacidad de inspirar y alinear a otros determina el techo de tu empresa.',
+      },
+      {
+        id: 'liderazgo-2',
+        titulo: 'Comunicación efectiva con tu equipo',
+        contenido: 'La comunicación efectiva tiene cuatro elementos: claridad (que el mensaje sea inequívoco), contexto (que el receptor entienda el "por qué"), feedback (confirmar que se ha entendido correctamente) y consistencia (repetir los mensajes importantes más veces de lo que crees necesario). El error más común es asumir que porque tú lo tienes claro, tu equipo también lo tiene. Comunica en exceso; nunca en defecto.',
+      },
+    ],
+    quiz: [
+      { pregunta: '¿Cuál es la diferencia entre liderar y gestionar?', opciones: ['Ninguna, es lo mismo', 'Liderar es hacer las cosas correctas; gestionar, hacerlas bien', 'Gestionar es más importante'], correcta: 1 },
+      { pregunta: '¿Cuál es el error más común en comunicación de equipo?', opciones: ['Comunicar demasiado', 'Asumir que el otro lo entendió', 'Usar herramientas digitales'], correcta: 1 },
+    ],
   },
   {
-    id: 'confianza', icon: '🤝', color: '#F0B429', badge: 'pronto',
-    titulo: 'Personas de confianza',
-    desc: 'Cómo identificar, atraer y trabajar con asesores, socios y colaboradores de confianza.',
-    contenido: {
-      intro: '¿A quién necesitas a tu lado?',
-      texto: 'El emprendedor solitario tiene un techo bajo. Los que más lejos llegan se rodean de las personas correctas en el momento correcto.',
-      secciones: [
-        { titulo: '📌 Los 4 perfiles que todo emprendedor necesita', color: '#F0B429', lista: ['El asesor fiscal y legal', 'El mentor o advisor', 'El socio complementario', 'El equipo de confianza'] },
-      ],
-      consejo: { mentor: '⚡ Consejo de Andrea', texto: '"Antes de buscar inversores, busca un buen asesor fiscal. Te ahorrará más dinero del que imaginas."' }
-    },
-    videos: ['El perfil del asesor que todo emprendedor necesita', 'Cómo evaluar un socio antes de firmar', 'Redes de contacto: calidad vs cantidad', 'Mentores reales: cómo encontrarlos']
-  },
-  {
-    id: 'productividad', icon: '⚡', color: '#34D399', badge: 'nuevo',
+    id: 'productividad',
+    icon: '⚡',
+    color: '#14B8A6',
     titulo: 'Productividad y sistemas',
-    desc: 'Trabaja menos horas con más impacto. Sistemas, herramientas y procesos que escalan.',
-    contenido: {
-      intro: '¿Por qué trabajar más no es la solución?',
-      texto: 'El emprendedor ocupado es el peor emprendedor. La productividad real no es hacer más cosas, sino hacer las cosas correctas en el momento correcto.',
-      secciones: [
-        { titulo: '📌 El sistema de productividad del emprendedor', color: '#34D399', lista: ['Time blocking: bloquea tu tiempo como reuniones', 'La regla 80/20: el 20% de acciones genera el 80% de resultados', 'Batch processing: agrupa tareas similares', 'Automatiza lo repetitivo antes de delegarlo', 'Revisión semanal: 30 minutos cada viernes'] },
-      ],
-      consejo: { mentor: '⚡ Consejo de Jedi', texto: '"La productividad no es velocidad. Es dirección. Moverse rápido en la dirección equivocada es el error más costoso que puedes cometer."' }
-    },
-    videos: ['Time blocking para emprendedores', 'Las mejores herramientas de productividad', 'Cómo delegar correctamente', 'Automatización sin código', 'La revisión semanal que cambia todo']
+    desc: 'Trabaja menos horas con mejores resultados.',
+    lecciones: [
+      {
+        id: 'productividad-1',
+        titulo: 'La regla del 80/20 aplicada al negocio',
+        contenido: 'El Principio de Pareto dice que el 20% de tus actividades genera el 80% de tus resultados. En un negocio: el 20% de tus clientes genera el 80% de tus ingresos; el 20% de tus productos o servicios representa el 80% de tu beneficio. La productividad real no es hacer más cosas: es identificar ese 20% y dedicarle el máximo de tu energía, eliminando o delegando el resto.',
+      },
+      {
+        id: 'productividad-2',
+        titulo: 'Sistemas y automatización básica',
+        contenido: 'Un sistema es un proceso documentado que produce resultados consistentes sin depender de tu presencia. Para crear sistemas: primero haz la tarea tú mismo y documenta cada paso; luego simplifica eliminando lo innecesario; después, enseña a otra persona o automatiza con herramientas digitales. Herramientas clave: Notion o Trello para gestión de tareas, Zapier o Make para automatizaciones, y un CRM para gestionar clientes.',
+      },
+      {
+        id: 'productividad-3',
+        titulo: 'Gestión del tiempo del emprendedor',
+        contenido: 'El tiempo es el único recurso no renovable. Técnicas que funcionan: Time Blocking (asignar bloques de tiempo a categorías de tareas antes de que lleguen las urgencias), la regla de los 2 minutos (si algo tarda menos de 2 minutos, hazlo ahora), y las "3 victorias del día" (cada mañana define las 3 cosas que, si las completas, el día habrá sido exitoso independientemente de lo demás).',
+      },
+    ],
+    quiz: [
+      { pregunta: '¿Qué dice el Principio de Pareto?', opciones: ['Todo es igualmente importante', 'El 20% de acciones genera el 80% de resultados', 'Hay que hacer más para conseguir más'], correcta: 1 },
+      { pregunta: '¿Qué es un sistema en un negocio?', opciones: ['Un software de gestión', 'Un proceso documentado que funciona sin tu presencia', 'Un equipo de trabajo'], correcta: 1 },
+    ],
   },
 ]
 
+// ─── Componente principal ──────────────────────────────────────────────────────
 export default function Formacion({ onNavigate, currentPage }) {
-  const [busqueda, setBusqueda] = useState('')
-  const [verticalActiva, setVerticalActiva] = useState(VERTICALES[0])
-  const [tabActiva, setTabActiva] = useState('contenido')
+  const { user, agregarXP } = useAuth()
+  const [vista, setVista]             = useState('lista')        // 'lista' | 'vertical' | 'leccion'
+  const [verticalActual, setVertical] = useState(null)
+  const [leccionActual, setLeccion]   = useState(null)
+  const [completadas, setCompletadas] = useState(new Set())
+  const [respuestasQuiz, setRespuestasQuiz] = useState({})       // { preguntaIdx: opcionIdx }
+  const [feedback, setFeedback]       = useState(null)           // null | { idx, correcto }
 
-  const filtradas = VERTICALES.filter(v =>
-    !busqueda || v.titulo.toLowerCase().includes(busqueda.toLowerCase()) || v.desc.toLowerCase().includes(busqueda.toLowerCase())
-  )
+  useEffect(() => {
+    if (user) cargarProgreso()
+  }, [user])
 
-  return (
-    <Layout currentPage={currentPage} onNavigate={onNavigate}>
-      <h1 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.6rem', letterSpacing: '-0.03em', marginBottom: 6 }}>
-        Biblioteca de formación
-      </h1>
-      <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: 20 }}>
-        Todo el conocimiento que necesitas, organizado por verticales. Directo y sin ruido.
-      </p>
+  // ─── Cargar progreso desde Supabase ───────────────────────────
+  const cargarProgreso = async () => {
+    const { data } = await supabase
+      .from('formacion_progreso')
+      .select('leccion_id')
+      .eq('user_id', user.id)
+    if (data) setCompletadas(new Set(data.map(r => r.leccion_id)))
+  }
 
-      {/* Buscador */}
-      <div style={{ position: 'relative', marginBottom: 20 }}>
-        <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }}>🔍</span>
-        <input
-          value={busqueda}
-          onChange={e => setBusqueda(e.target.value)}
-          placeholder="Buscar vertical o módulo..."
-          style={{ width: '100%', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', color: 'var(--text)', padding: '12px 14px 12px 42px', fontSize: '0.9rem', outline: 'none', fontFamily: 'DM Sans, sans-serif' }}
-        />
-      </div>
+  // ─── Marcar lección como completada ───────────────────────────
+  const marcarCompletada = async (leccionId) => {
+    if (completadas.has(leccionId)) return
+    const nuevas = new Set(completadas)
+    nuevas.add(leccionId)
+    setCompletadas(nuevas)
+    await supabase.from('formacion_progreso').upsert({
+      user_id:    user.id,
+      leccion_id: leccionId,
+      completada: true,
+    }, { onConflict: 'user_id,leccion_id' })
+    await agregarXP(10)
+  }
 
-      <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: 0, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
+  // ─── Porcentaje de progreso por vertical ──────────────────────
+  const porcentaje = (v) => {
+    const total = v.lecciones.length
+    const hechas = v.lecciones.filter(l => completadas.has(l.id)).length
+    return total === 0 ? 0 : Math.round((hechas / total) * 100)
+  }
 
-        {/* Sidebar verticales */}
-        <div style={{ borderRight: '1px solid var(--border)', overflow: 'auto', maxHeight: '70vh' }}>
-          <div style={{ padding: '12px 16px', fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', borderBottom: '1px solid var(--border)' }}>
-            {filtradas.length} verticales
-          </div>
-          {filtradas.map(v => (
-            <button
-              key={v.id}
-              onClick={() => { setVerticalActiva(v); setTabActiva('contenido') }}
-              style={{
-                width: '100%', padding: '12px 16px', textAlign: 'left', cursor: 'pointer',
-                background: verticalActiva?.id === v.id ? 'var(--indigo-dim)' : 'transparent',
-                borderLeft: `3px solid ${verticalActiva?.id === v.id ? v.color : 'transparent'}`,
-                border: 'none', borderBottom: '1px solid var(--border)',
-                display: 'flex', alignItems: 'center', gap: 10,
-                transition: 'all var(--transition)'
-              }}>
-              <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>{v.icon}</span>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: '0.82rem', fontWeight: 600, color: verticalActiva?.id === v.id ? 'var(--text)' : 'var(--text-soft)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+  // ─── Responder quiz ───────────────────────────────────────────
+  const responderQuiz = (pregIdx, opcionIdx) => {
+    if (respuestasQuiz[pregIdx] !== undefined) return   // ya respondida
+    setRespuestasQuiz(prev => ({ ...prev, [pregIdx]: opcionIdx }))
+    const correcta = verticalActual.quiz[pregIdx].correcta === opcionIdx
+    setFeedback({ idx: pregIdx, correcto: correcta })
+    setTimeout(() => setFeedback(null), 2500)
+  }
+
+  const abrirVertical = (v) => {
+    setVertical(v)
+    setRespuestasQuiz({})
+    setFeedback(null)
+    setVista('vertical')
+  }
+
+  const abrirLeccion = (l) => {
+    setLeccion(l)
+    setVista('leccion')
+  }
+
+  // ─── Vista: lista de verticales ───────────────────────────────
+  if (vista === 'lista') {
+    return (
+      <Layout currentPage={currentPage} onNavigate={onNavigate}>
+        <h1 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.6rem', letterSpacing: '-0.03em', marginBottom: 6 }}>
+          Formación
+        </h1>
+        <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: 28 }}>
+          {VERTICALES.length} verticales de formación para emprendedores
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 18 }}>
+          {VERTICALES.map(v => {
+            const pct = porcentaje(v)
+            return (
+              <button
+                key={v.id}
+                onClick={() => abrirVertical(v)}
+                style={{
+                  background: 'var(--surface)', border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius)', padding: 24,
+                  textAlign: 'left', cursor: 'pointer',
+                  transition: 'border-color var(--transition), transform var(--transition)',
+                  display: 'flex', flexDirection: 'column', gap: 0,
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = v.color; e.currentTarget.style.transform = 'translateY(-2px)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                {/* Icono */}
+                <div style={{ fontSize: '2.2rem', marginBottom: 14 }}>{v.icon}</div>
+
+                {/* Título */}
+                <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '0.95rem', color: 'var(--text)', marginBottom: 8 }}>
                   {v.titulo}
                 </div>
-                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{v.videos?.length || 5} videos</div>
-              </div>
-              <span style={{
-                fontSize: '0.6rem', fontWeight: 700, padding: '2px 6px', borderRadius: 99, flexShrink: 0,
-                background: v.badge === 'nuevo' ? 'var(--indigo-dim)' : 'var(--surface3)',
-                color: v.badge === 'nuevo' ? 'var(--indigo)' : 'var(--text-muted)',
-                border: `1px solid ${v.badge === 'nuevo' ? 'rgba(99,102,241,0.3)' : 'var(--border)'}`,
-                textTransform: 'uppercase'
-              }}>
-                {v.badge === 'nuevo' ? 'NEW' : 'Pronto'}
-              </span>
-            </button>
-          ))}
-        </div>
 
-        {/* Panel derecho */}
-        {verticalActiva && (
-          <div style={{ overflow: 'auto', maxHeight: '70vh' }}>
-            {/* Header */}
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontSize: '1.6rem' }}>{verticalActiva.icon}</span>
+                {/* Descripción */}
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.55, marginBottom: 18, flex: 1 }}>
+                  {v.desc}
+                </p>
+
+                {/* Footer */}
                 <div>
-                  <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.1rem' }}>{verticalActiva.titulo}</div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{verticalActiva.desc}</div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                      {v.lecciones.length} lecciones
+                    </span>
+                    <span style={{ fontSize: '0.72rem', color: pct === 100 ? '#22C55E' : 'var(--text-muted)', fontWeight: 600 }}>
+                      {pct}%
+                    </span>
+                  </div>
+                  <div style={{ height: 4, background: 'var(--surface3)', borderRadius: 99, overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${pct}%`, background: pct === 100 ? '#22C55E' : v.color, borderRadius: 99, transition: 'width 0.5s ease' }} />
+                  </div>
                 </div>
-              </div>
-              <span style={{
-                padding: '4px 12px', borderRadius: 99, fontSize: '0.72rem', fontWeight: 600,
-                background: verticalActiva.badge === 'nuevo' ? 'var(--indigo-dim)' : 'var(--surface3)',
-                color: verticalActiva.badge === 'nuevo' ? 'var(--indigo)' : 'var(--text-muted)',
-                border: `1px solid ${verticalActiva.badge === 'nuevo' ? 'rgba(99,102,241,0.3)' : 'var(--border)'}`,
-              }}>
-                {verticalActiva.badge === 'nuevo' ? 'Disponible' : 'Próximamente'}
-              </span>
-            </div>
+              </button>
+            )
+          })}
+        </div>
+      </Layout>
+    )
+  }
 
-            {/* Tabs */}
-            <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid var(--border)', padding: '0 24px' }}>
-              {[['contenido', '📄 Contenido'], ['videos', `🎬 Videos (${verticalActiva.videos?.length || 0})`]].map(([t, label]) => (
-                <button key={t} onClick={() => setTabActiva(t)}
-                  style={{
-                    padding: '12px 16px', cursor: 'pointer', background: 'transparent', border: 'none',
-                    fontSize: '0.85rem', fontWeight: tabActiva === t ? 600 : 400,
-                    color: tabActiva === t ? 'var(--text)' : 'var(--text-muted)',
-                    borderBottom: `2px solid ${tabActiva === t ? verticalActiva.color : 'transparent'}`,
-                    transition: 'all var(--transition)'
-                  }}>
-                  {label}
-                </button>
-              ))}
-            </div>
+  // ─── Vista: detalle de vertical ───────────────────────────────
+  if (vista === 'vertical' && verticalActual) {
+    const v   = verticalActual
+    const pct = porcentaje(v)
+    return (
+      <Layout currentPage={currentPage} onNavigate={onNavigate}>
+        {/* Volver */}
+        <button
+          onClick={() => setVista('lista')}
+          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.85rem', marginBottom: 20, padding: 0, display: 'flex', alignItems: 'center', gap: 6 }}>
+          ← Volver a verticales
+        </button>
 
-            {/* Contenido */}
-            <div style={{ padding: 24 }}>
-              {tabActiva === 'contenido' && verticalActiva.contenido && (
-                <div className="fade-in">
-                  <h3 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.1rem', marginBottom: 10 }}>
-                    {verticalActiva.contenido.intro}
-                  </h3>
-                  <p style={{ fontSize: '0.88rem', color: 'var(--text-soft)', lineHeight: 1.7, marginBottom: 20 }}>
-                    {verticalActiva.contenido.texto}
-                  </p>
-
-                  {verticalActiva.contenido.secciones.map((s, i) => (
-                    <div key={i} style={{ borderLeft: `3px solid ${s.color}`, paddingLeft: 16, marginBottom: 20 }}>
-                      <p style={{ fontWeight: 700, color: s.color, marginBottom: 8, fontSize: '0.92rem' }}>{s.titulo}</p>
-                      {s.texto && <p style={{ fontSize: '0.85rem', color: 'var(--text-soft)', lineHeight: 1.7 }}>{s.texto}</p>}
-                      {s.lista && (
-                        <ul style={{ paddingLeft: 16 }}>
-                          {s.lista.map((item, j) => (
-                            <li key={j} style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: 4, lineHeight: 1.6 }}>{item}</li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  ))}
-
-                  {/* Consejo */}
-                  {verticalActiva.contenido.consejo && (
-                    <div style={{ background: 'rgba(240,180,41,0.08)', border: '1px solid rgba(240,180,41,0.2)', borderRadius: 'var(--radius-sm)', padding: 16, marginTop: 8 }}>
-                      <p style={{ fontWeight: 700, color: 'var(--gold)', marginBottom: 6, fontSize: '0.85rem' }}>
-                        {verticalActiva.contenido.consejo.mentor}
-                      </p>
-                      <p style={{ fontSize: '0.85rem', color: 'var(--text-soft)', lineHeight: 1.7 }}>
-                        {verticalActiva.contenido.consejo.texto}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {tabActiva === 'videos' && (
-                <div className="fade-in">
-                  {verticalActiva.videos?.map((v, i) => (
-                    <div key={i} style={{
-                      display: 'flex', alignItems: 'center', gap: 14,
-                      padding: 14, borderRadius: 'var(--radius-sm)',
-                      border: '1px solid var(--border)', background: 'var(--surface2)',
-                      cursor: 'pointer', marginBottom: 10, transition: 'all var(--transition)'
-                    }}
-                      onMouseEnter={e => e.currentTarget.style.borderColor = verticalActiva.color}
-                      onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
-                    >
-                      <div style={{ width: 52, height: 38, borderRadius: 6, background: 'var(--surface3)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>
-                        🎬
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '0.88rem', fontWeight: 500, color: 'var(--text)', marginBottom: 3 }}>{v}</div>
-                        <div style={{ fontSize: '0.73rem', color: 'var(--text-muted)' }}>🎬 Video · {verticalActiva.titulo}</div>
-                      </div>
-                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', background: 'var(--surface3)', padding: '3px 8px', borderRadius: 4, flexShrink: 0 }}>
-                        {10 + i * 3} min
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+        {/* Header */}
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 24, marginBottom: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
+            <span style={{ fontSize: '2.2rem' }}>{v.icon}</span>
+            <div>
+              <h2 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.25rem', marginBottom: 4 }}>{v.titulo}</h2>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{v.desc}</p>
             </div>
           </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Progreso</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: pct === 100 ? '#22C55E' : 'var(--text-muted)' }}>{pct}%</span>
+          </div>
+          <div style={{ height: 6, background: 'var(--surface3)', borderRadius: 99, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${pct}%`, background: pct === 100 ? '#22C55E' : v.color, borderRadius: 99, transition: 'width 0.5s ease' }} />
+          </div>
+        </div>
+
+        {/* Lista de lecciones */}
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', overflow: 'hidden', marginBottom: 20 }}>
+          {v.lecciones.map((l, i) => {
+            const hecha = completadas.has(l.id)
+            return (
+              <button
+                key={l.id}
+                onClick={() => abrirLeccion(l)}
+                style={{
+                  width: '100%', padding: '16px 20px',
+                  background: 'none', border: 'none', borderBottom: i < v.lecciones.length - 1 ? '1px solid var(--border)' : 'none',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14,
+                  transition: 'background var(--transition)',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'var(--surface2)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'none'}
+              >
+                <span style={{
+                  width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
+                  background: hecha ? '#22C55E22' : 'var(--surface2)',
+                  border: `2px solid ${hecha ? '#22C55E' : 'var(--border2)'}`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '0.7rem', fontWeight: 700,
+                  color: hecha ? '#22C55E' : 'var(--text-muted)',
+                }}>
+                  {hecha ? '✓' : i + 1}
+                </span>
+                <span style={{ fontSize: '0.88rem', color: 'var(--text)', flex: 1, textAlign: 'left' }}>{l.titulo}</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>›</span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Quiz */}
+        {v.quiz?.length > 0 && (
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
+              <span style={{ fontSize: '1rem' }}>🧠</span>
+              <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '0.95rem' }}>Quiz rápido</span>
+            </div>
+            {v.quiz.map((q, qi) => {
+              const respondida = respuestasQuiz[qi] !== undefined
+              return (
+                <div key={qi} style={{ marginBottom: qi < v.quiz.length - 1 ? 24 : 0 }}>
+                  <p style={{ fontSize: '0.88rem', color: 'var(--text)', fontWeight: 500, marginBottom: 10 }}>{q.pregunta}</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {q.opciones.map((op, oi) => {
+                      const seleccionada = respuestasQuiz[qi] === oi
+                      const esCorrecta   = q.correcta === oi
+                      let bg = 'var(--surface2)'
+                      let border = '1px solid var(--border)'
+                      let color = 'var(--text)'
+                      if (respondida && seleccionada && esCorrecta)  { bg = 'rgba(34,197,94,0.12)'; border = '1px solid #22C55E'; color = '#22C55E' }
+                      if (respondida && seleccionada && !esCorrecta) { bg = 'rgba(239,68,68,0.12)';  border = '1px solid #EF4444'; color = '#EF4444' }
+                      return (
+                        <button
+                          key={oi}
+                          onClick={() => responderQuiz(qi, oi)}
+                          disabled={respondida}
+                          style={{ padding: '11px 16px', borderRadius: 'var(--radius-sm)', background: bg, border, color, fontSize: '0.85rem', textAlign: 'left', cursor: respondida ? 'default' : 'pointer', transition: 'all 0.2s' }}
+                        >
+                          {op}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         )}
-      </div>
-    </Layout>
-  )
+
+        {/* Feedback flotante */}
+        {feedback && (
+          <div style={{
+            position: 'fixed', bottom: 28, right: 28,
+            background: feedback.correcto ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)',
+            border: `1px solid ${feedback.correcto ? '#22C55E' : '#EF4444'}`,
+            borderRadius: 'var(--radius)', padding: '12px 20px',
+            display: 'flex', alignItems: 'center', gap: 10,
+            fontSize: '0.88rem', fontWeight: 600,
+            color: feedback.correcto ? '#22C55E' : '#EF4444',
+            zIndex: 100, backdropFilter: 'blur(8px)',
+            animation: 'fadeIn 0.2s ease',
+          }}>
+            {feedback.correcto ? '✅ Correcto' : '❌ Incorrecto'}
+          </div>
+        )}
+
+        <style>{`
+          @keyframes fadeIn { from { opacity:0; transform:translateY(8px) } to { opacity:1; transform:translateY(0) } }
+        `}</style>
+      </Layout>
+    )
+  }
+
+  // ─── Vista: leccion ───────────────────────────────────────────
+  if (vista === 'leccion' && leccionActual) {
+    const l     = leccionActual
+    const hecha = completadas.has(l.id)
+    return (
+      <Layout currentPage={currentPage} onNavigate={onNavigate}>
+        {/* Volver */}
+        <button
+          onClick={() => setVista('vertical')}
+          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.85rem', marginBottom: 20, padding: 0, display: 'flex', alignItems: 'center', gap: 6 }}>
+          ← Volver a {verticalActual?.titulo}
+        </button>
+
+        {/* Contenido */}
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 28, maxWidth: 700 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, marginBottom: 24 }}>
+            <h2 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.15rem', lineHeight: 1.4 }}>{l.titulo}</h2>
+            <button
+              onClick={() => marcarCompletada(l.id)}
+              disabled={hecha}
+              style={{
+                padding: '8px 16px', borderRadius: 'var(--radius-sm)', flexShrink: 0,
+                background: hecha ? 'rgba(34,197,94,0.12)' : 'var(--surface2)',
+                border: `1px solid ${hecha ? '#22C55E' : 'var(--border2)'}`,
+                color: hecha ? '#22C55E' : 'var(--text)',
+                cursor: hecha ? 'default' : 'pointer', fontSize: '0.82rem', fontWeight: 600,
+                display: 'flex', alignItems: 'center', gap: 6,
+              }}>
+              {hecha ? '✓ Completada' : '○ Marcar completada'}
+            </button>
+          </div>
+          <p style={{ fontSize: '0.92rem', color: 'var(--text-soft)', lineHeight: 1.85 }}>
+            {l.contenido}
+          </p>
+        </div>
+      </Layout>
+    )
+  }
+
+  return null
 }

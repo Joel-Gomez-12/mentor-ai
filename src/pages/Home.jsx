@@ -4,20 +4,28 @@ import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 
 const CONDICIONES = [
-  { num: 1, icon: '🌑', name: 'Semilla',     color: '#6B7280', xpMax: 100  },
-  { num: 2, icon: '⚠️', name: 'Alerta Roja', color: '#C0392B', xpMax: 250  },
-  { num: 3, icon: '🆘', name: 'Emergencia',  color: '#E67E22', xpMax: 500  },
-  { num: 4, icon: '📊', name: 'Tracción',    color: '#F39C12', xpMax: 1000 },
-  { num: 5, icon: '📈', name: 'Escala',      color: '#3498DB', xpMax: 2000 },
-  { num: 6, icon: '👑', name: 'Dominio',     color: '#27AE60', xpMax: 5000 },
+  { num: 1, icon: '💀', name: 'Inexistencia', color: '#6B7280', xpMax: 100   },
+  { num: 2, icon: '🌱', name: 'Nacimiento',   color: '#16A34A', xpMax: 500   },
+  { num: 3, icon: '⚔️', name: 'Supervivencia',color: '#C0392B', xpMax: 1500  },
+  { num: 4, icon: '📊', name: 'Estabilidad',  color: '#F39C12', xpMax: 4000  },
+  { num: 5, icon: '🚀', name: 'Expansión',    color: '#3498DB', xpMax: 10000 },
+  { num: 6, icon: '👑', name: 'Dominio',      color: '#27AE60', xpMax: 99999 },
 ]
 
 const XP_RANGES = [
-  [0,100],[100,250],[250,500],[500,1000],[1000,2000],[2000,5000]
+  [0,100],[100,500],[500,1500],[1500,4000],[4000,10000],[10000,99999]
 ]
 
+function getSaludo() {
+  const h = new Date().getHours()
+  if (h >= 5  && h < 12) return 'Buenos días'
+  if (h >= 12 && h < 20) return 'Buenas tardes'
+  return 'Buenas noches'
+}
+
 export default function Home({ onNavigate, currentPage }) {
-  const { user, racha, xp, condicion } = useAuth()
+  const { user, xp, condicion, fullName } = useAuth()
+  const nombre = fullName || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'emprendedor'
   const [finanzas, setFinanzas] = useState({ ingresos: 0, gastos: 0, countIng: 0, countGas: 0 })
   const [loading, setLoading] = useState(true)
 
@@ -69,7 +77,7 @@ export default function Home({ onNavigate, currentPage }) {
 
       {/* Hero Andrea */}
       <div style={{
-        background: 'var(--surface)', border: '1px solid var(--border)',
+        background: 'linear-gradient(135deg, rgba(124,58,237,0.10), rgba(124,58,237,0.04))', border: '1px solid var(--border)',
         borderRadius: 'var(--radius)', padding: 28,
         display: 'flex', alignItems: 'center', gap: 22,
         position: 'relative', overflow: 'hidden',
@@ -78,16 +86,20 @@ export default function Home({ onNavigate, currentPage }) {
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at top right, rgba(240,180,41,0.07) 0%, transparent 60%)', pointerEvents: 'none' }} />
         <div style={{
           width: 72, height: 72, borderRadius: '50%',
-          background: 'var(--andrea-dim)', border: '3px solid var(--andrea)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '2rem', flexShrink: 0,
-          boxShadow: '0 0 30px rgba(240,180,41,0.2)'
-        }}>🧠</div>
+          border: '2px solid rgba(124,58,237,0.5)',
+          flexShrink: 0, overflow: 'hidden',
+          boxShadow: '0 0 30px rgba(124,58,237,0.3)'
+        }}>
+          <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
         <div>
-          <h2 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.4rem', letterSpacing: '-0.02em' }}>
-            Hola, soy <span style={{ color: 'var(--andrea)' }}>Andrea</span>. ¿Qué hacemos hoy?
+          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            {getSaludo()},
+          </p>
+          <h2 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.5rem', letterSpacing: '-0.02em', marginBottom: 6 }}>
+            <span style={{ color: 'var(--gold)' }}>{nombre}</span> 👋 <span style={{ color: 'var(--text-muted)', fontWeight: 400, fontSize: '1rem' }}>soy SISI, ¿en qué nos ponemos a trabajar hoy?</span>
           </h2>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-soft)', marginTop: 6 }}>
+          <p style={{ fontSize: '0.88rem', color: 'var(--text-soft)' }}>
             Estás en condición <strong style={{ color: condActual.color }}>{condActual.icon} {condActual.name}</strong> — sigue aplicando la fórmula para avanzar.
           </p>
         </div>
@@ -115,17 +127,30 @@ export default function Home({ onNavigate, currentPage }) {
           </div>
         </div>
 
-        {/* Racha */}
+        {/* Próximo nivel */}
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 20 }}>
           <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 8 }}>
-            Racha activa
+            Próximo nivel
           </div>
-          <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.3rem', color: 'var(--gold)', marginBottom: 4 }}>
-            🔥 {racha} días
-          </div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-            {racha > 1 ? '¡Sigue así, vas bien!' : 'Primer día — ¡a por ello!'}
-          </div>
+          {condActual.num < 6 ? (
+            <>
+              <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1rem', color: CONDICIONES[condIdx + 1]?.color, marginBottom: 4 }}>
+                {CONDICIONES[condIdx + 1]?.icon} {CONDICIONES[condIdx + 1]?.name}
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                Faltan {(condActual.xpMax - xpActual)} XP
+              </div>
+            </>
+          ) : (
+            <>
+              <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1rem', color: '#27AE60', marginBottom: 4 }}>
+                👑 Nivel máximo
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                Has alcanzado el Dominio
+              </div>
+            </>
+          )}
         </div>
 
         {/* XP */}
@@ -150,10 +175,11 @@ export default function Home({ onNavigate, currentPage }) {
             Foco del día
           </div>
           <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1rem', color: 'var(--jedi)', marginBottom: 4 }}>
-            {condActual.num <= 2 ? 'Visibilidad' :
-             condActual.num === 3 ? 'Promoción' :
-             condActual.num === 4 ? 'Optimizar' :
-             condActual.num === 5 ? 'Escalar' : 'Sistematizar'}
+            {condActual.num === 1 ? 'Visibilidad' :
+             condActual.num === 2 ? 'Validación' :
+             condActual.num === 3 ? 'Break-even' :
+             condActual.num === 4 ? 'Sistematizar' :
+             condActual.num === 5 ? 'Escalar' : 'Delegar'}
           </div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
             Según tu condición actual
@@ -167,6 +193,7 @@ export default function Home({ onNavigate, currentPage }) {
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 28 }}>
         {[
+          { icon: '⚡', label: 'SISI — Análisis IA',    page: 'sisi',        color: '#7C3AED' },
           { icon: '📡', label: 'Pulso del negocio',    page: 'pulso',       color: 'var(--gold)' },
           { icon: '💡', label: 'Capturar pensamiento', page: 'pensamiento', color: 'var(--indigo)' },
           { icon: '📈', label: 'Registrar ingreso',    page: 'ingreso',     color: 'var(--jedi)' },

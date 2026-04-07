@@ -83,16 +83,36 @@ body {
 .fill-red    { background: linear-gradient(90deg, var(--leo), #fca5a5); }
 
 /* Scrollbar personalizado para sidebar y paneles */
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--surface3);
-  border-radius: 99px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--border2);
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border2); }
+
+/* ============================================================
+   RESPONSIVE — MÓVIL (< 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  :root { --sidebar-w: 0px; }
+
+  /* El sidebar en móvil es un drawer: se oculta fuera de pantalla */
+  aside {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease !important;
+  }
+  aside.open {
+    transform: translateX(0) !important;
+  }
+
+  /* El main no tiene margen izquierdo en móvil */
+  main { margin-left: 0 !important; }
+
+  /* Padding más compacto */
+  main > div:last-child { padding: 16px !important; }
+
+  /* Grids: 1 columna en móvil */
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+
+  /* Tipografía más compacta */
+  h1 { font-size: 1.3rem !important; }
+  h2 { font-size: 1.1rem !important; }
 }

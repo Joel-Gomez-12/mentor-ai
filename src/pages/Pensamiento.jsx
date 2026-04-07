@@ -18,9 +18,9 @@ const MENTORES_CONFIG = [
     systemPrompt: `Eres Steve, un mentor visionario inspirado en Steve Jobs. Eres directo y enfocado en la excelencia. El emprendedor acaba de capturar un pensamiento y necesita tu perspectiva innovadora. Responde en español con 3 oraciones completas. REGLA CRÍTICA: Nunca cortes una oración a la mitad. Siempre termina todas tus oraciones.`
   },
   {
-    key: 'leo', name: 'Leónidas', emoji: '⚔️',
+    key: 'leo', name: 'Leo', emoji: '⚔️',
     color: 'var(--leo)', dim: 'var(--leo-dim)',
-    systemPrompt: `Eres Leónidas, un mentor guerrero con mentalidad espartana. Eres duro, directo y sin excusas. El emprendedor acaba de capturar un pensamiento y necesita que lo desafíes a actuar. Responde en español con 3 oraciones completas. REGLA CRÍTICA: Nunca cortes una oración a la mitad. Siempre termina todas tus oraciones.`
+    systemPrompt: `Eres Leo, un mentor guerrero con mentalidad espartana. Eres duro, directo y sin excusas. El emprendedor acaba de capturar un pensamiento y necesita que lo desafíes a actuar. Responde en español con 3 oraciones completas. REGLA CRÍTICA: Nunca cortes una oración a la mitad. Siempre termina todas tus oraciones.`
   },
 ]
 
@@ -129,7 +129,7 @@ export default function Pensamiento({ onNavigate, currentPage }) {
     if (!error && data) {
       setHistorial(prev => [data, ...prev])
       setGuardado(true)
-      await agregarXP(10)
+      await agregarXP(3)
       // Pedir respuestas IA en paralelo
       pedirRespuestasMentores(texto, tipo)
     } else {
@@ -160,27 +160,16 @@ export default function Pensamiento({ onNavigate, currentPage }) {
   return (
     <Layout currentPage={currentPage} onNavigate={onNavigate}>
       <h1 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.6rem', letterSpacing: '-0.03em', marginBottom: 6 }}>
-        Capturar pensamiento
+        🧠 Capturar pensamiento
       </h1>
       <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: 28 }}>
-        Andrea guarda todo lo que pasa por tu mente.
+        Guarda todo lo que pasa por tu mente y consulta con tus mentores.
       </p>
 
       {/* ── Formulario ─────────────────────────────────────────── */}
       {!guardado ? (
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 22, marginBottom: 16 }}>
-          {/* Header Andrea */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18 }}>
-            <div style={{
-              width: 44, height: 44, borderRadius: '50%',
-              background: 'var(--andrea-dim)', border: '2px solid var(--andrea)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem'
-            }}>🧠</div>
-            <div>
-              <div style={{ fontWeight: 600, color: 'var(--andrea)' }}>Andrea</div>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>¿En qué estás pensando ahora mismo?</div>
-            </div>
-          </div>
+          
 
           {/* Textarea */}
           <textarea

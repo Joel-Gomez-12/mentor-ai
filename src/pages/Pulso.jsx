@@ -61,12 +61,12 @@ const PREGUNTAS = [
 ]
 
 const CONDICIONES_INFO = {
-  1: { icon: '🌑', name: 'Semilla',     color: '#6B7280', bg: 'rgba(107,114,128,0.1)' },
-  2: { icon: '⚠️', name: 'Alerta Roja', color: '#C0392B', bg: 'rgba(192,57,43,0.1)'   },
-  3: { icon: '🆘', name: 'Emergencia',  color: '#E67E22', bg: 'rgba(230,126,34,0.1)'  },
-  4: { icon: '📊', name: 'Tracción',    color: '#F39C12', bg: 'rgba(243,156,18,0.1)'  },
-  5: { icon: '📈', name: 'Escala',      color: '#3498DB', bg: 'rgba(52,152,219,0.1)'  },
-  6: { icon: '👑', name: 'Dominio',     color: '#27AE60', bg: 'rgba(39,174,96,0.1)'   },
+  1: { icon: '💀', name: 'Inexistencia',  color: '#6B7280', bg: 'rgba(107,114,128,0.1)' },
+  2: { icon: '🌱', name: 'Nacimiento',    color: '#16A34A', bg: 'rgba(22,163,74,0.1)'   },
+  3: { icon: '⚔️', name: 'Supervivencia', color: '#C0392B', bg: 'rgba(192,57,43,0.1)'   },
+  4: { icon: '📊', name: 'Estabilidad',   color: '#F39C12', bg: 'rgba(243,156,18,0.1)'  },
+  5: { icon: '🚀', name: 'Expansión',     color: '#3498DB', bg: 'rgba(52,152,219,0.1)'  },
+  6: { icon: '👑', name: 'Dominio',       color: '#27AE60', bg: 'rgba(39,174,96,0.1)'   },
 }
 
 export default function Pulso({ onNavigate, currentPage }) {
@@ -115,13 +115,13 @@ export default function Pulso({ onNavigate, currentPage }) {
 
     const prompt = `Eres Andrea, asistente de mentoría empresarial experta en el sistema de las 6 condiciones del emprendedor.
 
-Las 6 condiciones son:
-1 - SEMILLA: Sin presencia, sin datos, sin ventas. Solo una idea.
-2 - ALERTA ROJA: Caída pronunciada, situación de crisis o peligro.
-3 - EMERGENCIA: Estadísticas bajando o estancadas, sin crecimiento.
-4 - TRACCIÓN: Crecimiento gradual estable, las cosas van bien.
-5 - ESCALA: Crecimiento explosivo, más demanda de la que puedes gestionar.
-6 - DOMINIO: Nivel alto sostenido, el negocio funciona con abundancia total.
+Las 6 fases son:
+1 - INEXISTENCIA: Sin presencia, sin datos, sin ventas. El proyecto no existe en el mercado.
+2 - NACIMIENTO: Primeras señales reales de interés y primeros clientes.
+3 - SUPERVIVENCIA: El negocio cubre o se acerca a cubrir sus costes. Batalla por el break-even.
+4 - ESTABILIDAD: El proyecto funciona con orden y repetibilidad. Ingresos predecibles.
+5 - EXPANSIÓN: El sistema funciona bien y es momento de crecer con estructura.
+6 - DOMINIO: Sistema autónomo. Abundancia total y sin depender del fundador.
 
 El emprendedor ha respondido lo siguiente sobre su negocio:
 ${resumenRespuestas}
@@ -171,7 +171,7 @@ Analiza sus respuestas y responde EXACTAMENTE en este formato JSON sin texto adi
       }
 
       setResultado(parsed)
-      await agregarXP(25)
+      await agregarXP(30)
       // ── Guardar en Supabase ──────────────────────────────────
       const { error: saveError } = await supabase
         .from('pulsos')

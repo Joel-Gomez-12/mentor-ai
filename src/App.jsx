@@ -12,6 +12,8 @@ import Ajustes from './pages/Ajustes'
 import Mentores from './pages/Mentores'
 import Pulso from './pages/Pulso'
 import Pensamiento from './pages/Pensamiento'
+import Contactos from './pages/Contactos'
+import Sisi from './pages/Sisi'
 
 
 function ProtectedRoute({ children }) {
@@ -37,6 +39,8 @@ function AppInner() {
     mentores:    <Mentores    onNavigate={setPage} currentPage={page} />,
     pulso:       <Pulso       onNavigate={setPage} currentPage={page} />,
     pensamiento: <Pensamiento onNavigate={setPage} currentPage={page} />,
+    contactos:   <Contactos   onNavigate={setPage} currentPage={page} />,
+    sisi:        <Sisi        onNavigate={setPage} currentPage={page} />,
   }
 
   return pages[page] || pages['home']

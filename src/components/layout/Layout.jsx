@@ -24,13 +24,14 @@ export default function Layout({ children, currentPage, onNavigate }) {
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
-          <main style={{ 
-      marginLeft: 'var(--sidebar-w)', 
-      flex: 1, 
-      display: 'flex', 
+          <main style={{
+      marginLeft: 'var(--sidebar-w)',
+      flex: 1,
+      display: 'flex',
       flexDirection: 'column',
-      height: '100vh',        // ← altura completa de pantalla
-      overflow: 'hidden'      // ← evita scroll en el contenedor padre
+      height: '100vh',
+      overflow: 'hidden',
+      transition: 'margin-left 0.3s ease'
     }}>
       <Topbar
         title={PAGE_TITLES[currentPage] || 'Mentor AI'}
