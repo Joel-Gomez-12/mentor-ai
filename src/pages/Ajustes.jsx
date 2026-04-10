@@ -9,7 +9,7 @@ const CONDICIONES_COLORS = ['', '#6B7280', '#16A34A', '#C0392B', '#F39C12', '#34
 const MENTORES = [
   { key: 'jedi',  icon: '🧙', label: 'Jedi',     color: 'var(--jedi)'  },
   { key: 'steve', icon: '💡', label: 'Steve',    color: 'var(--steve)' },
-  { key: 'leo',   icon: '⚔️', label: 'Leo',       color: 'var(--leo)'   },
+  { key: 'leo',   icon: '⚔️', label: 'Leonidas',  color: 'var(--leo)'   },
 ]
 
 export default function Ajustes({ onNavigate, currentPage }) {

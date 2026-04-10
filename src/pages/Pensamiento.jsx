@@ -18,9 +18,9 @@ const MENTORES_CONFIG = [
     systemPrompt: `Eres Steve, un mentor visionario inspirado en Steve Jobs. Eres directo y enfocado en la excelencia. El emprendedor acaba de capturar un pensamiento y necesita tu perspectiva innovadora. Responde en español con 3 oraciones completas. REGLA CRÍTICA: Nunca cortes una oración a la mitad. Siempre termina todas tus oraciones.`
   },
   {
-    key: 'leo', name: 'Leo', emoji: '⚔️',
+    key: 'leo', name: 'Leonidas', emoji: '⚔️',
     color: 'var(--leo)', dim: 'var(--leo-dim)',
-    systemPrompt: `Eres Leo, un mentor guerrero con mentalidad espartana. Eres duro, directo y sin excusas. El emprendedor acaba de capturar un pensamiento y necesita que lo desafíes a actuar. Responde en español con 3 oraciones completas. REGLA CRÍTICA: Nunca cortes una oración a la mitad. Siempre termina todas tus oraciones.`
+    systemPrompt: `Eres Leonidas, un mentor guerrero con mentalidad espartana. Eres duro, directo y sin excusas. El emprendedor acaba de capturar un pensamiento y necesita que lo desafíes a actuar. Responde en español con 3 oraciones completas. REGLA CRÍTICA: Nunca cortes una oración a la mitad. Siempre termina todas tus oraciones.`
   },
 ]
 
@@ -235,7 +235,7 @@ export default function Pensamiento({ onNavigate, currentPage }) {
 
           {/* Loading IA */}
           {cargandoIA && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 16 }}>
+            <div className="rg-3" style={{ gap: 14, marginBottom: 16 }}>
               {MENTORES_CONFIG.map(m => (
                 <div key={m.key} style={{
                   background: 'var(--surface)', border: `1px solid var(--border)`,
@@ -256,7 +256,7 @@ export default function Pensamiento({ onNavigate, currentPage }) {
 
           {/* Respuestas IA */}
           {!cargandoIA && respuestasMentores.length > 0 && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 16 }}>
+            <div className="rg-3" style={{ gap: 14, marginBottom: 16 }}>
               {respuestasMentores.map(m => (
                 <div key={m.key} style={{
                   background: 'var(--surface)', border: `1px solid var(--border)`,

@@ -17,14 +17,14 @@ const MENTORES_DISPONIBLES = [
   { id: 'pablo', nombre: 'Pablo',     especialidad: 'estrategia empresarial real, visión de negocio y toma de decisiones difíciles' },
   { id: 'jedi',  nombre: 'Jedi',      especialidad: 'ejecución técnica, desbloqueo inmediato y siguiente paso concreto' },
   { id: 'steve', nombre: 'Steve',     especialidad: 'innovación, diferenciación de producto y pensamiento lateral' },
-  { id: 'leo',   nombre: 'Leo',       especialidad: 'ventas, captación de clientes y técnicas de cierre' },
+  { id: 'leo',   nombre: 'Leonidas',  especialidad: 'ventas, captación de clientes y técnicas de cierre' },
 ]
 
 const MENTORES_UI = {
   pablo: { foto: '/mentores/pablo.jpg', icon: '🟡', name: 'Pablo', badge: 'Estrategia real',      color: 'var(--gold)'  },
   jedi:  { foto: '/mentores/jedi.jpg',  icon: '🧙', name: 'Jedi',  badge: 'Desbloqueo inmediato', color: 'var(--jedi)'  },
   steve: { foto: '/mentores/steve.jpg', icon: '💡', name: 'Steve', badge: 'Pensamiento lateral',  color: 'var(--steve)' },
-  leo:   { foto: '/mentores/leo.jpg',   icon: '⚔️', name: 'Leo',   badge: 'Cierre y negociación', color: 'var(--leo)'   },
+  leo:   { foto: '/mentores/leo.jpg',   icon: '⚔️', name: 'Leonidas', badge: 'Cierre y negociación', color: 'var(--leo)'   },
 }
 
 const MENTORES_PROMPTS = {
@@ -58,7 +58,7 @@ ESTRUCTURA DE LAS 5 ORACIONES:
 5. Una sentencia breve y aspiracional que motive a crear algo extraordinario.
 FORMATO: Texto corrido sin interrupciones, enfocado en la calidad de cada palabra.`,
 
-  leo: `Eres Leo, un mentor guerrero con mentalidad espartana, firme y sin filtros.
+  leo: `Eres Leonidas, un mentor guerrero con mentalidad espartana, firme y sin filtros.
 REGLA INQUEBRANTABLE: Responde con EXACTAMENTE un párrafo de 5 oraciones contundentes, fuertes y disciplinadas.
 ESTRUCTURA DE LAS 5 ORACIONES:
 1. Un reconocimiento seco pero honorable del desafío, nombrando el cuello de botella que SISI detectó.
@@ -156,7 +156,7 @@ REGLAS:
 - Si detectas que el usuario necesita una decisión estratégica difícil, visión de negocio real o está cometiendo un error grave de dirección → sugiere Pablo.
 - Si el usuario está bloqueado en una tarea concreta o necesita el siguiente paso ejecutable ahora mismo → sugiere Jedi.
 - Si el usuario necesita diferenciarse, repensar su producto o explorar ángulos que no ha visto → sugiere Steve.
-- Si el usuario tiene un problema de ventas, no consigue cerrar clientes o necesita mejorar su proceso de captación → sugiere Leo.
+- Si el usuario tiene un problema de ventas, no consigue cerrar clientes o necesita mejorar su proceso de captación → sugiere Leonidas.
 - Si la situación no requiere profundidad extra de ningún mentor, devuelve nombre: "ninguno" en mentor_recomendado.
 - Comunícate de forma cercana, clara, práctica y útil. Sin tecnicismos innecesarios.
 - Una sola acción concreta es mejor que cinco difusas.
@@ -566,7 +566,7 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
   "sugerencias_extra": {
     "mentor_recomendado": {
       "id": "jedi|steve|leo|ninguno",
-      "nombre": "Jedi|Steve|Leo|ninguno",
+      "nombre": "Jedi|Steve|Leonidas|ninguno",
       "motivo": "por qué este mentor aportaría valor ahora mismo"
     },
     "knowledge_link_recomendado": null

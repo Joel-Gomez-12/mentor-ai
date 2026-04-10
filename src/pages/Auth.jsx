@@ -20,7 +20,7 @@ const LOGO_SVG = (
 
 const FEATURES = [
   { icon: '⚡', title: 'SISI — Inteligencia principal', desc: 'Tu IA analiza tu negocio en tiempo real y detecta el cuello de botella exacto.' },
-  { icon: '🧙', title: 'Mentores especializados', desc: 'Pablo, Jedi, Steve y Leo responden tus dudas con contexto completo de tu situación.' },
+  { icon: '🧙', title: 'Mentores especializados', desc: 'Pablo, Jedi, Steve y Leonidas responden tus dudas con contexto completo de tu situación.' },
   { icon: '📊', title: 'Pulso del negocio', desc: 'Mide tu orden financiero, avanza por fases y sabe exactamente dónde estás.' },
 ]
 
@@ -84,7 +84,7 @@ export default function Auth() {
     <div style={{ display: 'flex', minHeight: '100vh', background: '#080A12', fontFamily: 'DM Sans, sans-serif' }}>
 
       {/* ── LADO IZQUIERDO — Branding ── */}
-      <div style={{
+      <div className="auth-brand" style={{
         flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center',
         padding: '60px 64px',
         background: 'linear-gradient(135deg, #0D0F1C 0%, #130D2E 60%, #0D0F1C 100%)',
@@ -141,7 +141,7 @@ export default function Auth() {
       </div>
 
       {/* ── LADO DERECHO — Formulario ── */}
-      <div style={{ width: 480, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px 48px', background: '#0B0D1A' }}>
+      <div className="auth-form-col" style={{ width: 480, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px 48px', background: '#0B0D1A' }}>
 
         {/* Header del formulario */}
         <div style={{ marginBottom: 36 }}>

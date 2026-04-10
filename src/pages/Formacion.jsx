@@ -325,7 +325,7 @@ export default function Formacion({ onNavigate, currentPage }) {
           {VERTICALES.length} verticales de formación para emprendedores
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 18 }}>
+        <div className="rg-3" style={{ gap: 18 }}>
           {VERTICALES.map(v => {
             const pct = porcentaje(v)
             return (

@@ -111,7 +111,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
       setProyectos(prev => [data, ...prev])
       setForm({ nombre: '', descripcion: '', objetivo: '', fecha_inicio: new Date().toISOString().split('T')[0] })
       setVista('lista')
-      await agregarXP(15)
+      await agregarXP(10)
       // Abrir modal SISI
       setProyectoNuevo(data)
       setPaso(0)
@@ -215,7 +215,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
       setUpdates(prev => [...prev, data])
       setConteos(prev => ({ ...prev, [proyectoActivo.id]: (prev[proyectoActivo.id] || 0) + 1 }))
       setUpdateForm({ estado: 'avanza', accion: '', proximo_paso: '', progreso: updateForm.progreso })
-      await agregarXP(updateForm.estado === 'completado' ? 40 : 10)
+      await agregarXP(updateForm.estado === 'completado' ? 40 : 5)
     }
     setGuardando(false)
   }
@@ -253,7 +253,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 24, marginBottom: 24 }}>
           <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, marginBottom: 18 }}>Crear nuevo proyecto</p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+          <div className="rg-2" style={{ gap: 14, marginBottom: 14 }}>
             <div>
               <label style={labelStyle}>Nombre del proyecto *</label>
               <input value={form.nombre} onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))}
@@ -303,7 +303,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
               </button>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
+            <div className="rg-2" style={{ gap: 16 }}>
               {proyectos.map((p, i) => {
                 const color = getColor(i)
                 const numUpdates = conteos[p.id] || 0
@@ -327,7 +327,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
                       </p>
                     )}
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 14 }}>
+                    <div className="rg-2" style={{ gap: 8, marginBottom: 14 }}>
                       {[
                         { label: 'Inicio',   value: p.fecha_inicio ? new Date(p.fecha_inicio).toLocaleDateString('es-ES') : '—', color: 'var(--text)' },
                         { label: 'Updates',  value: numUpdates > 0 ? `${numUpdates} semana${numUpdates > 1 ? 's' : ''}` : 'Sin updates', color: numUpdates > 0 ? 'var(--indigo)' : 'var(--text-muted)' },
@@ -687,7 +687,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
                   {analisisSisi.diagnostico}
                 </p>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 16 }}>
+                <div className="rg-2" style={{ gap: 10, marginBottom: 16 }}>
                   <div style={{ background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.2)', borderRadius: 'var(--radius-sm)', padding: '10px 14px' }}>
                     <div style={{ fontSize: '0.65rem', color: 'var(--jedi)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 5 }}>✓ Fortaleza</div>
                     <p style={{ fontSize: '0.82rem', color: 'var(--text-soft)', lineHeight: 1.5 }}>{analisisSisi.fortaleza}</p>

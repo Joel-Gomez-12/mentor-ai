@@ -68,13 +68,13 @@ FORMATO: Texto corrido sin interrupciones, enfocado en la calidad de cada palabr
     key: 'leo',
     foto: '/mentores/leo.jpg',
     emoji: '⚔️',
-    name: 'Leo',
+    name: 'Leonidas',
     badge: 'Mentor Guerrero',
     color: 'var(--leo)',
     dim: 'var(--leo-dim)',
-    desc: 'Habla el idioma de los clientes. Desde el primer contacto hasta el cierre, Leo te entrena para vender con naturalidad.',
+    desc: 'Habla el idioma de los clientes. Desde el primer contacto hasta el cierre, Leonidas te entrena para vender con naturalidad.',
     frase: '"Una objeción no es un rechazo. Es una pregunta sin respuesta."',
-    systemPrompt: `Eres Leo, un mentor guerrero con mentalidad espartana, firme y sin filtros.
+    systemPrompt: `Eres Leonidas, un mentor guerrero con mentalidad espartana, firme y sin filtros.
 REGLA INQUEBRANTABLE: Responde con EXACTAMENTE un párrafo de 5 oraciones contundentes, fuertes y disciplinadas. 
 ESTRUCTURA DE LAS 5 ORACIONES:
 1. Un reconocimiento seco pero honorable del desafío que el emprendedor enfrenta.
@@ -184,7 +184,7 @@ export default function Mentores({ onNavigate, currentPage }) {
       </p>
 
       {/* ── Cards de mentores ─────────────────────────────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
+      <div className="rg-3" style={{ gap: 16, marginBottom: 24 }}>
         {MENTORES.map(m => (
           <div key={m.key} style={{
             background: 'var(--surface)', border: '1px solid var(--border)',
@@ -269,7 +269,7 @@ export default function Mentores({ onNavigate, currentPage }) {
 
       {/* ── Loading ───────────────────────────────────────────────── */}
       {cargando && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
+        <div className="rg-3" style={{ gap: 16, marginBottom: 24 }}>
           {MENTORES.map(m => (
             <div key={m.key} style={{
               background: 'var(--surface)', border: `1px solid var(--border)`,
@@ -296,7 +296,7 @@ export default function Mentores({ onNavigate, currentPage }) {
           <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>
             Consejo de los mentores
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+          <div className="rg-3" style={{ gap: 16 }}>
             {respuestas.map(m => (
               <div key={m.key} style={{
                 background: 'var(--surface)', border: `1px solid var(--border)`,
@@ -360,7 +360,7 @@ export default function Mentores({ onNavigate, currentPage }) {
                   {/* ── Respuestas expandibles ── */}
                   {abierta && (
                     <div style={{ padding: '0 18px 16px', borderTop: '1px solid var(--border)' }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginTop: 14 }}>
+                      <div className="rg-3" style={{ gap: 10, marginTop: 14 }}>
                         {s.messages?.filter(m => m.role === 'assistant').map(msg => {
                           const nombreMentor = msg.content.match(/^\[(.+?)\]:/)?.[1]
                           const contenido    = msg.content.replace(/^\[.+?\]:\s*/, '')

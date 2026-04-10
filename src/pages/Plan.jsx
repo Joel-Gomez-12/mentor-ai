@@ -247,7 +247,7 @@ Da un mensaje directo, cálido y accionable. Menciona algo específico de sus da
     if (!error) {
       setGuardado(true)
       setTimeout(() => setGuardado(false), 2500)
-      await agregarXP(20)
+      await agregarXP(5)
       await generarMensajeAndrea() // ← genera mensaje al guardar
     } else {
       console.error('Error guardando plan:', error)
@@ -456,7 +456,7 @@ Da un mensaje directo, cálido y accionable. Menciona algo específico de sus da
       )}
 
       {/* ── Stats rápidos del mes ─────────────────────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 28 }}>
+      <div className="rg-4" style={{ gap: 12, marginBottom: 28 }}>
         {[
           { label: 'Ingresos del mes',   value: `€${finanzasMes.ingresos.toFixed(2)}`, color: 'var(--jedi)',   icon: '📈' },
           { label: 'Gastos del mes',     value: `€${finanzasMes.gastos.toFixed(2)}`,   color: 'var(--leo)',    icon: '📉' },
@@ -470,7 +470,7 @@ Da un mensaje directo, cálido y accionable. Menciona algo específico de sus da
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, alignItems: 'start' }}>
+      <div className="rg-2" style={{ gap: 20, alignItems: 'start' }}>
 
         {/* ── COLUMNA IZQUIERDA ─────────────────────────────── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

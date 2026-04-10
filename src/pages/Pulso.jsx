@@ -171,7 +171,7 @@ Analiza sus respuestas y responde EXACTAMENTE en este formato JSON sin texto adi
       }
 
       setResultado(parsed)
-      await agregarXP(30)
+      await agregarXP(5)
       // ── Guardar en Supabase ──────────────────────────────────
       const { error: saveError } = await supabase
         .from('pulsos')
@@ -241,7 +241,7 @@ Analiza sus respuestas y responde EXACTAMENTE en este formato JSON sin texto adi
                     }}
                   />
                 ) : (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+                  <div className="rg-2" style={{ gap: 8 }}>
                     {pregunta.opciones.map(op => (
                       <button
                         key={op.valor}
@@ -349,7 +349,7 @@ Analiza sus respuestas y responde EXACTAMENTE en este formato JSON sin texto adi
               {resultado.diagnostico}
             </p>
             <span style={{ background: 'var(--surface)', border: `1px solid ${condInfo.color}44`, borderRadius: 99, padding: '4px 14px', fontSize: '0.78rem', color: condInfo.color, fontWeight: 600 }}>
-              +25 XP ganados
+              +5 XP ganados
             </span>
           </div>
 
@@ -364,7 +364,7 @@ Analiza sus respuestas y responde EXACTAMENTE en este formato JSON sin texto adi
             </div>
           )}
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }}>
+          <div className="rg-2" style={{ gap: 16, marginBottom: 20 }}>
 
             {/* Fórmula de acción */}
             <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 22 }}>

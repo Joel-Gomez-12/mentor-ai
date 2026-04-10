@@ -89,6 +89,19 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: var(--border2); }
 
 /* ============================================================
+   CLASES DE GRID RESPONSIVE
+   ============================================================ */
+
+/* Grid de 2 columnas → 1 en móvil */
+.rg-2 { display: grid; grid-template-columns: repeat(2, 1fr); }
+
+/* Grid de 3 columnas → 1 en móvil */
+.rg-3 { display: grid; grid-template-columns: repeat(3, 1fr); }
+
+/* Grid de 4 columnas → 2 en tablet, 1 en móvil */
+.rg-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
+
+/* ============================================================
    RESPONSIVE — MÓVIL (< 768px)
    ============================================================ */
 @media (max-width: 768px) {
@@ -109,10 +122,36 @@ body {
   /* Padding más compacto */
   main > div:last-child { padding: 16px !important; }
 
-  /* Grids: 1 columna en móvil */
+  /* Grids legacy: 1 columna */
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+
+  /* Grids responsivos */
+  .rg-2 { grid-template-columns: 1fr !important; }
+  .rg-3 { grid-template-columns: 1fr !important; }
+  .rg-4 { grid-template-columns: repeat(2, 1fr) !important; }
 
   /* Tipografía más compacta */
   h1 { font-size: 1.3rem !important; }
   h2 { font-size: 1.1rem !important; }
+
+  /* Auth: ocultar columna izquierda de branding en móvil */
+  .auth-brand { display: none !important; }
+  .auth-form-col { width: 100% !important; max-width: 100% !important; padding: 28px 20px !important; }
+
+  /* Tabs que desbordan: scroll horizontal */
+  .tabs-scroll { overflow-x: auto; white-space: nowrap; padding-bottom: 4px; }
+  .tabs-scroll::-webkit-scrollbar { height: 0; }
+}
+
+/* ============================================================
+   RESPONSIVE — TABLET (< 1024px)
+   ============================================================ */
+@media (max-width: 1024px) {
+  .rg-4 { grid-template-columns: repeat(2, 1fr) !important; }
+  .rg-3 { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* Extra pequeño (< 480px) */
+@media (max-width: 480px) {
+  .rg-4 { grid-template-columns: 1fr !important; }
 }

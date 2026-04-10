@@ -163,7 +163,7 @@ export default function Finanzas({ onNavigate, currentPage, tab: tabInicial = 'i
       const { count } = await supabase.from('transactions')
         .select('id', { count: 'exact', head: true })
         .eq('user_id', user.id).eq('tipo', 'ingreso')
-      await agregarXP(count === 1 ? 50 : 5)
+      await agregarXP(count === 1 ? 10 : 5)
     }
     setGuardando(false)
   }
@@ -198,7 +198,7 @@ export default function Finanzas({ onNavigate, currentPage, tab: tabInicial = 'i
       </p>
 
       {/* ── Resumen top ─────────────────────────────────────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 28 }}>
+      <div className="rg-3" style={{ gap: 14, marginBottom: 28 }}>
         {[
           { label: 'Ingresos totales', value: `€${totalIng.toFixed(2)}`, sub: `${ingresos.length} registros`, color: 'var(--jedi)', border: 'var(--jedi)' },
           { label: 'Gastos totales',   value: `€${totalGas.toFixed(2)}`, sub: `${gastos.length} registros`,  color: 'var(--leo)',  border: 'var(--leo)' },
@@ -213,7 +213,7 @@ export default function Finanzas({ onNavigate, currentPage, tab: tabInicial = 'i
       </div>
 
       {/* ── Tabs ─────────────────────────────────────────────────────── */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+      <div className="tabs-scroll" style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
         {[
           ['ingreso',   '📈 Registrar ingreso'],
           ['gasto',     '📉 Registrar gasto'],
@@ -233,7 +233,7 @@ export default function Finanzas({ onNavigate, currentPage, tab: tabInicial = 'i
 
       {/* ── REGISTRAR INGRESO ────────────────────────────────────────── */}
       {tab === 'ingreso' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, alignItems: 'start' }}>
+        <div className="rg-2" style={{ gap: 20, alignItems: 'start' }}>
           <div style={cardStyle}>
             <div style={{ marginBottom: 16 }}>
               <label style={labelStyle}>Cantidad (€) *</label>
@@ -286,7 +286,7 @@ export default function Finanzas({ onNavigate, currentPage, tab: tabInicial = 'i
 
       {/* ── REGISTRAR GASTO ──────────────────────────────────────────── */}
       {tab === 'gasto' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, alignItems: 'start' }}>
+        <div className="rg-2" style={{ gap: 20, alignItems: 'start' }}>
           <div style={cardStyle}>
             <div style={{ marginBottom: 16 }}>
               <label style={labelStyle}>Cantidad (€) *</label>
@@ -380,7 +380,7 @@ export default function Finanzas({ onNavigate, currentPage, tab: tabInicial = 'i
           </div>
 
           {/* 6 KPI Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 24 }}>
+          <div className="rg-3" style={{ gap: 14, marginBottom: 24 }}>
             {[
               { icon: '📈', label: 'Ingresos del mes', value: `€${totalIngMes.toFixed(2)}`, color: '#3DDB6E' },
               { icon: '📉', label: 'Gastos del mes',   value: `€${totalGasMes.toFixed(2)}`, color: '#FF5757' },
@@ -427,7 +427,7 @@ export default function Finanzas({ onNavigate, currentPage, tab: tabInicial = 'i
           </div>
 
           {/* Comparativa mensual + Gastos por categoría */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
+          <div className="rg-2" style={{ gap: 20, marginBottom: 20 }}>
 
             {/* Barras comparativas */}
             <div style={cardStyle}>

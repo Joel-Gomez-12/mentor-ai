@@ -109,7 +109,7 @@ export default function Home({ onNavigate, currentPage }) {
       <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>
         Tu estado actual
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 28 }}>
+      <div className="rg-4" style={{ gap: 14, marginBottom: 28 }}>
 
         {/* Condición */}
         <div style={{ background: 'var(--surface)', border: `1px solid ${condActual.color}44`, borderRadius: 'var(--radius)', padding: 20 }}>
@@ -191,7 +191,7 @@ export default function Home({ onNavigate, currentPage }) {
       <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>
         Accesos rápidos
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 28 }}>
+      <div className="rg-4" style={{ gap: 12, marginBottom: 28 }}>
         {[
           { icon: '⚡', label: 'SISI — Análisis IA',    page: 'sisi',        color: '#7C3AED' },
           { icon: '📡', label: 'Pulso del negocio',    page: 'pulso',       color: 'var(--gold)' },
@@ -217,7 +217,7 @@ export default function Home({ onNavigate, currentPage }) {
       <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>
         Resumen financiero del mes
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
+      <div className="rg-3" style={{ gap: 14 }}>
         {[
           { label: 'Ingresos este mes', value: `€${finanzas.ingresos.toFixed(2)}`, sub: `${finanzas.countIng} registros`, color: 'var(--jedi)',  border: 'var(--jedi)' },
           { label: 'Gastos este mes',   value: `€${finanzas.gastos.toFixed(2)}`,   sub: `${finanzas.countGas} registros`, color: 'var(--leo)',   border: 'var(--leo)' },
