@@ -8,7 +8,7 @@ const VERTICALES = [
   {
     id: 'fiscal',
     icon: '🏛️',
-    color: '#6366F1',
+    color: '#128c7e',
     titulo: 'Gestión fiscal e impuestos',
     desc: 'Aprende a gestionar tus obligaciones fiscales como emprendedor.',
     lecciones: [

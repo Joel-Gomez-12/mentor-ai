@@ -7,9 +7,10 @@ const CONDICIONES_NAMES = ['', 'Inexistencia', 'Nacimiento', 'Supervivencia', 'E
 const CONDICIONES_COLORS = ['', '#6B7280', '#16A34A', '#C0392B', '#F39C12', '#3498DB', '#27AE60']
 
 const MENTORES = [
-  { key: 'jedi',  icon: '🧙', label: 'Jedi',     color: 'var(--jedi)'  },
-  { key: 'steve', icon: '💡', label: 'Steve',    color: 'var(--steve)' },
-  { key: 'leo',   icon: '⚔️', label: 'Leonidas',  color: 'var(--leo)'   },
+  { key: 'pablo', foto: '/mentores/pablo.jpg', label: 'Pablo',    color: 'var(--gold)'  },
+  { key: 'jedi',  foto: '/mentores/jedi.jpg',  label: 'Yoda',     color: 'var(--jedi)'  },
+  { key: 'steve', foto: '/mentores/steve.jpg', label: 'Steve',    color: 'var(--steve)' },
+  { key: 'leo',   foto: '/mentores/leo.jpg',   label: 'Leonidas', color: 'var(--leo)'   },
 ]
 
 export default function Ajustes({ onNavigate, currentPage }) {
@@ -19,6 +20,7 @@ export default function Ajustes({ onNavigate, currentPage }) {
   const [fullName,   setFullName]   = useState('')
   const [sector,     setSector]     = useState('')
   const [moneda,     setMoneda]     = useState('EUR')
+  const [idioma,     setIdioma]     = useState('es')
   const [mentorFav,  setMentorFav]  = useState('jedi')
   const [guardando,  setGuardando]  = useState(false)
   const [savedOk,    setSavedOk]    = useState(false)
@@ -43,13 +45,14 @@ export default function Ajustes({ onNavigate, currentPage }) {
   const cargarPerfil = async () => {
     const { data } = await supabase
       .from('users')
-      .select('full_name, sector, moneda, mentor_fav')
+      .select('full_name, sector, moneda, idioma, mentor_fav')
       .eq('id', user.id)
       .single()
     if (data) {
       setFullName(data.full_name || '')
       setSector(data.sector    || '')
       setMoneda(data.moneda    || 'EUR')
+      setIdioma(data.idioma    || 'es')
       setMentorFav(data.mentor_fav || 'jedi')
     }
   }
@@ -59,7 +62,7 @@ export default function Ajustes({ onNavigate, currentPage }) {
     setGuardando(true)
     const { error } = await supabase
       .from('users')
-      .update({ full_name: fullName, sector, moneda, mentor_fav: mentorFav })
+      .update({ full_name: fullName, sector, moneda, idioma, mentor_fav: mentorFav })
       .eq('id', user.id)
     setGuardando(false)
     if (!error) {
@@ -179,7 +182,7 @@ export default function Ajustes({ onNavigate, currentPage }) {
               <label style={label}>Tu sector / industria</label>
               <input value={sector} onChange={e => setSector(e.target.value)} placeholder="Ej: Tecnología, Salud, Educación..." style={input} />
             </div>
-            <div style={{ marginBottom: 24 }}>
+            <div style={{ marginBottom: 16 }}>
               <label style={label}>Moneda</label>
               <select value={moneda} onChange={e => setMoneda(e.target.value)} style={input}>
                 <option value="EUR">€ Euro</option>
@@ -189,6 +192,32 @@ export default function Ajustes({ onNavigate, currentPage }) {
                 <option value="COP">$ Peso colombiano</option>
                 <option value="MXN">$ Peso mexicano</option>
               </select>
+            </div>
+            <div style={{ marginBottom: 24 }}>
+              <label style={label}>🌐 Idioma de respuestas de la IA</label>
+              <div style={{ display: 'flex', gap: 8 }}>
+                {[
+                  { key: 'es', label: '🇪🇸 Español' },
+                  { key: 'en', label: '🇬🇧 English' },
+                ].map(op => (
+                  <button
+                    key={op.key}
+                    onClick={() => setIdioma(op.key)}
+                    style={{
+                      flex: 1, padding: '10px 0', borderRadius: 'var(--radius-sm)',
+                      cursor: 'pointer', fontWeight: idioma === op.key ? 600 : 400,
+                      fontSize: '0.88rem', transition: 'all 0.2s',
+                      background: idioma === op.key ? 'var(--indigo-dim)' : 'var(--surface2)',
+                      border: `1px solid ${idioma === op.key ? 'rgba(18,140,126,0.5)' : 'var(--border2)'}`,
+                      color: idioma === op.key ? 'var(--text)' : 'var(--text-soft)',
+                    }}>
+                    {op.label}
+                  </button>
+                ))}
+              </div>
+              <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 7 }}>
+                Los mentores, SISI y análisis responderán en el idioma seleccionado.
+              </p>
             </div>
 
             <button
@@ -219,7 +248,9 @@ export default function Ajustes({ onNavigate, currentPage }) {
                     display: 'flex', alignItems: 'center', gap: 10, transition: 'all 0.2s',
                     textAlign: 'left',
                   }}>
-                  <span style={{ fontSize: '1.1rem' }}>{m.icon}</span>
+                  <div style={{ width: 28, height: 28, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: `1.5px solid ${m.color}` }}>
+                    <img src={m.foto} alt={m.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
                   <span style={{ fontSize: '0.88rem' }}>{m.label}</span>
                   {mentorFav === m.key && <span style={{ marginLeft: 'auto', fontSize: '0.75rem' }}>✓ Seleccionado</span>}
                 </button>

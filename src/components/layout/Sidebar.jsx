@@ -85,7 +85,7 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
         style={{
         width: 240,
         height: '100vh',
-        background: 'var(--surface)',
+        background: '#ffffff',
         borderRight: '1px solid var(--border)',
         display: 'flex',
         flexDirection: 'column',
@@ -96,13 +96,13 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
       }}>
 
         {/* Logo */}
-        <div style={{ padding: '28px 22px 20px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
+        <div style={{ padding: '24px 22px 18px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
           <div style={{ marginBottom: 10 }}>{LOGO_SVG}</div>
           <div style={{
             fontFamily: 'Sora, sans-serif', fontWeight: 800,
             fontSize: '1.25rem', letterSpacing: '-0.02em', color: 'var(--text)'
           }}>
-            Mentor<span style={{ color: 'var(--gold)' }}> AI</span>
+            Mentor<span style={{ color: '#128c7e' }}> AI</span>
           </div>
           <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: 3, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Tu segundo cerebro empresarial
@@ -113,9 +113,9 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
         <div style={{ padding: '18px 22px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
           <div style={{
             width: 38, height: 38, borderRadius: '50%',
-            border: '2px solid rgba(124,58,237,0.5)',
+            border: '2px solid rgba(18,140,126,0.5)',
             overflow: 'hidden', flexShrink: 0,
-            boxShadow: '0 0 10px rgba(124,58,237,0.3)'
+            boxShadow: '0 0 10px rgba(18,140,126,0.3)'
           }}>
             <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
@@ -153,12 +153,13 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
                       padding: '9px 12px', borderRadius: 'var(--radius-sm)',
                       cursor: 'pointer', transition: 'all var(--transition)',
                       fontSize: '0.88rem', width: '100%', textAlign: 'left',
-                      border: isActive ? '1px solid rgba(99,102,241,0.25)' : '1px solid transparent',
-                      background: isActive ? 'var(--indigo-dim)' : 'none',
-                      color: isActive ? 'var(--text)' : 'var(--text-soft)',
+                      border: '1px solid transparent',
+                      background: isActive ? '#128c7e' : 'none',
+                      color: isActive ? '#ffffff' : 'var(--text-soft)',
+                      fontWeight: isActive ? 600 : 400,
                     }}
                   >
-                    <span style={{ fontSize: '1rem', width: 20, textAlign: 'center', color: isActive ? 'var(--indigo)' : 'inherit' }}>
+                    <span style={{ fontSize: '1rem', width: 20, textAlign: 'center', color: isActive ? '#ffffff' : 'var(--text-muted)' }}>
                       {icon}
                     </span>
                     {label}
@@ -205,12 +206,13 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
               }
             }}
             style={{
-              width: '100%', padding: '7px 0',
+              width: '100%', padding: '8px 0',
               borderRadius: 'var(--radius-sm)',
-              background: 'var(--surface2)',
+              background: 'var(--surface3)',
               border: '1px solid var(--border)',
               color: 'var(--text-muted)',
-              fontSize: '0.78rem', cursor: 'pointer'
+              fontSize: '0.78rem', cursor: 'pointer',
+              transition: 'all 0.2s',
             }}
           >
             🚪 Cerrar sesión

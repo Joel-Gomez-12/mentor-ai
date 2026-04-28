@@ -6,9 +6,11 @@ const AuthContext = createContext({})
 export function AuthProvider({ children }) {
   const [user, setUser]           = useState(null)
   const [loading, setLoading]     = useState(true)
-  const [xp, setXp]               = useState(0)
-  const [condicion, setCondicion] = useState(1)
-  const [fullName, setFullName]   = useState('')
+  const [xp, setXp]                     = useState(0)
+  const [condicion, setCondicion]       = useState(1)
+  const [fullName, setFullName]         = useState('')
+  const [idioma, setIdioma]             = useState('es')
+  const [tipoNegocio, setTipoNegocio]   = useState(null)
   const inicializado = useRef(false)
 
   useEffect(() => {
@@ -43,6 +45,8 @@ export function AuthProvider({ children }) {
           setXp(0)
           setCondicion(1)
           setFullName('')
+          setIdioma('es')
+          setTipoNegocio(null)
         }
       }
     )
@@ -58,7 +62,7 @@ export function AuthProvider({ children }) {
     try {
       const { data } = await supabase
         .from('users')
-        .select('xp, condicion, full_name')
+        .select('xp, condicion, full_name, idioma, tipo_negocio')
         .eq('id', userId)
         .single()
 
@@ -67,6 +71,8 @@ export function AuthProvider({ children }) {
       setXp(data.xp || 0)
       setCondicion(data.condicion || 1)
       setFullName(data.full_name || '')
+      setIdioma(data.idioma || 'es')
+      setTipoNegocio(data.tipo_negocio || null)
     } catch (err) {
       console.error('Error cargando datos:', err)
     }
@@ -119,11 +125,17 @@ export function AuthProvider({ children }) {
     setCondicion(1)
   }
 
+  const guardarTipoNegocio = async (tipo) => {
+    if (!user) return
+    await supabase.from('users').update({ tipo_negocio: tipo }).eq('id', user.id)
+    setTipoNegocio(tipo)
+  }
+
   return (
     <AuthContext.Provider value={{
       user, loading,
-      xp, condicion, fullName,
-      agregarXP,
+      xp, condicion, fullName, idioma, tipoNegocio,
+      agregarXP, guardarTipoNegocio,
       signUp, signIn, signOut,
     }}>
       {!loading && children}

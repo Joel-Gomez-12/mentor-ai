@@ -410,9 +410,9 @@ Da un mensaje directo, cálido y accionable. Menciona algo específico de sus da
       {proyectoPlan && (
         <div style={{
           background: planSisi
-            ? 'linear-gradient(135deg, rgba(124,58,237,0.08), rgba(124,58,237,0.03))'
+            ? 'linear-gradient(135deg, rgba(18,140,126,0.08), rgba(18,140,126,0.03))'
             : 'var(--surface)',
-          border: `1px solid ${planSisi ? 'rgba(124,58,237,0.25)' : 'var(--border)'}`,
+          border: `1px solid ${planSisi ? 'rgba(18,140,126,0.25)' : 'var(--border)'}`,
           borderRadius: 'var(--radius)', padding: '14px 20px',
           marginBottom: 20, display: 'flex', alignItems: 'center',
           justifyContent: 'space-between', gap: 12, flexWrap: 'wrap'
@@ -441,7 +441,7 @@ Da un mensaje directo, cálido y accionable. Menciona algo específico de sus da
           <div style={{ display: 'flex', gap: 8 }}>
             {objDeclaradoSisi && (
               <button onClick={sincronizarDesdeProyecto}
-                style={{ padding: '6px 14px', borderRadius: 'var(--radius-sm)', background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.3)', color: 'rgba(124,58,237,0.9)', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ padding: '6px 14px', borderRadius: 'var(--radius-sm)', background: 'rgba(18,140,126,0.12)', border: '1px solid rgba(18,140,126,0.3)', color: 'rgba(18,140,126,0.9)', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}>
                 ⚡ Usar objetivo del proyecto (€{objDeclaradoSisi})
               </button>
             )}
@@ -594,7 +594,7 @@ Da un mensaje directo, cálido y accionable. Menciona algo específico de sus da
                 </div>
               ))}
               <button onClick={() => onNavigate('sisi')}
-                style={{ marginTop: 8, padding: '7px 14px', borderRadius: 'var(--radius-sm)', background: 'rgba(124,58,237,0.10)', border: '1px solid rgba(124,58,237,0.25)', color: 'rgba(124,58,237,0.9)', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 }}>
+                style={{ marginTop: 8, padding: '7px 14px', borderRadius: 'var(--radius-sm)', background: 'rgba(18,140,126,0.10)', border: '1px solid rgba(18,140,126,0.25)', color: 'rgba(18,140,126,0.9)', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 }}>
                 ⚡ Analizar con SISI
               </button>
             </div>

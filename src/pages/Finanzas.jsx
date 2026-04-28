@@ -225,7 +225,7 @@ export default function Finanzas({ onNavigate, currentPage, tab: tabInicial = 'i
             fontSize: '0.85rem', cursor: 'pointer',
             fontWeight: tab === t ? 600 : 400,
             background: tab === t ? 'var(--indigo-dim)' : 'var(--surface2)',
-            border: `1px solid ${tab === t ? 'rgba(99,102,241,0.25)' : 'var(--border)'}`,
+            border: `1px solid ${tab === t ? 'rgba(18,140,126,0.25)' : 'var(--border)'}`,
             color: tab === t ? 'var(--indigo)' : 'var(--text-soft)'
           }}>{label}</button>
         ))}
@@ -387,7 +387,7 @@ export default function Finanzas({ onNavigate, currentPage, tab: tabInicial = 'i
               { icon: '📊', label: 'Margen neto',      value: `${kpis.margen.toFixed(1)}%`,  color: '#F5C842' },
               { icon: '🔥', label: 'Burn rate',        value: `€${kpis.burnRate.toFixed(2)}`, color: '#F97316', sub: 'promedio mensual' },
               { icon: '⏱️', label: 'Runway',           value: kpis.runway !== null ? `${kpis.runway} meses` : '∞', color: '#5AB4FF', sub: 'con el balance actual' },
-              { icon: '👤', label: 'Ingreso/cliente',  value: `€${kpis.ingCliente.toFixed(2)}`, color: '#A78BFA', sub: 'este mes' },
+              { icon: '👤', label: 'Ingreso/cliente',  value: `€${kpis.ingCliente.toFixed(2)}`, color: '#1aad9e', sub: 'este mes' },
             ].map(({ icon, label, value, color, sub }) => (
               <div key={label} style={{ ...cardStyle, borderTop: `2px solid ${color}22` }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>

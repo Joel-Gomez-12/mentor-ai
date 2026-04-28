@@ -5,24 +5,24 @@ import { useAuth } from '../context/AuthContext'
 
 // ─── Constantes del sistema ───────────────────────────────────────
 const FASES = {
-  1: { icon: '💀', name: 'Inexistencia',  color: '#6B7280', escenario_ideal: 'Canal definido, marca personal clara, problema validado con 10 personas y MVP lanzado.' },
-  2: { icon: '🌱', name: 'Nacimiento',    color: '#16A34A', escenario_ideal: '3 primeros clientes reales, feedback activo recogido, propuesta de valor en una frase y canal principal identificado.' },
-  3: { icon: '⚔️', name: 'Supervivencia', color: '#C0392B', escenario_ideal: 'Costes fijos cubiertos 3 meses seguidos, reserva mínima separada, control de caja semanal y sin deudas crecientes.' },
-  4: { icon: '📊', name: 'Estabilidad',   color: '#F39C12', escenario_ideal: 'Procesos documentados, sistema de seguimiento de clientes activo, 3 fuentes de ingreso estables y primeras delegaciones funcionando.' },
-  5: { icon: '🚀', name: 'Expansión',     color: '#3498DB', escenario_ideal: 'Driver de crecimiento identificado y multiplicado, recursos que escalan sin el fundador y nuevo canal abierto con datos reales.' },
-  6: { icon: '👑', name: 'Dominio',       color: '#27AE60', escenario_ideal: 'Sistema autónomo documentado, equipo que reemplaza al fundador en funciones clave y fundador enfocado en visión estratégica.' },
+  1: { icon: '🌱', name: 'Semilla',           color: '#6B7280', sub: 'Inexistencia',  escenario_ideal: 'Canal definido, marca personal clara, problema validado con 10 personas, MVP lanzado y primer pago real conseguido.' },
+  2: { icon: '✅', name: 'Validación',         color: '#16A34A', sub: 'Nacimiento',    escenario_ideal: '3 primeros clientes reales que pagan, feedback activo recogido, propuesta de valor en una frase, canal principal identificado y la venta replicada 3 veces.' },
+  3: { icon: '⚔️', name: 'Break-even',         color: '#C0392B', sub: 'Supervivencia', escenario_ideal: 'Todos los costes reales cubiertos (salario fundador incluido), reserva del 10% activa, control de caja semanal y 3 meses consecutivos en positivo.' },
+  4: { icon: '📊', name: 'Estabilidad ×10',   color: '#F39C12', sub: 'Estabilidad',   escenario_ideal: 'Procesos documentados, sistema de seguimiento activo, ningún cliente >30% ingresos, primeras delegaciones funcionando y reserva de 3 meses de gastos fijos.' },
+  5: { icon: '🚀', name: 'Escalado ×50',      color: '#3498DB', sub: 'Expansión',     escenario_ideal: 'Negocio opera 2 semanas sin el fundador, equipo directivo autónomo, driver de crecimiento identificado y sistema de ventas escalable no basado en relaciones personales.' },
+  6: { icon: '👑', name: 'Sistema Autónomo',  color: '#27AE60', sub: 'Dominio',       escenario_ideal: 'Sistema completamente documentado, equipo que reemplaza al fundador en todas las funciones clave y fundador enfocado en visión estratégica y siguiente capa.' },
 }
 
 const MENTORES_DISPONIBLES = [
   { id: 'pablo', nombre: 'Pablo',     especialidad: 'estrategia empresarial real, visión de negocio y toma de decisiones difíciles' },
-  { id: 'jedi',  nombre: 'Jedi',      especialidad: 'ejecución técnica, desbloqueo inmediato y siguiente paso concreto' },
+  { id: 'jedi',  nombre: 'Yoda',      especialidad: 'ejecución técnica, desbloqueo inmediato y siguiente paso concreto' },
   { id: 'steve', nombre: 'Steve',     especialidad: 'innovación, diferenciación de producto y pensamiento lateral' },
   { id: 'leo',   nombre: 'Leonidas',  especialidad: 'ventas, captación de clientes y técnicas de cierre' },
 ]
 
 const MENTORES_UI = {
   pablo: { foto: '/mentores/pablo.jpg', icon: '🟡', name: 'Pablo', badge: 'Estrategia real',      color: 'var(--gold)'  },
-  jedi:  { foto: '/mentores/jedi.jpg',  icon: '🧙', name: 'Jedi',  badge: 'Desbloqueo inmediato', color: 'var(--jedi)'  },
+  jedi:  { foto: '/mentores/jedi.jpg',  icon: '🧙', name: 'Yoda',  badge: 'Desbloqueo inmediato', color: 'var(--jedi)'  },
   steve: { foto: '/mentores/steve.jpg', icon: '💡', name: 'Steve', badge: 'Pensamiento lateral',  color: 'var(--steve)' },
   leo:   { foto: '/mentores/leo.jpg',   icon: '⚔️', name: 'Leonidas', badge: 'Cierre y negociación', color: 'var(--leo)'   },
 }
@@ -38,7 +38,7 @@ ESTRUCTURA:
 5. La advertencia directa sobre el mayor riesgo que corre si no actúa ahora.
 FORMATO: Texto continuo. Habla como socio experimentado que dice la verdad aunque no sea cómoda.`,
 
-  jedi: `Eres Jedi, un mentor con sabiduría ancestral y calma profunda.
+  jedi: `Eres Yoda, un mentor con sabiduría ancestral y calma profunda.
 REGLA INQUEBRANTABLE: Responde con un párrafo de EXACTAMENTE 5 oraciones. CADA ORACIÓN DEBE TENER AL MENOS 20 PALABRAS. Es obligatorio que te extiendas en la explicación mística y filosófica de cada punto, sin ser breve.
 ESTRUCTURA DE LAS 5 ORACIONES:
 1. Una validación del dilema desde una perspectiva espiritual o de "la luz", mencionando el contexto específico que te pasó SISI.
@@ -101,10 +101,12 @@ const ORDEN_FINANCIERO = {
   sin_datos: { color: '#6B7280', label: '— Sin datos'  },
 }
 
-// ─── System prompt de SISI (Pablo Core) ──────────────────────────
-const SISI_SYSTEM_PROMPT = `Eres SISI, la inteligencia principal de Mentor AI, plataforma creada por Pablo para acompañar emprendedores y empresas.
+// ─── System prompt de SISI (Pablo Core v2 — Abril 2026) ─────────
+const SISI_SYSTEM_PROMPT = `Eres SISI, la inteligencia principal de Mentor AI, plataforma creada por Pablo para acompañar emprendedores y empresas activas.
 
-NO eres un chatbot genérico. Eres la IA central que piensa, interpreta y guía estratégicamente.
+Eres un asesor de negocios de élite con más de 25 años de experiencia combinada en negocios físicos (retail, hostelería, manufactura, servicios locales) y negocios digitales (SaaS, e-commerce, infoproductos, agencias online, marketplaces). Tu metodología combina los marcos académicos más contrastados (Harvard Business Review, Yale School of Management, INSEAD, Wharton) con experiencia práctica real en cientos de empresas de sectores diferentes.
+
+NO eres un chatbot genérico. Eres la IA central que piensa, interpreta y guía estratégicamente tanto a emprendedores con proyectos nuevos como a empresarios con negocios activos.
 
 TU FUNCIÓN PRINCIPAL:
 - Interpretar la situación real del usuario con los datos que recibes
@@ -115,52 +117,88 @@ TU FUNCIÓN PRINCIPAL:
 - Proponer la siguiente microacción más útil y concreta
 - Terminar siempre con una pregunta de avance que invite a actuar
 
-FILOSOFÍA DE PABLO (tu criterio central e inamovible):
+PRINCIPIOS INAMOVIBLES:
+- Nunca asumas. Siempre pregunta antes de diagnosticar si falta información clave.
 - No se puede saltar de fase. Cada fase tiene su fórmula específica.
 - El error más común es aplicar la fórmula equivocada para la fase en que se está.
 - El orden financiero correcto: reservas primero, luego crecimiento.
 - Visibilidad sin validación es ruido. Validación sin sistema es caos.
 - Un negocio sano crece con orden, no con velocidad.
 - La acción correcta en el momento equivocado también es un error.
+- Una sola acción concreta es mejor que cinco difusas.
+
+DIAGNÓSTICO INICIAL — TIPO DE NEGOCIO:
+Si el payload no incluye tipo_negocio o es desconocido, antes de analizar debes identificar si el usuario opera:
+- FÍSICO: tiene local, empleados en plantilla, stock, inmuebles o instalaciones propias.
+- ONLINE: vende por internet, servicios digitales, SaaS, infoproductos, e-commerce.
+- HÍBRIDO: combina presencia física y canal online.
+Esta distinción condiciona toda la estructura de costes, el break-even y las palancas de crecimiento.
+
+ESTRUCTURA DE COSTES SEGÚN TIPO:
+Negocio FÍSICO — gastos fijos típicos: alquiler/amortización local, salarios + SS + IRPF, suministros, seguros, mantenimiento, gestoría, licencias. Gastos variables: materiales por unidad, comisiones, packaging, logística, mermas. Señal crítica: el break-even es más alto y menos flexible. La clave es el margen de contribución por unidad y el volumen necesario.
+Negocio ONLINE — gastos fijos típicos: herramientas y plataformas SaaS, hosting/servidores, freelancers recurrentes, gestoría. Gastos variables: publicidad digital (mayor coste variable), comisiones de pasarela (1.9–2.5%), afiliados. Métricas adicionales clave: CAC (Coste de Adquisición de Cliente), LTV (Lifetime Value), Churn Rate, ROAS, MRR/ARR. Señal crítica: el break-even es más fácil de alcanzar, pero el escalado requiere dominar CAC y LTV.
 
 LAS 6 FASES Y SUS FÓRMULAS:
-1. INEXISTENCIA: Sin presencia, sin datos, sin ventas. Fórmula: crear canal + marca personal + validar problema con 10 personas + lanzar MVP.
-2. NACIMIENTO: Primeras señales de interés. Fórmula: conseguir 3 primeros clientes reales + recoger feedback activo + definir propuesta de valor en una frase + identificar canal principal.
-3. SUPERVIVENCIA: Batalla por el break-even. Fórmula: calcular punto de equilibrio + control de caja semanal + reserva mínima fija + cubrir costes fijos 3 meses consecutivos.
-4. ESTABILIDAD: Sistema con orden y repetibilidad. Fórmula: documentar procesos + sistema de seguimiento de clientes + proteger fuentes de ingreso estables + empezar a delegar.
-5. EXPANSIÓN: Crecer con estructura. Fórmula: identificar driver de crecimiento + incorporar recursos que escalan + abrir canal/mercado con datos reales + invertir en capacidad de entrega.
-6. DOMINIO: Sistema autónomo. Fórmula: documentar todo el sistema + construir equipo que reemplaza al fundador en cada función + manuales de operación + enfoque en visión estratégica.
+1. SEMILLA (Inexistencia): El negocio existe en idea o versión mínima. Sin facturación estable. Riesgo: gastar antes de validar. Fórmula: crear canal + marca personal + validar problema con 10 personas + lanzar MVP + conseguir el primer pago real.
+2. VALIDACIÓN (Nacimiento): Primeras señales del mercado. Ingresos irregulares. Riesgo: escalar antes de tiempo. Fórmula: conseguir 3 primeros clientes reales que pagan + recoger feedback activo + definir propuesta de valor en una frase + identificar canal principal + replicar la venta 3 veces más.
+3. BREAK-EVEN (Supervivencia): El negocio cubre todos sus costes reales. Riesgo: declarar break-even prematuramente. Fórmula: calcular punto de equilibrio real + control de caja semanal + reserva mínima fija + cubrir costes fijos 3 meses consecutivos.
+4. ESTABILIDAD (×10): Beneficios netos consistentes. Los beneficios son ×10 respecto al break-even. Fórmula: documentar procesos + sistema de seguimiento de clientes + proteger fuentes de ingreso estables + empezar a delegar + diversificar cartera (ningún cliente >30% ingresos).
+5. ESCALADO (×50): Dominio del nicho. Sistemas replicables. Los beneficios son ×50 respecto al break-even. Fórmula: identificar driver de crecimiento + incorporar recursos que escalan + abrir canal/mercado con datos reales + construir equipo directivo autónomo.
+6. SISTEMA AUTÓNOMO (Dominio): El negocio opera sin el fundador. Fórmula: documentar todo el sistema + equipo que reemplaza al fundador en cada función + manuales de operación + fundador enfocado en visión estratégica y siguiente capa.
+
+DEFINICIÓN EXACTA DEL BREAK-EVEN (fase 3):
+Solo existe break-even real cuando se cumplen TODAS estas condiciones:
+1. Todos los salarios cubiertos, incluyendo el del fundador, con IRPF y Seguridad Social completos.
+2. Todos los gastos directos e indirectos cubiertos: alquiler, suministros, herramientas, gestoría, seguros, publicidad, logística.
+3. Toda la inversión inicial contemplada: como deuda amortizable o capital recuperado.
+4. Las deudas activas tienen plan de amortización sostenible incluido en los gastos mensuales.
+5. Se destinan reservas del 10% de beneficios netos anuales a fondo de contingencia disponible.
+6. Todos los gastos aplazados están contabilizados con plan de liquidación.
+Fórmula: (Gastos Fijos + Salarios completos + Cuotas deuda + Provisión contingencias 10% + Gastos aplazados prorrateados) / Margen de Contribución = Volumen mínimo mensual.
+
+CHECKLISTS POR TRANSICIÓN DE FASE:
+Semilla → Validación (10 pasos): (1) Definir problema real y cliente ideal exacto. (2) Identificar 10 potenciales clientes reales. (3) Tener 5 conversaciones de descubrimiento (no de venta). (4) Construir propuesta mínima viable entregable en <72h. (5) Conseguir el primer pago real. (6) Calcular coste real de entrega y margen. (7) Replicar la venta 3 veces más con clientes diferentes. (8) Documentar exactamente qué hiciste para conseguir cada venta. (9) Calcular cuánto necesitas vender por mes para cubrir gastos personales básicos. (10) Decidir si continuar o pivotar basándote en datos.
+Validación → Break-even (10 pasos): (1) Calcular el break-even real con la fórmula completa. (2) Mapear todos los gastos en tabla: fijos, variables, deudas, aplazados, inversiones. (3) Establecer precio que garantice margen de contribución suficiente. (4) Crear sistema de captación repetible. (5) Construir pipeline con al menos 3× el volumen necesario. (6) Sistematizar la entrega para que no dependa solo del fundador. (7) Controlar la caja semanalmente (dinero real, no beneficio en papel). (8) Eliminar gastos que no generan ingreso directo. (9) Crear fondo de contingencia del 10% desde el primer mes con beneficio neto. (10) Verificar que TODOS los criterios del break-even están cumplidos antes de declararlo.
+Break-even → Estabilidad (10 pasos): (1) Confirmar 3 meses consecutivos de break-even real. (2) Documentar procesos clave en manuales operativos. (3) Primera contratación o delegación en la tarea que más tiempo consume y menos valor aporta. (4) Crear métricas semanales: ingresos, gastos, margen, pipeline, clientes activos. (5) Diversificar cartera (ningún cliente >30% ingresos). (6) Optimizar margen de contribución. (7) Establecer presupuesto anual con objetivos mensuales. (8) Invertir en marketing sistemático (no campañas puntuales). (9) Consolidar reserva del 10% hasta tener 3 meses de gastos fijos en liquidez. (10) Definir la siguiente capa de crecimiento.
+Estabilidad → Escalado (10 pasos): (1) Verificar que el negocio puede operar sin el fundador 2 semanas sin perder ingresos. (2) Identificar la palanca de escalado: volumen, precio o multiplicador. (3) Construir equipo directivo autónomo. (4) Crear sistema de ventas escalable no basado en relaciones personales del fundador. (5) Definir KPIs de escalado y dashboard semanal. (6) Revisar estructura legal y fiscal para escalar. (7) Evaluar si se necesita financiación externa. (8) Blindar propiedad intelectual: marca, patentes, contratos clave. (9) Sistema de retención de talento. (10) Planificar la siguiente fase de vida del fundador.
 
 IDENTIDAD DEL USUARIO:
-- El payload incluye usuario.nombre: úsalo para personalizar tu respuesta. Dirígete al usuario por su nombre en el mensaje_principal.
-- El payload incluye usuario.user_id: identifica de forma única a este usuario. Cada análisis es exclusivo de esta persona.
+- El payload incluye usuario.nombre: úsalo para personalizar tu respuesta. Dirígete al usuario por su nombre.
+- El payload incluye usuario.user_id: identifica de forma única a este usuario. Cada análisis es exclusivo y privado.
+- Si el payload incluye usuario.tipo_negocio: úsalo para adaptar toda la estructura de costes y métricas.
 
-PLAN DE NEGOCIO Y SEGUIMIENTO (plan_negocio en el payload):
-- Si plan_negocio existe y tiene respuestas_fundador: el usuario ya definió su proyecto conmigo. Tienes lo que dijo sobre su problema, clientes, modelo de ingresos y riesgos. Úsalo como base de toda tu lectura.
+PLAN DE NEGOCIO Y SEGUIMIENTO:
+- Si plan_negocio existe y tiene respuestas_fundador: el usuario ya definió su proyecto. Tienes lo que dijo sobre su problema, clientes, modelo de ingresos y riesgos. Úsalo como base de toda tu lectura.
 - Si plan_negocio.sin_plan = true: el usuario tiene proyecto pero no ha pasado por el análisis inicial. Recuérdale que puede hacerlo desde la sección Proyectos.
-- Si plan_negocio es null: el usuario no tiene proyectos. Prioriza indicarle que cree su proyecto primero.
-- LOGROS: si seguimiento_actual.logros tiene elementos, reconócelos explícitamente en tu mensaje_principal. Un logro cumplido merece reconocimiento antes del siguiente reto.
-- DESVIACIONES: si seguimiento_actual.desviaciones tiene elementos, son señales de alerta que debes abordar como cuello de botella o como parte de tu acción concreta. No los ignores.
-- COHERENCIA: si el fundador declaró un objetivo de ingresos (objetivo_mensual_declarado) y la realidad es diferente, usa esa brecha como dato central de tu análisis. La brecha entre lo planeado y lo real es el dato más valioso que tienes.
-- REGLA DEL 50% (fases 1-3): si gastos > 50% de ingresos en fases de Inexistencia/Nacimiento/Supervivencia, es una alerta financiera crítica que debes mencionar.
+- Si plan_negocio es null: el usuario no tiene proyectos. Indícale que cree su proyecto primero para que puedas acompañarle con precisión.
+- LOGROS: si seguimiento_actual.logros tiene elementos, reconócelos explícitamente antes del siguiente reto. Un logro cumplido merece reconocimiento.
+- DESVIACIONES: si seguimiento_actual.desviaciones tiene elementos, son señales de alerta que debes abordar como cuello de botella. No los ignores.
+- COHERENCIA: si el fundador declaró un objetivo de ingresos y la realidad es diferente, usa esa brecha como dato central del análisis. La brecha entre lo planeado y lo real es el dato más valioso.
+- REGLA DEL 50% (fases 1-3): si gastos > 50% de ingresos en Semilla/Validación/Break-even, es una alerta financiera crítica que debes mencionar.
 
 MEMORIA Y CONTINUIDAD:
-- El payload incluye memoria.sesiones_previas_sisi: array con el historial de sesiones anteriores de ESTE usuario contigo.
+- El payload incluye memoria.sesiones_previas_sisi con el historial de sesiones anteriores de ESTE usuario.
 - Si hay sesiones previas, analiza si el cuello de botella se repite, si la acción sugerida fue ejecutada, y si hay progresión o regresión.
-- Si el mismo problema aparece en varias sesiones, indícalo explícitamente: "Llevamos X sesiones identificando este mismo bloqueo...".
-- Nunca mezcles contexto de un usuario con otro. Cada análisis es individual y privado.
+- Si el mismo problema aparece en varias sesiones, indícalo: "Llevamos X sesiones identificando este mismo bloqueo...".
+- Recuerda los compromisos de sesiones anteriores y evalúa si se cumplieron.
+- Nunca mezcles contexto de un usuario con otro.
 
-REGLAS:
-- Siempre eres tú quien guía. Los mentores secundarios son apoyos temáticos, no te sustituyen.
-- Sugiere un mentor secundario solo cuando realmente aporte valor específico.
-- Si detectas que el usuario necesita una decisión estratégica difícil, visión de negocio real o está cometiendo un error grave de dirección → sugiere Pablo.
-- Si el usuario está bloqueado en una tarea concreta o necesita el siguiente paso ejecutable ahora mismo → sugiere Jedi.
-- Si el usuario necesita diferenciarse, repensar su producto o explorar ángulos que no ha visto → sugiere Steve.
-- Si el usuario tiene un problema de ventas, no consigue cerrar clientes o necesita mejorar su proceso de captación → sugiere Leonidas.
-- Si la situación no requiere profundidad extra de ningún mentor, devuelve nombre: "ninguno" en mentor_recomendado.
-- Comunícate de forma cercana, clara, práctica y útil. Sin tecnicismos innecesarios.
-- Una sola acción concreta es mejor que cinco difusas.
-- Si no hay suficiente contexto para evaluar algo, indícalo con honestidad.
+PROTOCOLO CUANDO EL USUARIO NO SABE QUÉ HACER (en orden de prioridad):
+Nivel 1 — SISI analiza y propone: revisa contexto disponible (historial, fase, checklist, métricas) y propone el siguiente paso más lógico. Si falta información, haz las preguntas del diagnóstico antes de proponer.
+Nivel 2 — Mentor especializado: si la situación requiere perspectiva específica, propón el mentor adecuado. Pablo: decisión estratégica o error grave de dirección. Yoda: bloqueo de ejecución o siguiente paso inmediato. Steve: diferenciación, producto o ángulos no vistos. Leonidas: captación, cierre, negociación o propuesta comercial.
+Nivel 3 — Agenda de contactos: antes de buscar ayuda externa, sugiere revisar los contactos del usuario por especialidad o sector. El usuario a menudo ya tiene la solución cerca sin saberlo.
+Nivel 4 — Ecosistema PIA: si el problema tiene solución dentro del ecosistema de Pablo, proponla SIEMPRE antes que cualquier alternativa externa. PIA Dreams (consultoría y desarrollo de negocio con acompañamiento humano), PIA Agent (automatización inteligente con IA para reducir operativa sin aumentar equipo), PIA Media (estrategia de marketing, contenido, publicidad digital y generación de leads sistemática). SISI nunca recomienda herramientas o agencias externas cuando existe una solución PIA que resuelve el mismo problema.
+
+DERIVACIÓN A PABLO (mentor humano):
+Deriva a Pablo cuando: el usuario necesita una decisión estratégica que requiere experiencia humana directa no replicable por IA, hay una negociación importante (inversores, socios, compradores), el usuario está en una encrucijada emocional que bloquea el negocio, o la situación requiere criterio legal/fiscal específico.
+
+TONO Y ESTILO:
+- Directo: di lo que ves, aunque no sea lo que el usuario quiere escuchar.
+- Empático: detrás de cada número hay una persona con presión real.
+- Práctico: cada sesión termina con un paso concreto, no con una lista de cosas a estudiar.
+- Sin hype: no prometas resultados que no puedes garantizar. Sin lenguaje motivacional vacío.
+- Inteligente: haz las preguntas que un buen asesor de negocios haría, no las obvias.
+- Paciente: si el usuario no tiene los números exactos, ayúdale a estimarlos. No bloquees el análisis por falta de datos perfectos.
 
 CLASIFICACIONES:
 - Distancia al ideal: "alta" | "media" | "baja"
@@ -173,7 +211,7 @@ FORMATO DE RESPUESTA: Responde ÚNICAMENTE con JSON válido, sin texto adicional
 
 // ─── Componente principal ─────────────────────────────────────────
 export default function Sisi({ onNavigate, currentPage }) {
-  const { user, condicion, agregarXP } = useAuth()
+  const { user, condicion, agregarXP, idioma, tipoNegocio, guardarTipoNegocio } = useAuth()
 
   const [consulta, setConsulta]             = useState('')
   const [analizando, setAnalizando]         = useState(false)
@@ -352,6 +390,7 @@ export default function Sisi({ onNavigate, currentPage }) {
         objetivo_principal:        ctx.plan?.objetivo_mensual || 'No definido',
         objetivo_anual:            ctx.plan?.objetivo_anual   || 'No definido',
         idioma:                    'es',
+        tipo_negocio:              tipoNegocio || 'desconocido',
       },
       contexto: {
         consulta_usuario:          consulta.trim() || 'El usuario solicita un análisis general de su situación actual.',
@@ -492,7 +531,7 @@ Ahora responde desde tu perspectiva y personalidad. Complementa lo que SISI ya d
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          system_instruction: { parts: [{ text: MENTORES_PROMPTS[mentorId] }] },
+          system_instruction: { parts: [{ text: MENTORES_PROMPTS[mentorId] + (idioma === 'en' ? '\n\nIMPORTANT: You must respond in English.' : '') }] },
           contents: [{ parts: [{ text: contextoSISI }] }],
           generationConfig: { temperature: 0.7, maxOutputTokens: 800, topP: 0.95 }
         })
@@ -566,7 +605,7 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
   "sugerencias_extra": {
     "mentor_recomendado": {
       "id": "jedi|steve|leo|ninguno",
-      "nombre": "Jedi|Steve|Leonidas|ninguno",
+      "nombre": "Yoda|Steve|Leonidas|ninguno",
       "motivo": "por qué este mentor aportaría valor ahora mismo"
     },
     "knowledge_link_recomendado": null
@@ -575,7 +614,8 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
     "version_prompt": "sisi_core_v1",
     "timestamp": "${new Date().toISOString()}"
   }
-}`
+}
+${idioma === 'en' ? 'IMPORTANT: Write ALL text values inside the JSON in English.' : ''}`
             }]
           }],
           generationConfig: { temperature: 0.65, maxOutputTokens: 4000 }
@@ -643,23 +683,23 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
 
       {/* ── Header SISI ───────────────────────────────────────── */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(124,58,237,0.10), rgba(124,58,237,0.04))',
-        border: '1px solid rgba(124,58,237,0.25)', borderRadius: 'var(--radius)',
+        background: 'linear-gradient(135deg, rgba(18,140,126,0.10), rgba(18,140,126,0.04))',
+        border: '1px solid rgba(18,140,126,0.25)', borderRadius: 'var(--radius)',
         padding: 28, marginBottom: 24, position: 'relative', overflow: 'hidden'
       }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at top right, rgba(124,58,237,0.12) 0%, transparent 60%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at top right, rgba(18,140,126,0.12) 0%, transparent 60%)', pointerEvents: 'none' }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
           <div style={{
             width: 64, height: 64, borderRadius: '50%',
-            border: '2px solid rgba(124,58,237,0.5)',
+            border: '2px solid rgba(18,140,126,0.5)',
             flexShrink: 0, overflow: 'hidden',
-            boxShadow: '0 0 30px rgba(124,58,237,0.3)'
+            boxShadow: '0 0 30px rgba(18,140,126,0.3)'
           }}>
             <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div>
             <h1 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: '1.6rem', letterSpacing: '-0.03em', marginBottom: 4 }}>
-              SISI <span style={{ color: 'rgba(124,58,237,0.7)', fontSize: '0.88rem', fontWeight: 400 }}>Inteligencia principal · Mentor AI</span>
+              SISI <span style={{ color: 'rgba(18,140,126,0.7)', fontSize: '0.88rem', fontWeight: 400 }}>Inteligencia principal · Mentor AI</span>
             </h1>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
               Interpreta tu situación, detecta el cuello de botella y propone tu siguiente paso exacto.
@@ -667,6 +707,58 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
           </div>
         </div>
       </div>
+
+      {/* ── Pregunta inicial: tipo de negocio ────────────────── */}
+      {!tipoNegocio && (
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(18,140,126,0.10), rgba(18,140,126,0.04))',
+          border: '1px solid rgba(18,140,126,0.3)', borderRadius: 'var(--radius)',
+          padding: 24, marginBottom: 20
+        }}>
+          <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1rem', marginBottom: 6 }}>
+            Antes de empezar, necesito entender tu negocio
+          </p>
+          <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: 18 }}>
+            El tipo de negocio cambia toda la estructura de costes, el break-even y las palancas de crecimiento. Solo te pregunto esto una vez.
+          </p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            {[
+              { id: 'fisico',  icon: '🏪', label: 'Negocio físico', desc: 'Local, empleados, stock, instalaciones' },
+              { id: 'online',  icon: '💻', label: 'Negocio online',  desc: 'SaaS, e-commerce, infoproductos, servicios digitales' },
+              { id: 'hibrido', icon: '🔀', label: 'Híbrido',         desc: 'Tienes presencia física y canal online' },
+            ].map(({ id, icon, label, desc }) => (
+              <button key={id} onClick={() => guardarTipoNegocio(id)} style={{
+                flex: '1 1 160px', padding: '14px 18px', borderRadius: 'var(--radius-sm)',
+                background: 'var(--surface)', border: '1px solid var(--border)',
+                cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s'
+              }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(18,140,126,0.5)'; e.currentTarget.style.background = 'rgba(18,140,126,0.08)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface)' }}
+              >
+                <div style={{ fontSize: '1.4rem', marginBottom: 6 }}>{icon}</div>
+                <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--text)', marginBottom: 3 }}>{label}</div>
+                <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>{desc}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Tipo de negocio activo (chip editable) ───────────── */}
+      {tipoNegocio && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+          <div style={{
+            padding: '5px 14px', borderRadius: 99, fontSize: '0.78rem', fontWeight: 600,
+            background: 'rgba(18,140,126,0.1)', border: '1px solid rgba(18,140,126,0.3)', color: 'rgba(18,140,126,0.9)'
+          }}>
+            {tipoNegocio === 'fisico' ? '🏪 Negocio físico' : tipoNegocio === 'online' ? '💻 Negocio online' : '🔀 Híbrido'}
+          </div>
+          <button onClick={() => guardarTipoNegocio(null)} style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontSize: '0.73rem', color: 'var(--text-muted)', textDecoration: 'underline'
+          }}>Cambiar</button>
+        </div>
+      )}
 
       {/* ── Contexto activo ───────────────────────────────────── */}
       <div style={{ marginBottom: 20 }}>
@@ -682,7 +774,7 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
             { icon: '🗂️',       label: cargandoCtx ? '...' : `${ctx.proyectos} proyectos activos`,                             color: '#3498DB'  },
             { icon: '📋',       label: cargandoCtx ? '...' : (proyectoSeleccionado || ctx.proyectoPrincipal)?.plan_sisi ? `Plan: ${(proyectoSeleccionado || ctx.proyectoPrincipal).nombre}` : proyectoSeleccionado ? `Proyecto: ${proyectoSeleccionado.nombre}` : 'Sin plan de negocio aún', color: (proyectoSeleccionado || ctx.proyectoPrincipal)?.plan_sisi ? '#27AE60' : proyectoSeleccionado ? '#3498DB' : '#6B7280' },
             { icon: '📡',       label: cargandoCtx ? '...' : ctx.ultimoPulso ? `Último pulso: Fase ${ctx.ultimoPulso.condicion}` : 'Sin pulso reciente', color: '#F39C12' },
-            { icon: '🔁',       label: cargandoCtx ? '...' : `${ctx.accionesRecientes.length} acciones recientes`,             color: '#7C3AED'  },
+            { icon: '🔁',       label: cargandoCtx ? '...' : `${ctx.accionesRecientes.length} acciones recientes`,             color: '#128c7e'  },
           ].map((chip, i) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: 6,
@@ -717,9 +809,9 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
                   style={{
                     padding: '7px 16px', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
                     fontSize: '0.83rem', fontWeight: activo ? 700 : 400,
-                    background: activo ? 'rgba(124,58,237,0.15)' : 'var(--surface2)',
-                    border: activo ? '1px solid rgba(124,58,237,0.5)' : '1px solid var(--border)',
-                    color: activo ? 'rgba(124,58,237,0.9)' : 'var(--text-soft)',
+                    background: activo ? 'rgba(18,140,126,0.15)' : 'var(--surface2)',
+                    border: activo ? '1px solid rgba(18,140,126,0.5)' : '1px solid var(--border)',
+                    color: activo ? 'rgba(18,140,126,0.9)' : 'var(--text-soft)',
                     transition: 'all 0.2s'
                   }}>
                   {p.plan_sisi ? '📋 ' : '🗂️ '}{p.nombre}
@@ -738,14 +830,14 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
 
       {!cargandoCtx && ctx.proyectos === 0 ? (
         <div className="fade-in" style={{
-          background: 'linear-gradient(135deg, rgba(124,58,237,0.10), rgba(124,58,237,0.04))',
-          border: '1px solid rgba(124,58,237,0.30)', borderRadius: 'var(--radius)',
+          background: 'linear-gradient(135deg, rgba(18,140,126,0.10), rgba(18,140,126,0.04))',
+          border: '1px solid rgba(18,140,126,0.30)', borderRadius: 'var(--radius)',
           padding: 28, marginBottom: 24
         }}>
           <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', marginBottom: 20 }}>
             <div style={{
               width: 48, height: 48, borderRadius: '50%', flexShrink: 0,
-              background: 'rgba(124,58,237,0.15)', border: '2px solid rgba(124,58,237,0.4)',
+              background: 'rgba(18,140,126,0.15)', border: '2px solid rgba(18,140,126,0.4)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem'
             }}>⚡</div>
             <div>
@@ -765,7 +857,7 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
               onClick={() => onNavigate('proyectos')}
               style={{
                 padding: '10px 24px', borderRadius: 'var(--radius-sm)', border: 'none',
-                background: 'rgba(124,58,237,0.85)', color: 'white',
+                background: 'rgba(18,140,126,0.85)', color: 'white',
                 fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer'
               }}>
               🗂️ Crear mi primer proyecto
@@ -810,7 +902,7 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
             disabled={analizando || cargandoCtx}
             style={{
               padding: '11px 28px', borderRadius: 'var(--radius-sm)', border: 'none',
-              background: analizando || cargandoCtx ? 'var(--surface3)' : 'rgba(124,58,237,0.85)',
+              background: analizando || cargandoCtx ? 'var(--surface3)' : 'rgba(18,140,126,0.85)',
               color: 'white', fontWeight: 600, fontSize: '0.9rem',
               cursor: analizando || cargandoCtx ? 'not-allowed' : 'pointer',
               opacity: analizando || cargandoCtx ? 0.7 : 1
@@ -827,17 +919,17 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
       ══════════════════════════════════════════════════════════ */}
       {ru && (
         <div className="fade-in">
-          <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.7rem', color: 'rgba(124,58,237,0.8)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 14 }}>
+          <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.7rem', color: 'rgba(18,140,126,0.8)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 14 }}>
             Respuesta de SISI
           </p>
 
           {/* 1. Mensaje principal */}
           <div style={{
-            background: 'linear-gradient(135deg, rgba(124,58,237,0.10), rgba(124,58,237,0.04))',
-            border: '1px solid rgba(124,58,237,0.25)', borderRadius: 'var(--radius)', padding: 24, marginBottom: 14
+            background: 'linear-gradient(135deg, rgba(18,140,126,0.10), rgba(18,140,126,0.04))',
+            border: '1px solid rgba(18,140,126,0.25)', borderRadius: 'var(--radius)', padding: 24, marginBottom: 14
           }}>
             <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-              <div style={{ width: 40, height: 40, borderRadius: '50%', flexShrink: 0, background: 'rgba(124,58,237,0.15)', border: '2px solid rgba(124,58,237,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem' }}>⚡</div>
+              <div style={{ width: 40, height: 40, borderRadius: '50%', flexShrink: 0, background: 'rgba(18,140,126,0.15)', border: '2px solid rgba(18,140,126,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem' }}>⚡</div>
               <p style={{ fontSize: '0.95rem', color: 'var(--text)', lineHeight: 1.8, fontStyle: 'italic' }}>
                 "{ru.mensaje_principal}"
               </p>
@@ -1024,8 +1116,8 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
           )}
 
           {/* 6. Pregunta de avance */}
-          <div style={{ background: 'rgba(124,58,237,0.07)', border: '1px solid rgba(124,58,237,0.2)', borderRadius: 'var(--radius)', padding: 22, marginBottom: 16 }}>
-            <div style={{ fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(124,58,237,0.7)', marginBottom: 10 }}>💬 Pregunta de avance</div>
+          <div style={{ background: 'rgba(18,140,126,0.07)', border: '1px solid rgba(18,140,126,0.2)', borderRadius: 'var(--radius)', padding: 22, marginBottom: 16 }}>
+            <div style={{ fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(18,140,126,0.7)', marginBottom: 10 }}>💬 Pregunta de avance</div>
             <p style={{ fontSize: '1rem', color: 'var(--text)', lineHeight: 1.7, fontStyle: 'italic', fontWeight: 500 }}>"{ru.pregunta_avance}"</p>
           </div>
 
@@ -1155,8 +1247,8 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
                         <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
 
                           {/* Mensaje principal */}
-                          <div style={{ background: 'linear-gradient(135deg, rgba(124,58,237,0.08), rgba(124,58,237,0.03))', border: '1px solid rgba(124,58,237,0.2)', borderRadius: 'var(--radius-sm)', padding: 16 }}>
-                            <div style={{ fontSize: '0.65rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(124,58,237,0.7)', marginBottom: 8 }}>⚡ SISI dijo</div>
+                          <div style={{ background: 'linear-gradient(135deg, rgba(18,140,126,0.08), rgba(18,140,126,0.03))', border: '1px solid rgba(18,140,126,0.2)', borderRadius: 'var(--radius-sm)', padding: 16 }}>
+                            <div style={{ fontSize: '0.65rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(18,140,126,0.7)', marginBottom: 8 }}>⚡ SISI dijo</div>
                             <p style={{ fontSize: '0.87rem', color: 'var(--text-soft)', lineHeight: 1.7, fontStyle: 'italic' }}>"{ru_s.mensaje_principal}"</p>
                           </div>
 
@@ -1204,8 +1296,8 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
 
                           {/* Pregunta de avance */}
                           {ru_s.pregunta_avance && (
-                            <div style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)', borderRadius: 'var(--radius-sm)', padding: 14 }}>
-                              <div style={{ fontSize: '0.65rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(124,58,237,0.7)', marginBottom: 6 }}>💬 Pregunta de avance</div>
+                            <div style={{ background: 'rgba(18,140,126,0.06)', border: '1px solid rgba(18,140,126,0.15)', borderRadius: 'var(--radius-sm)', padding: 14 }}>
+                              <div style={{ fontSize: '0.65rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(18,140,126,0.7)', marginBottom: 6 }}>💬 Pregunta de avance</div>
                               <p style={{ fontSize: '0.87rem', color: 'var(--text)', lineHeight: 1.6, fontStyle: 'italic', fontWeight: 500 }}>"{ru_s.pregunta_avance}"</p>
                             </div>
                           )}
@@ -1220,7 +1312,7 @@ Responde con EXACTAMENTE este JSON (sin texto adicional):
                           )}
                           {s.accion_titulo && (
                             <div style={{ fontSize: '0.84rem', color: 'var(--text-soft)' }}>
-                              <span style={{ color: 'rgba(124,58,237,0.8)', fontWeight: 600 }}>Acción: </span>{s.accion_titulo}
+                              <span style={{ color: 'rgba(18,140,126,0.8)', fontWeight: 600 }}>Acción: </span>{s.accion_titulo}
                             </div>
                           )}
                         </div>

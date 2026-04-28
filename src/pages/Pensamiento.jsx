@@ -5,27 +5,29 @@ import { useAuth } from '../context/AuthContext'
 
 const MENTORES_CONFIG = [
   {
-    key: 'jedi', name: 'Jedi', emoji: '🧙',
-    color: 'var(--jedi)', dim: 'var(--jedi-dim)',
-    systemPrompt: `Eres Jedi, un mentor sabio con sabiduría ancestral. Hablas con calma y profundidad. 
-    El emprendedor acaba de capturar un pensamiento y necesita tu perspectiva. 
-    Da un consejo concreto y accionable. Responde en español con 3 oraciones completas. 
-    REGLA CRÍTICA: Nunca cortes una oración a la mitad. Siempre termina todas tus oraciones.`
+    key: 'pablo', name: 'Pablo', foto: '/mentores/pablo.jpg',
+    color: 'var(--gold)', dim: 'rgba(245,200,66,0.1)',
+    systemPrompt: `Eres Pablo Sabirón, director de Sabitek Holding y creador de Mentor AI. El emprendedor acaba de capturar un pensamiento y necesita tu visión estratégica real. Da un diagnóstico directo y sin rodeos basado en el pensamiento. Responde en español con 3 oraciones completas. REGLA CRÍTICA: Nunca cortes una oración a la mitad. Siempre termina todas tus oraciones.`
   },
   {
-    key: 'steve', name: 'Steve', emoji: '💡',
+    key: 'yoda', name: 'Yoda', foto: '/mentores/jedi.jpg',
+    color: 'var(--jedi)', dim: 'var(--jedi-dim)',
+    systemPrompt: `Eres Yoda, un mentor sabio con sabiduría ancestral. Hablas con calma y profundidad. El emprendedor acaba de capturar un pensamiento y necesita tu perspectiva. Da un consejo concreto y accionable. Responde en español con 3 oraciones completas. REGLA CRÍTICA: Nunca cortes una oración a la mitad. Siempre termina todas tus oraciones.`
+  },
+  {
+    key: 'steve', name: 'Steve', foto: '/mentores/steve.jpg',
     color: 'var(--steve)', dim: 'var(--steve-dim)',
     systemPrompt: `Eres Steve, un mentor visionario inspirado en Steve Jobs. Eres directo y enfocado en la excelencia. El emprendedor acaba de capturar un pensamiento y necesita tu perspectiva innovadora. Responde en español con 3 oraciones completas. REGLA CRÍTICA: Nunca cortes una oración a la mitad. Siempre termina todas tus oraciones.`
   },
   {
-    key: 'leo', name: 'Leonidas', emoji: '⚔️',
+    key: 'leo', name: 'Leonidas', foto: '/mentores/leo.jpg',
     color: 'var(--leo)', dim: 'var(--leo-dim)',
     systemPrompt: `Eres Leonidas, un mentor guerrero con mentalidad espartana. Eres duro, directo y sin excusas. El emprendedor acaba de capturar un pensamiento y necesita que lo desafíes a actuar. Responde en español con 3 oraciones completas. REGLA CRÍTICA: Nunca cortes una oración a la mitad. Siempre termina todas tus oraciones.`
   },
 ]
 
 export default function Pensamiento({ onNavigate, currentPage }) {
-  const { user, agregarXP } = useAuth()
+  const { user, agregarXP, idioma } = useAuth()
   const [texto, setTexto] = useState('')
   const [tipo, setTipo] = useState('idea')
   const [proyecto, setProyecto] = useState('General')
@@ -87,7 +89,7 @@ export default function Pensamiento({ onNavigate, currentPage }) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              system_instruction: { parts: [{ text: mentor.systemPrompt }] },
+              system_instruction: { parts: [{ text: mentor.systemPrompt + (idioma === 'en' ? '\n\nIMPORTANT: You must respond in English.' : '') }] },
               contents: [{ parts: [{ text: prompt }] }],
               generationConfig: { temperature: 0.85, maxOutputTokens: 800 }
             })
@@ -235,7 +237,7 @@ export default function Pensamiento({ onNavigate, currentPage }) {
 
           {/* Loading IA */}
           {cargandoIA && (
-            <div className="rg-3" style={{ gap: 14, marginBottom: 16 }}>
+            <div className="rg-4" style={{ gap: 14, marginBottom: 16 }}>
               {MENTORES_CONFIG.map(m => (
                 <div key={m.key} style={{
                   background: 'var(--surface)', border: `1px solid var(--border)`,
@@ -244,7 +246,9 @@ export default function Pensamiento({ onNavigate, currentPage }) {
                   animation: 'pulse 1.5s ease-in-out infinite'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: m.dim, border: `2px solid ${m.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>{m.emoji}</div>
+                    <div style={{ width: 32, height: 32, borderRadius: '50%', border: `2px solid ${m.color}`, overflow: 'hidden', flexShrink: 0 }}>
+                      <img src={m.foto} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
                     <span style={{ fontWeight: 700, color: m.color, fontSize: '0.85rem' }}>{m.name}</span>
                   </div>
                   <div style={{ height: 10, background: 'var(--surface2)', borderRadius: 99, marginBottom: 8 }} />
@@ -256,7 +260,7 @@ export default function Pensamiento({ onNavigate, currentPage }) {
 
           {/* Respuestas IA */}
           {!cargandoIA && respuestasMentores.length > 0 && (
-            <div className="rg-3" style={{ gap: 14, marginBottom: 16 }}>
+            <div className="rg-4" style={{ gap: 14, marginBottom: 16 }}>
               {respuestasMentores.map(m => (
                 <div key={m.key} style={{
                   background: 'var(--surface)', border: `1px solid var(--border)`,
@@ -264,7 +268,9 @@ export default function Pensamiento({ onNavigate, currentPage }) {
                   borderRadius: 'var(--radius)', padding: 18
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: m.dim, border: `2px solid ${m.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>{m.emoji}</div>
+                    <div style={{ width: 32, height: 32, borderRadius: '50%', border: `2px solid ${m.color}`, overflow: 'hidden', flexShrink: 0 }}>
+                      <img src={m.foto} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
                     <span style={{ fontWeight: 700, color: m.color, fontSize: '0.85rem' }}>{m.name}</span>
                   </div>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-soft)', lineHeight: 1.7, fontStyle: 'italic' }}>

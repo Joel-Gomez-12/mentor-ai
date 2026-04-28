@@ -19,7 +19,7 @@ const PREGUNTAS_SISI = [
 ]
 
 export default function Proyectos({ onNavigate, currentPage }) {
-  const { user, agregarXP } = useAuth()
+  const { user, agregarXP, idioma } = useAuth()
   const [vista, setVista] = useState('lista')
   const [proyectos, setProyectos] = useState([])
   const [conteos, setConteos] = useState({})       // { project_id: count }
@@ -141,7 +141,8 @@ export default function Proyectos({ onNavigate, currentPage }) {
   const analizarPlan = async (resp) => {
     setModalPlan('analizando')
     const contexto = PREGUNTAS_SISI.map(p => `${p.pregunta}\nRespuesta: ${resp[p.id] || '—'}`).join('\n\n')
-    const prompt = `Eres SISI, asistente de mentoría empresarial de Mentor AI. Un emprendedor acaba de crear un proyecto y ha respondido estas preguntas sobre su plan de negocio:\n\n${contexto}\n\nNombre del proyecto: ${proyectoNuevo?.nombre}\nObjetivo: ${proyectoNuevo?.objetivo || 'No definido'}\n\nAnaliza sus respuestas y devuelve ÚNICAMENTE un JSON válido con esta estructura exacta:\n{\n  "diagnostico": "2-3 oraciones directas sobre la viabilidad real del plan",\n  "fortaleza": "El punto más sólido del plan en una oración",\n  "riesgo_principal": "El mayor riesgo o debilidad en una oración",\n  "proximos_pasos": ["paso concreto 1", "paso concreto 2", "paso concreto 3"],\n  "viabilidad": "alta" | "media" | "baja"\n}`
+    const idiomaInstruccion = idioma === 'en' ? '\nIMPORTANT: Write all text values inside the JSON in English.' : ''
+    const prompt = `Eres SISI, asistente de mentoría empresarial de Mentor AI. Un emprendedor acaba de crear un proyecto y ha respondido estas preguntas sobre su plan de negocio:\n\n${contexto}\n\nNombre del proyecto: ${proyectoNuevo?.nombre}\nObjetivo: ${proyectoNuevo?.objetivo || 'No definido'}\n\nAnaliza sus respuestas y devuelve ÚNICAMENTE un JSON válido con esta estructura exacta:\n{\n  "diagnostico": "2-3 oraciones directas sobre la viabilidad real del plan",\n  "fortaleza": "El punto más sólido del plan en una oración",\n  "riesgo_principal": "El mayor riesgo o debilidad en una oración",\n  "proximos_pasos": ["paso concreto 1", "paso concreto 2", "paso concreto 3"],\n  "viabilidad": "alta" | "media" | "baja"\n}${idiomaInstruccion}`
 
     const fallback = {
       diagnostico: 'No pude generar el análisis en este momento. Tus respuestas han quedado guardadas y puedes continuar con el proyecto.',
@@ -412,7 +413,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
                   style={{
                     padding: '7px 14px', borderRadius: 99, fontSize: '0.82rem', cursor: 'pointer',
                     fontWeight: updateForm.estado === key ? 600 : 400,
-                    background: updateForm.estado === key ? 'rgba(99,102,241,0.15)' : 'var(--surface2)',
+                    background: updateForm.estado === key ? 'rgba(18,140,126,0.15)' : 'var(--surface2)',
                     border: `1px solid ${updateForm.estado === key ? 'var(--indigo)' : 'var(--border)'}`,
                     color: updateForm.estado === key ? color : 'var(--text-soft)'
                   }}>
@@ -564,7 +565,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
             {modalPlan === 'bienvenida' && (
               <div className="fade-in">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
-                  <div style={{ width: 52, height: 52, borderRadius: '50%', border: '2px solid rgba(124,58,237,0.5)', overflow: 'hidden', flexShrink: 0 }}>
+                  <div style={{ width: 52, height: 52, borderRadius: '50%', border: '2px solid rgba(18,140,126,0.5)', overflow: 'hidden', flexShrink: 0 }}>
                     <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                   <div>
@@ -604,7 +605,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
 
                 {/* Avatar + pregunta */}
                 <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: '50%', border: '2px solid rgba(124,58,237,0.5)', overflow: 'hidden', flexShrink: 0 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', border: '2px solid rgba(18,140,126,0.5)', overflow: 'hidden', flexShrink: 0 }}>
                     <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                   <div style={{ background: 'var(--surface2)', borderRadius: '0 var(--radius) var(--radius) var(--radius)', padding: '12px 16px', fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.6, flex: 1 }}>
@@ -648,7 +649,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
             {/* ── Analizando ── */}
             {modalPlan === 'analizando' && (
               <div className="fade-in" style={{ textAlign: 'center', padding: '20px 0' }}>
-                <div style={{ width: 64, height: 64, borderRadius: '50%', border: '2px solid rgba(124,58,237,0.5)', overflow: 'hidden', margin: '0 auto 20px' }}>
+                <div style={{ width: 64, height: 64, borderRadius: '50%', border: '2px solid rgba(18,140,126,0.5)', overflow: 'hidden', margin: '0 auto 20px' }}>
                   <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1rem', marginBottom: 8 }}>SISI está analizando tu plan...</p>
@@ -665,7 +666,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
             {modalPlan === 'resultado' && analisisSisi && (
               <div className="fade-in">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-                  <div style={{ width: 42, height: 42, borderRadius: '50%', border: '2px solid rgba(124,58,237,0.5)', overflow: 'hidden', flexShrink: 0 }}>
+                  <div style={{ width: 42, height: 42, borderRadius: '50%', border: '2px solid rgba(18,140,126,0.5)', overflow: 'hidden', flexShrink: 0 }}>
                     <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                   <div>

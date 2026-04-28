@@ -28,13 +28,13 @@ FORMATO: Un bloque de texto continuo. Nada de listas. El tono es el de un socio 
     key: 'jedi',
     foto: '/mentores/jedi.jpg',
     emoji: '🧙',
-    name: 'Jedi',
+    name: 'Yoda',
     badge: 'Desbloqueo inmediato',
     color: 'var(--jedi)',
     dim: 'var(--jedi-dim)',
-    desc: 'Cuando estás bloqueado, Jedi va directo al problema. Sin rodeos. Te da el siguiente paso ejecutable ahora mismo.',
+    desc: 'Cuando estás bloqueado, Yoda va directo al problema. Sin rodeos. Te da el siguiente paso ejecutable ahora mismo.',
     frase: '"El bloqueo no está en el mercado. Está en la siguiente decisión que evitas tomar."',
-    systemPrompt: `Eres Jedi, un mentor de ejecución técnica y desbloqueo inmediato. Cuando alguien está paralizado, tú vas directo al punto de bloqueo sin rodeos.
+    systemPrompt: `Eres Yoda, un mentor de ejecución técnica y desbloqueo inmediato. Cuando alguien está paralizado, tú vas directo al punto de bloqueo sin rodeos.
 REGLA INQUEBRANTABLE: Responde con un párrafo de EXACTAMENTE 5 oraciones. CADA ORACIÓN DEBE SER CONCISA, TÉCNICA Y ORIENTADA A LA ACCIÓN INMEDIATA.
 ESTRUCTURA DE LAS 5 ORACIONES:
 1. Identifica con precisión quirúrgica el bloqueo real: qué tarea, decisión o conversación está evitando el emprendedor.
@@ -87,7 +87,7 @@ FORMATO: Un solo párrafo sólido. Cada oración debe sentirse como un golpe de 
 ]
 
 export default function Mentores({ onNavigate, currentPage }) {
-  const { user } = useAuth()
+  const { user, idioma } = useAuth()
   const [consulta, setConsulta] = useState('')
   const [respuestas, setRespuestas] = useState(null)
   const [cargando, setCargando] = useState(false)
@@ -109,7 +109,7 @@ export default function Mentores({ onNavigate, currentPage }) {
     if (data) setHistorial(data)
   }
 
-  // ─── Consulta grupal a los 3 mentores con Gemini ────────────────
+  // ─── Consulta grupal a los 4 mentores con Gemini ────────────────
   const obtenerConsejo = async () => {
     if (!consulta.trim()) return
     setCargando(true)
@@ -125,7 +125,7 @@ export default function Mentores({ onNavigate, currentPage }) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              system_instruction: { parts: [{ text: mentor.systemPrompt }] },
+              system_instruction: { parts: [{ text: mentor.systemPrompt + (idioma === 'en' ? '\n\nIMPORTANT: You must respond in English.' : '') }] },
               contents: [{ parts: [{ text: consulta }] }],
               generationConfig: { temperature: 0.7, maxOutputTokens: 800, topP: 0.95 }
             })
@@ -230,7 +230,7 @@ export default function Mentores({ onNavigate, currentPage }) {
       {/* ── Consulta grupal ──────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 22, marginBottom: 24 }}>
         <p style={{ fontWeight: 600, fontSize: '0.95rem', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
-          💬 Consulta a los tres mentores
+          💬 Consulta a los mentores
         </p>
         <textarea
           value={consulta}

@@ -77,7 +77,7 @@ export default function Home({ onNavigate, currentPage }) {
 
       {/* Hero Andrea */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(124,58,237,0.10), rgba(124,58,237,0.04))', border: '1px solid var(--border)',
+        background: 'linear-gradient(135deg, rgba(18,140,126,0.10), rgba(18,140,126,0.04))', border: '1px solid var(--border)',
         borderRadius: 'var(--radius)', padding: 28,
         display: 'flex', alignItems: 'center', gap: 22,
         position: 'relative', overflow: 'hidden',
@@ -86,9 +86,9 @@ export default function Home({ onNavigate, currentPage }) {
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at top right, rgba(240,180,41,0.07) 0%, transparent 60%)', pointerEvents: 'none' }} />
         <div style={{
           width: 72, height: 72, borderRadius: '50%',
-          border: '2px solid rgba(124,58,237,0.5)',
+          border: '2px solid rgba(18,140,126,0.5)',
           flexShrink: 0, overflow: 'hidden',
-          boxShadow: '0 0 30px rgba(124,58,237,0.3)'
+          boxShadow: '0 0 30px rgba(18,140,126,0.3)'
         }}>
           <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
@@ -193,7 +193,7 @@ export default function Home({ onNavigate, currentPage }) {
       </p>
       <div className="rg-4" style={{ gap: 12, marginBottom: 28 }}>
         {[
-          { icon: '⚡', label: 'SISI — Análisis IA',    page: 'sisi',        color: '#7C3AED' },
+          { icon: '⚡', label: 'SISI — Análisis IA',    page: 'sisi',        color: '#128c7e' },
           { icon: '📡', label: 'Pulso del negocio',    page: 'pulso',       color: 'var(--gold)' },
           { icon: '💡', label: 'Capturar pensamiento', page: 'pensamiento', color: 'var(--indigo)' },
           { icon: '📈', label: 'Registrar ingreso',    page: 'ingreso',     color: 'var(--jedi)' },

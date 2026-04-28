@@ -70,7 +70,7 @@ const CONDICIONES_INFO = {
 }
 
 export default function Pulso({ onNavigate, currentPage }) {
-  const { user, agregarXP } = useAuth()
+  const { user, agregarXP, idioma } = useAuth()
   const [respuestas, setRespuestas] = useState({})
   const [resultado, setResultado] = useState(null)
   const [cargando, setCargando] = useState(false)
@@ -133,7 +133,8 @@ Analiza sus respuestas y responde EXACTAMENTE en este formato JSON sin texto adi
   "formula": ["paso 1 concreto y accionable", "paso 2 concreto y accionable", "paso 3 concreto y accionable"],
   "mensaje_andrea": "(mensaje motivador y personalizado de Andrea al emprendedor, 2 oraciones completas)",
   "alerta": "(si hay algo crítico que deba atender urgente, si no hay nada crítico escribe null)"
-}`
+}
+${idioma === 'en' ? 'IMPORTANT: Write all text values inside the JSON (diagnostico, formula steps, mensaje_andrea, alerta) in English.' : ''}`
 
     try {
       const response = await fetch(
@@ -251,7 +252,7 @@ Analiza sus respuestas y responde EXACTAMENTE en este formato JSON sin texto adi
                           cursor: 'pointer', textAlign: 'left', fontSize: '0.85rem',
                           transition: 'all var(--transition)',
                           background: respuestas[pregunta.id] === op.valor ? 'var(--indigo-dim)' : 'var(--surface2)',
-                          border: `1px solid ${respuestas[pregunta.id] === op.valor ? 'rgba(99,102,241,0.5)' : 'var(--border)'}`,
+                          border: `1px solid ${respuestas[pregunta.id] === op.valor ? 'rgba(18,140,126,0.5)' : 'var(--border)'}`,
                           color: respuestas[pregunta.id] === op.valor ? 'var(--text)' : 'var(--text-soft)',
                           fontWeight: respuestas[pregunta.id] === op.valor ? 600 : 400,
                         }}

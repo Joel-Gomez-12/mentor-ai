@@ -20,7 +20,7 @@ const LOGO_SVG = (
 
 const FEATURES = [
   { icon: '⚡', title: 'SISI — Inteligencia principal', desc: 'Tu IA analiza tu negocio en tiempo real y detecta el cuello de botella exacto.' },
-  { icon: '🧙', title: 'Mentores especializados', desc: 'Pablo, Jedi, Steve y Leonidas responden tus dudas con contexto completo de tu situación.' },
+  { icon: '🧙', title: 'Mentores especializados', desc: 'Pablo, Yoda, Steve y Leonidas responden tus dudas con contexto completo de tu situación.' },
   { icon: '📊', title: 'Pulso del negocio', desc: 'Mide tu orden financiero, avanza por fases y sabe exactamente dónde estás.' },
 ]
 
@@ -68,37 +68,37 @@ export default function Auth() {
 
   const inputStyle = (field) => ({
     width: '100%',
-    background: 'rgba(255,255,255,0.04)',
-    border: `1px solid ${focused === field ? '#7C3AED' : 'rgba(255,255,255,0.1)'}`,
+    background: focused === field ? '#ffffff' : '#f0faf8',
+    border: `1.5px solid ${focused === field ? '#128c7e' : 'rgba(18,140,126,0.2)'}`,
     borderRadius: 12,
-    color: '#fff',
+    color: '#0c2420',
     padding: '13px 16px',
     fontSize: '0.92rem',
     outline: 'none',
     fontFamily: 'DM Sans, sans-serif',
     boxSizing: 'border-box',
-    transition: 'border-color 0.2s',
+    transition: 'all 0.2s',
   })
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#080A12', fontFamily: 'DM Sans, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f0faf8', fontFamily: 'DM Sans, sans-serif' }}>
 
       {/* ── LADO IZQUIERDO — Branding ── */}
       <div className="auth-brand" style={{
         flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center',
         padding: '60px 64px',
-        background: 'linear-gradient(135deg, #0D0F1C 0%, #130D2E 60%, #0D0F1C 100%)',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
+        background: 'linear-gradient(145deg, #128c7e 0%, #0f7a6d 50%, #0a6459 100%)',
+        borderRight: 'none',
         position: 'relative', overflow: 'hidden',
       }}>
         {/* Glow decorativo */}
-        <div style={{ position: 'absolute', top: '15%', left: '10%', width: 400, height: 400, borderRadius: '50%', background: 'rgba(124,58,237,0.08)', filter: 'blur(80px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '10%', right: '5%', width: 300, height: 300, borderRadius: '50%', background: 'rgba(240,180,41,0.05)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '10%', right: '-5%', width: 350, height: 350, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '5%', left: '-5%',  width: 280, height: 280, borderRadius: '50%', background: 'rgba(240,180,41,0.08)', filter: 'blur(50px)', pointerEvents: 'none' }} />
 
         {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 56 }}>
           {LOGO_SVG}
-          <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: '1.4rem', color: '#fff', letterSpacing: '-0.02em' }}>
+          <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: '1.4rem', color: '#ffffff', letterSpacing: '-0.02em' }}>
             Mentor<span style={{ color: '#F0B429' }}> AI</span>
           </span>
         </div>
@@ -106,7 +106,7 @@ export default function Auth() {
         {/* Headline */}
         <h2 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: '2.4rem', lineHeight: 1.2, color: '#fff', marginBottom: 16, letterSpacing: '-0.03em' }}>
           Tu segundo<br />
-          <span style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>cerebro empresarial</span>
+          <span style={{ color: '#F0B429' }}>cerebro empresarial</span>
         </h2>
         <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, marginBottom: 52, maxWidth: 420 }}>
           La plataforma de inteligencia artificial diseñada para emprendedores que quieren crecer con claridad y sin perder el rumbo.
@@ -116,7 +116,7 @@ export default function Auth() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {FEATURES.map((f, i) => (
             <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-              <div style={{ width: 42, height: 42, borderRadius: 12, background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', flexShrink: 0 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 12, background: 'rgba(18,140,126,0.12)', border: '1px solid rgba(18,140,126,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', flexShrink: 0 }}>
                 {f.icon}
               </div>
               <div>
@@ -131,7 +131,7 @@ export default function Auth() {
         <div style={{ marginTop: 52, display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ display: 'flex' }}>
             {['E', 'P', 'U'].map((l, i) => (
-              <div key={i} style={{ width: 32, height: 32, borderRadius: '50%', background: `hsl(${260 + i * 30},60%,50%)`, border: '2px solid #080A12', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.72rem', fontWeight: 700, color: '#fff', marginLeft: i > 0 ? -10 : 0 }}>{l}</div>
+              <div key={i} style={{ width: 32, height: 32, borderRadius: '50%', background: `hsl(${170 + i * 15},55%,38%)`, border: '2px solid #071212', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.72rem', fontWeight: 700, color: '#fff', marginLeft: i > 0 ? -10 : 0 }}>{l}</div>
             ))}
           </div>
           <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)' }}>
@@ -141,14 +141,14 @@ export default function Auth() {
       </div>
 
       {/* ── LADO DERECHO — Formulario ── */}
-      <div className="auth-form-col" style={{ width: 480, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px 48px', background: '#0B0D1A' }}>
+      <div className="auth-form-col" style={{ width: 480, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px 48px', background: '#ffffff' }}>
 
         {/* Header del formulario */}
         <div style={{ marginBottom: 36 }}>
-          <h3 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.5rem', color: '#fff', marginBottom: 8 }}>
+          <h3 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.5rem', color: '#0c2420', marginBottom: 8 }}>
             {isLogin ? 'Bienvenido de vuelta' : 'Crea tu cuenta'}
           </h3>
-          <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)' }}>
+          <p style={{ fontSize: '0.85rem', color: '#4d8a82' }}>
             {isLogin ? 'Accede a tu panel de Mentor AI' : 'Empieza gratis, sin tarjeta de crédito'}
           </p>
         </div>
@@ -160,7 +160,7 @@ export default function Auth() {
           </div>
         )}
         {message && (
-          <div style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: 10, padding: '12px 16px', marginBottom: 20, fontSize: '0.84rem', color: '#4ADE80', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+          <div style={{ background: 'rgba(18,140,126,0.08)', border: '1px solid rgba(18,140,126,0.3)', borderRadius: 10, padding: '12px 16px', marginBottom: 20, fontSize: '0.84rem', color: '#128c7e', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
             <span style={{ flexShrink: 0 }}>✅</span> {message}
           </div>
         )}
@@ -170,7 +170,7 @@ export default function Auth() {
 
           {!isLogin && (
             <div>
-              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'rgba(255,255,255,0.5)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#4d8a82', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 Nombre completo
               </label>
               <input
@@ -204,7 +204,7 @@ export default function Auth() {
 
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <label style={{ fontSize: '0.78rem', fontWeight: 600, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#4d8a82', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 Contraseña
               </label>
             </div>
@@ -222,12 +222,12 @@ export default function Auth() {
               <button
                 type="button"
                 onClick={() => setShowPass(!showPass)}
-                style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', fontSize: '1rem', padding: 0, lineHeight: 1 }}>
+                style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#72aaa1', fontSize: '1rem', padding: 0, lineHeight: 1 }}>
                 {showPass ? '🙈' : '👁️'}
               </button>
             </div>
             {!isLogin && (
-              <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)', marginTop: 6 }}>Mínimo 6 caracteres</p>
+              <p style={{ fontSize: '0.72rem', color: '#72aaa1', marginTop: 6 }}>Mínimo 6 caracteres</p>
             )}
           </div>
 
@@ -239,7 +239,7 @@ export default function Auth() {
               marginTop: 8,
               padding: '14px',
               borderRadius: 12,
-              background: loading ? 'rgba(124,58,237,0.5)' : 'linear-gradient(135deg, #7C3AED, #6D28D9)',
+              background: loading ? 'rgba(18,140,126,0.5)' : 'linear-gradient(135deg, #0f7a6d, #128c7e, #1aad9e)',
               border: 'none',
               color: '#fff',
               fontWeight: 700,
@@ -247,7 +247,7 @@ export default function Auth() {
               cursor: loading ? 'not-allowed' : 'pointer',
               fontFamily: 'DM Sans, sans-serif',
               letterSpacing: '0.01em',
-              boxShadow: loading ? 'none' : '0 4px 24px rgba(124,58,237,0.35)',
+              boxShadow: loading ? 'none' : '0 4px 24px rgba(18,140,126,0.35)',
               transition: 'all 0.2s',
             }}>
             {loading
@@ -260,11 +260,11 @@ export default function Auth() {
 
         {/* Divisor */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '28px 0' }}>
-          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
-          <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.2)' }}>
+          <div style={{ flex: 1, height: 1, background: 'rgba(18,140,126,0.12)' }} />
+          <span style={{ fontSize: '0.75rem', color: '#72aaa1' }}>
             {isLogin ? '¿Primera vez aquí?' : '¿Ya tienes cuenta?'}
           </span>
-          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
+          <div style={{ flex: 1, height: 1, background: 'rgba(18,140,126,0.12)' }} />
         </div>
 
         {/* Toggle modo */}
@@ -272,19 +272,19 @@ export default function Auth() {
           onClick={switchMode}
           style={{
             width: '100%', padding: '13px', borderRadius: 12,
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            color: '#A78BFA', fontWeight: 600, fontSize: '0.88rem',
+            background: '#f0faf8',
+            border: '1.5px solid rgba(18,140,126,0.25)',
+            color: '#128c7e', fontWeight: 600, fontSize: '0.88rem',
             cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
             transition: 'all 0.2s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(124,58,237,0.08)'; e.currentTarget.style.borderColor = 'rgba(124,58,237,0.3)' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(18,140,126,0.08)'; e.currentTarget.style.borderColor = 'rgba(18,140,126,0.3)' }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#f0faf8'; e.currentTarget.style.borderColor = 'rgba(18,140,126,0.25)' }}
         >
           {isLogin ? 'Crear cuenta nueva' : 'Ya tengo cuenta — Iniciar sesión'}
         </button>
 
-        <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.2)', textAlign: 'center', marginTop: 28, lineHeight: 1.6 }}>
+        <p style={{ fontSize: '0.72rem', color: '#72aaa1', textAlign: 'center', marginTop: 28, lineHeight: 1.6 }}>
           Al continuar aceptas los términos de uso de Mentor AI.<br />
           Tus datos se almacenan de forma segura.
         </p>

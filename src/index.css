@@ -4,34 +4,38 @@
    VARIABLES Y RESET
    ============================================================ */
 :root {
-  --bg:          #080A12;
-  --surface:     #0F1120;
-  --surface2:    #161929;
-  --surface3:    #1D2035;
-  --border:      rgba(255,255,255,0.07);
-  --border2:     rgba(255,255,255,0.12);
-  --text:        #E8EAF6;
-  --text-muted:  #6B7280;
-  --text-soft:   #9CA3AF;
+  --bg:          #f0faf8;
+  --surface:     #ffffff;
+  --surface2:    #f0faf8;
+  --surface3:    #e2f5f0;
+  --border:      rgba(18,140,126,0.14);
+  --border2:     rgba(18,140,126,0.28);
+  --text:        #0c2420;
+  --text-muted:  #4d8a82;
+  --text-soft:   #72aaa1;
 
-  --gold:        #F0B429;
-  --gold-dim:    rgba(240,180,41,0.15);
-  --indigo:      #6366F1;
-  --indigo-dim:  rgba(99,102,241,0.15);
+  --gold:        #E09400;
+  --gold-dim:    rgba(224,148,0,0.12);
+  --primary:     #128c7e;
+  --primary-h:   #0f7a6d;
+  --primary-l:   #1aad9e;
+  --primary-dim: rgba(18,140,126,0.10);
+  --indigo:      #128c7e;
+  --indigo-dim:  rgba(18,140,126,0.10);
 
-  --andrea:      #F0B429;
-  --andrea-dim:  rgba(240,180,41,0.12);
-  --jedi:        #34D399;
-  --jedi-dim:    rgba(52,211,153,0.12);
-  --steve:       #C7D2FE;
-  --steve-dim:   rgba(199,210,254,0.10);
-  --leo:         #F87171;
-  --leo-dim:     rgba(248,113,113,0.12);
+  --andrea:      #E09400;
+  --andrea-dim:  rgba(224,148,0,0.10);
+  --jedi:        #0e9e72;
+  --jedi-dim:    rgba(14,158,114,0.10);
+  --steve:       #3B82F6;
+  --steve-dim:   rgba(59,130,246,0.10);
+  --leo:         #EA580C;
+  --leo-dim:     rgba(234,88,12,0.10);
 
   --radius:      14px;
   --radius-sm:   8px;
-  --shadow:      0 4px 24px rgba(0,0,0,0.5);
-  --shadow-lg:   0 8px 48px rgba(0,0,0,0.7);
+  --shadow:      0 2px 16px rgba(18,140,126,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-lg:   0 8px 40px rgba(18,140,126,0.12), 0 2px 8px rgba(0,0,0,0.06);
   --transition:  0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --sidebar-w:   240px;
 }
@@ -44,6 +48,7 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Animación fadeIn para pantallas */
@@ -71,7 +76,7 @@ body {
 /* XP bar */
 .xp-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--gold), var(--indigo));
+  background: linear-gradient(90deg, var(--primary), var(--gold));
   border-radius: 99px;
   transition: width 1s ease;
 }
