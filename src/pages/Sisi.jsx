@@ -5,12 +5,12 @@ import { useAuth } from '../context/AuthContext'
 
 // ─── Constantes del sistema ───────────────────────────────────────
 const FASES = {
-  1: { icon: '🌱', name: 'Semilla',           color: '#6B7280', sub: 'Inexistencia',  escenario_ideal: 'Canal definido, marca personal clara, problema validado con 10 personas, MVP lanzado y primer pago real conseguido.' },
-  2: { icon: '✅', name: 'Validación',         color: '#16A34A', sub: 'Nacimiento',    escenario_ideal: '3 primeros clientes reales que pagan, feedback activo recogido, propuesta de valor en una frase, canal principal identificado y la venta replicada 3 veces.' },
-  3: { icon: '⚔️', name: 'Break-even',         color: '#C0392B', sub: 'Supervivencia', escenario_ideal: 'Todos los costes reales cubiertos (salario fundador incluido), reserva del 10% activa, control de caja semanal y 3 meses consecutivos en positivo.' },
-  4: { icon: '📊', name: 'Estabilidad ×10',   color: '#F39C12', sub: 'Estabilidad',   escenario_ideal: 'Procesos documentados, sistema de seguimiento activo, ningún cliente >30% ingresos, primeras delegaciones funcionando y reserva de 3 meses de gastos fijos.' },
-  5: { icon: '🚀', name: 'Escalado ×50',      color: '#3498DB', sub: 'Expansión',     escenario_ideal: 'Negocio opera 2 semanas sin el fundador, equipo directivo autónomo, driver de crecimiento identificado y sistema de ventas escalable no basado en relaciones personales.' },
-  6: { icon: '👑', name: 'Sistema Autónomo',  color: '#27AE60', sub: 'Dominio',       escenario_ideal: 'Sistema completamente documentado, equipo que reemplaza al fundador en todas las funciones clave y fundador enfocado en visión estratégica y siguiente capa.' },
+  1: { icon: '💀', name: 'Inexistencia',  color: '#6B7280', escenario_ideal: 'Canal definido, marca personal clara, problema validado con 10 personas, MVP lanzado y primer pago real conseguido.' },
+  2: { icon: '🌱', name: 'Nacimiento',    color: '#16A34A', escenario_ideal: '3 primeros clientes reales que pagan, feedback activo recogido, propuesta de valor en una frase, canal principal identificado y la venta replicada 3 veces.' },
+  3: { icon: '⚔️', name: 'Supervivencia', color: '#C0392B', escenario_ideal: 'Todos los costes reales cubiertos (salario fundador incluido), reserva del 10% activa, control de caja semanal y 3 meses consecutivos en positivo.' },
+  4: { icon: '📊', name: 'Estabilidad',   color: '#F39C12', escenario_ideal: 'Procesos documentados, sistema de seguimiento activo, ningún cliente >30% ingresos, primeras delegaciones funcionando y reserva de 3 meses de gastos fijos.' },
+  5: { icon: '🚀', name: 'Expansión',     color: '#3498DB', escenario_ideal: 'Negocio opera 2 semanas sin el fundador, equipo directivo autónomo, driver de crecimiento identificado y sistema de ventas escalable no basado en relaciones personales.' },
+  6: { icon: '👑', name: 'Dominio',       color: '#27AE60', escenario_ideal: 'Sistema completamente documentado, equipo que reemplaza al fundador en todas las funciones clave y fundador enfocado en visión estratégica y siguiente capa.' },
 }
 
 const MENTORES_DISPONIBLES = [
@@ -163,9 +163,12 @@ Break-even → Estabilidad (10 pasos): (1) Confirmar 3 meses consecutivos de bre
 Estabilidad → Escalado (10 pasos): (1) Verificar que el negocio puede operar sin el fundador 2 semanas sin perder ingresos. (2) Identificar la palanca de escalado: volumen, precio o multiplicador. (3) Construir equipo directivo autónomo. (4) Crear sistema de ventas escalable no basado en relaciones personales del fundador. (5) Definir KPIs de escalado y dashboard semanal. (6) Revisar estructura legal y fiscal para escalar. (7) Evaluar si se necesita financiación externa. (8) Blindar propiedad intelectual: marca, patentes, contratos clave. (9) Sistema de retención de talento. (10) Planificar la siguiente fase de vida del fundador.
 
 IDENTIDAD DEL USUARIO:
-- El payload incluye usuario.nombre: úsalo para personalizar tu respuesta. Dirígete al usuario por su nombre.
+- El payload incluye usuario.nombre: úsalo para personalizar tu respuesta. Dirígete al usuario por su nombre desde el primer mensaje.
 - El payload incluye usuario.user_id: identifica de forma única a este usuario. Cada análisis es exclusivo y privado.
 - Si el payload incluye usuario.tipo_negocio: úsalo para adaptar toda la estructura de costes y métricas.
+- Si el payload incluye usuario.sector: el usuario declaró que su negocio pertenece a ese sector. Adapta todos tus análisis, ejemplos y referencias a esa industria específica desde el inicio. No uses ejemplos genéricos si tienes el sector.
+- Si el payload incluye usuario.bloqueo_principal: el usuario declaró este como su mayor obstáculo al registrarse. Es su punto de dolor inicial — tenlo muy presente al diagnosticar y priorizar recomendaciones. Si su consulta actual está relacionada con ese bloqueo, reconócelo explícitamente.
+- Si el payload incluye usuario.area_foco: el usuario indicó que quiere apoyo principalmente en esa área. Priorízala en tu respuesta cuando sea pertinente, aunque sin ignorar cuellos de botella más urgentes que detectes.
 
 PLAN DE NEGOCIO Y SEGUIMIENTO:
 - Si plan_negocio existe y tiene respuestas_fundador: el usuario ya definió su proyecto. Tienes lo que dijo sobre su problema, clientes, modelo de ingresos y riesgos. Úsalo como base de toda tu lectura.
@@ -211,7 +214,7 @@ FORMATO DE RESPUESTA: Responde ÚNICAMENTE con JSON válido, sin texto adicional
 
 // ─── Componente principal ─────────────────────────────────────────
 export default function Sisi({ onNavigate, currentPage }) {
-  const { user, condicion, agregarXP, idioma, tipoNegocio, guardarTipoNegocio } = useAuth()
+  const { user, condicion, agregarXP, idioma, tipoNegocio, guardarTipoNegocio, sector, bloqueo, areaFoco, fullName } = useAuth()
 
   const [consulta, setConsulta]             = useState('')
   const [analizando, setAnalizando]         = useState(false)
@@ -226,7 +229,7 @@ export default function Sisi({ onNavigate, currentPage }) {
   const [consultandoMentor, setConsultandoMentor] = useState(false)
   const [proyectoSeleccionado, setProyectoSeleccionado] = useState(null)  // proyecto activo para la sesión
 
-  const nombreUsuario = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuario'
+  const nombreUsuario = fullName || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuario'
   const [ctx, setCtx] = useState({
     ingresos: 0, gastos: 0,
     proyectos: 0,
@@ -391,6 +394,9 @@ export default function Sisi({ onNavigate, currentPage }) {
         objetivo_anual:            ctx.plan?.objetivo_anual   || 'No definido',
         idioma:                    'es',
         tipo_negocio:              tipoNegocio || 'desconocido',
+        sector:                    sector      || 'no especificado',
+        bloqueo_principal:         bloqueo     || null,
+        area_foco:                 areaFoco    || null,
       },
       contexto: {
         consulta_usuario:          consulta.trim() || 'El usuario solicita un análisis general de su situación actual.',
@@ -708,58 +714,6 @@ ${idioma === 'en' ? 'IMPORTANT: Write ALL text values inside the JSON in English
         </div>
       </div>
 
-      {/* ── Pregunta inicial: tipo de negocio ────────────────── */}
-      {!tipoNegocio && (
-        <div style={{
-          background: 'linear-gradient(135deg, rgba(18,140,126,0.10), rgba(18,140,126,0.04))',
-          border: '1px solid rgba(18,140,126,0.3)', borderRadius: 'var(--radius)',
-          padding: 24, marginBottom: 20
-        }}>
-          <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1rem', marginBottom: 6 }}>
-            Antes de empezar, necesito entender tu negocio
-          </p>
-          <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: 18 }}>
-            El tipo de negocio cambia toda la estructura de costes, el break-even y las palancas de crecimiento. Solo te pregunto esto una vez.
-          </p>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            {[
-              { id: 'fisico',  icon: '🏪', label: 'Negocio físico', desc: 'Local, empleados, stock, instalaciones' },
-              { id: 'online',  icon: '💻', label: 'Negocio online',  desc: 'SaaS, e-commerce, infoproductos, servicios digitales' },
-              { id: 'hibrido', icon: '🔀', label: 'Híbrido',         desc: 'Tienes presencia física y canal online' },
-            ].map(({ id, icon, label, desc }) => (
-              <button key={id} onClick={() => guardarTipoNegocio(id)} style={{
-                flex: '1 1 160px', padding: '14px 18px', borderRadius: 'var(--radius-sm)',
-                background: 'var(--surface)', border: '1px solid var(--border)',
-                cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s'
-              }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(18,140,126,0.5)'; e.currentTarget.style.background = 'rgba(18,140,126,0.08)' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface)' }}
-              >
-                <div style={{ fontSize: '1.4rem', marginBottom: 6 }}>{icon}</div>
-                <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--text)', marginBottom: 3 }}>{label}</div>
-                <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>{desc}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── Tipo de negocio activo (chip editable) ───────────── */}
-      {tipoNegocio && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-          <div style={{
-            padding: '5px 14px', borderRadius: 99, fontSize: '0.78rem', fontWeight: 600,
-            background: 'rgba(18,140,126,0.1)', border: '1px solid rgba(18,140,126,0.3)', color: 'rgba(18,140,126,0.9)'
-          }}>
-            {tipoNegocio === 'fisico' ? '🏪 Negocio físico' : tipoNegocio === 'online' ? '💻 Negocio online' : '🔀 Híbrido'}
-          </div>
-          <button onClick={() => guardarTipoNegocio(null)} style={{
-            background: 'none', border: 'none', cursor: 'pointer',
-            fontSize: '0.73rem', color: 'var(--text-muted)', textDecoration: 'underline'
-          }}>Cambiar</button>
-        </div>
-      )}
-
       {/* ── Contexto activo ───────────────────────────────────── */}
       <div style={{ marginBottom: 20 }}>
         <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
@@ -828,55 +782,16 @@ ${idioma === 'en' ? 'IMPORTANT: Write ALL text values inside the JSON in English
         </div>
       )}
 
-      {!cargandoCtx && ctx.proyectos === 0 ? (
-        <div className="fade-in" style={{
-          background: 'linear-gradient(135deg, rgba(18,140,126,0.10), rgba(18,140,126,0.04))',
-          border: '1px solid rgba(18,140,126,0.30)', borderRadius: 'var(--radius)',
-          padding: 28, marginBottom: 24
-        }}>
-          <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', marginBottom: 20 }}>
-            <div style={{
-              width: 48, height: 48, borderRadius: '50%', flexShrink: 0,
-              background: 'rgba(18,140,126,0.15)', border: '2px solid rgba(18,140,126,0.4)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem'
-            }}>⚡</div>
-            <div>
-              <p style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 8 }}>
-                {nombreUsuario}, antes de analizar tu situación…
-              </p>
-              <p style={{ fontSize: '0.92rem', color: 'var(--text-soft)', lineHeight: 1.75 }}>
-                Veo que aún no tienes ningún proyecto registrado. Para que pueda acompañarte con precisión —detectar tu cuello de botella, evaluar tu modelo económico y proponer acciones concretas— necesito conocer tu proyecto.
-              </p>
-              <p style={{ fontSize: '0.92rem', color: 'var(--text-soft)', lineHeight: 1.75, marginTop: 10 }}>
-                Ve a <strong>Proyectos</strong>, crea el tuyo y cuéntame qué resuelves, a quién y cómo generas dinero. Luego vuelve aquí y lo analizamos juntos.
-              </p>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            <button
-              onClick={() => onNavigate('proyectos')}
-              style={{
-                padding: '10px 24px', borderRadius: 'var(--radius-sm)', border: 'none',
-                background: 'rgba(18,140,126,0.85)', color: 'white',
-                fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer'
-              }}>
-              🗂️ Crear mi primer proyecto
-            </button>
-            <button
-              onClick={analizarConSISI}
-              disabled={analizando}
-              style={{
-                padding: '10px 20px', borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)', background: 'var(--surface)',
-                color: 'var(--text-muted)', fontSize: '0.85rem', cursor: 'pointer'
-              }}>
-              Analizar igualmente
-            </button>
-          </div>
-        </div>
-      ) : (
-      /* ── Input ─────────────────────────────────────────────── */
+      {/* ── Input ─────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 22, marginBottom: 24 }}>
+        {!cargandoCtx && ctx.proyectos === 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12, padding: '8px 12px', borderRadius: 'var(--radius-sm)', background: 'rgba(18,140,126,0.06)', border: '1px solid rgba(18,140,126,0.15)' }}>
+            <span style={{ fontSize: '0.82rem' }}>💡</span>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+              Si creas un proyecto en <button onClick={() => onNavigate('proyectos')} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'rgba(18,140,126,0.85)', fontWeight: 600, fontSize: '0.8rem', textDecoration: 'underline' }}>Proyectos</button>, SISI tendrá más contexto para analizarte.
+            </span>
+          </div>
+        )}
         <p style={{ fontWeight: 600, fontSize: '0.92rem', marginBottom: 12 }}>
           ⚡ ¿Qué quieres que SISI analice hoy?
         </p>
@@ -912,7 +827,6 @@ ${idioma === 'en' ? 'IMPORTANT: Write ALL text values inside the JSON in English
           {cargandoCtx && <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Cargando tu contexto...</span>}
         </div>
       </div>
-      )}
 
       {/* ══════════════════════════════════════════════════════════
           RESPUESTA VISIBLE — respuesta_usuario

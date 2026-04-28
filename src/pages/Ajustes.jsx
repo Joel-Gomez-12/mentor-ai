@@ -17,13 +17,14 @@ export default function Ajustes({ onNavigate, currentPage }) {
   const { user, signOut, xp, condicion } = useAuth()
 
   // ── Perfil ────────────────────────────────────────────────────
-  const [fullName,   setFullName]   = useState('')
-  const [sector,     setSector]     = useState('')
-  const [moneda,     setMoneda]     = useState('EUR')
-  const [idioma,     setIdioma]     = useState('es')
-  const [mentorFav,  setMentorFav]  = useState('jedi')
-  const [guardando,  setGuardando]  = useState(false)
-  const [savedOk,    setSavedOk]    = useState(false)
+  const [fullName,        setFullName]        = useState('')
+  const [sector,          setSector]          = useState('')
+  const [condicionLocal,  setCondicionLocal]  = useState(1)
+  const [moneda,          setMoneda]          = useState('EUR')
+  const [idioma,          setIdioma]          = useState('es')
+  const [mentorFav,       setMentorFav]       = useState('jedi')
+  const [guardando,       setGuardando]       = useState(false)
+  const [savedOk,         setSavedOk]         = useState(false)
 
   // ── Contraseña ────────────────────────────────────────────────
   const [passActual,  setPassActual]  = useState('')
@@ -45,29 +46,35 @@ export default function Ajustes({ onNavigate, currentPage }) {
   const cargarPerfil = async () => {
     const { data } = await supabase
       .from('users')
-      .select('full_name, sector, moneda, idioma, mentor_fav')
+      .select('full_name, sector, condicion, moneda, idioma, mentor_fav')
       .eq('id', user.id)
       .single()
     if (data) {
-      setFullName(data.full_name || '')
-      setSector(data.sector    || '')
-      setMoneda(data.moneda    || 'EUR')
-      setIdioma(data.idioma    || 'es')
-      setMentorFav(data.mentor_fav || 'jedi')
+      setFullName(data.full_name      || '')
+      setSector(data.sector           || '')
+      setCondicionLocal(data.condicion || 1)
+      setMoneda(data.moneda           || 'EUR')
+      setIdioma(data.idioma           || 'es')
+      setMentorFav(data.mentor_fav    || 'jedi')
     }
   }
 
   // ── Guardar perfil ─────────────────────────────────────────────
   const guardarPerfil = async () => {
     setGuardando(true)
+    const condicionCambio = condicionLocal !== condicion
     const { error } = await supabase
       .from('users')
-      .update({ full_name: fullName, sector, moneda, idioma, mentor_fav: mentorFav })
+      .update({ full_name: fullName, sector, condicion: condicionLocal, moneda, idioma, mentor_fav: mentorFav })
       .eq('id', user.id)
     setGuardando(false)
     if (!error) {
       setSavedOk(true)
-      setTimeout(() => setSavedOk(false), 2500)
+      if (condicionCambio) {
+        setTimeout(() => window.location.reload(), 800)
+      } else {
+        setTimeout(() => setSavedOk(false), 2500)
+      }
     }
   }
 
@@ -163,15 +170,36 @@ export default function Ajustes({ onNavigate, currentPage }) {
               </div>
             </div>
 
-            {/* Fase actual (solo lectura) */}
-            <div style={{ background: 'var(--surface2)', border: `1px solid ${condColor}44`, borderRadius: 'var(--radius-sm)', padding: '10px 14px', marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginBottom: 2, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Fase actual</div>
-                <div style={{ fontWeight: 700, color: condColor, fontSize: '0.9rem' }}>
-                  Fase {condicion} — {CONDICIONES_NAMES[condicion] || ''}
-                </div>
+            {/* Fase actual (editable) */}
+            <div style={{ marginBottom: 20 }}>
+              <label style={label}>Fase actual de tu negocio</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+                {CONDICIONES_NAMES.slice(1).map((nombre, i) => {
+                  const num = i + 1
+                  const col = CONDICIONES_COLORS[num]
+                  const sel = condicionLocal === num
+                  return (
+                    <button
+                      key={num}
+                      onClick={() => setCondicionLocal(num)}
+                      style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '9px 13px', borderRadius: 'var(--radius-sm)', border: `1.5px solid ${sel ? col : 'var(--border2)'}`, background: sel ? `${col}12` : 'var(--surface2)', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s' }}
+                    >
+                      <div style={{ width: 26, height: 26, borderRadius: 7, background: `${col}20`, border: `1.5px solid ${col}55`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.68rem', fontWeight: 800, color: col, flexShrink: 0 }}>
+                        {num}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <span style={{ fontWeight: sel ? 700 : 500, fontSize: '0.87rem', color: sel ? col : 'var(--text-soft)' }}>
+                          Fase {num} — {nombre}
+                        </span>
+                      </div>
+                      {sel && <div style={{ width: 16, height: 16, borderRadius: '50%', background: col, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><span style={{ color: '#fff', fontSize: '0.55rem' }}>✓</span></div>}
+                    </button>
+                  )
+                })}
               </div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{xp || 0} XP</div>
+              <p style={{ fontSize: '0.71rem', color: 'var(--text-muted)', marginTop: 7 }}>
+                Al guardar, la app se actualiza automáticamente.
+              </p>
             </div>
 
             <div style={{ marginBottom: 16 }}>
