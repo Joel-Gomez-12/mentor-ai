@@ -94,6 +94,7 @@ export default function Mentores({ onNavigate, currentPage }) {
   const [error, setError] = useState(null)
   const [historial, setHistorial] = useState([])
   const [sesionAbierta, setSesionAbierta] = useState(null)
+  const [mentorExpandido, setMentorExpandido] = useState(null)
 
   useEffect(() => {
     if (user) cargarHistorial()
@@ -183,54 +184,10 @@ export default function Mentores({ onNavigate, currentPage }) {
         Consulta sabiduría, estrategia y fortaleza cuando la necesites.
       </p>
 
-      {/* ── Cards de mentores ─────────────────────────────────────── */}
-      <div className="rg-3" style={{ gap: 16, marginBottom: 24 }}>
-        {MENTORES.map(m => (
-          <div key={m.key} style={{
-            background: 'var(--surface)', border: '1px solid var(--border)',
-            borderTop: `2px solid ${m.color}`,
-            borderRadius: 'var(--radius)', padding: 24, textAlign: 'center',
-          }}>
-            {/* Avatar */}
-            <div style={{
-              width: 80, height: 80, borderRadius: '50%',
-              border: `2px solid ${m.color}`,
-              margin: '0 auto 14px', overflow: 'hidden', flexShrink: 0,
-              boxShadow: `0 0 24px ${m.color}44`
-            }}>
-              <img src={m.foto} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-
-            {/* Nombre */}
-            <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.1rem', color: m.color, marginBottom: 8 }}>
-              {m.name}
-            </div>
-
-            {/* Badge */}
-            <span style={{
-              display: 'inline-block', padding: '3px 12px', borderRadius: 99,
-              fontSize: '0.72rem', fontWeight: 600,
-              background: m.dim, color: m.color,
-              border: `1px solid ${m.color}44`, marginBottom: 14
-            }}>{m.badge}</span>
-
-            {/* Descripción */}
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 14 }}>
-              {m.desc}
-            </p>
-
-            {/* Frase */}
-            <p style={{ fontSize: '0.82rem', color: m.color, fontStyle: 'italic' }}>
-              {m.frase}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Consulta grupal ──────────────────────────────────────── */}
+      {/* ── Consulta ─────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 22, marginBottom: 24 }}>
-        <p style={{ fontWeight: 600, fontSize: '0.95rem', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
-          💬 Consulta a los mentores
+        <p style={{ fontWeight: 600, fontSize: '0.95rem', marginBottom: 14 }}>
+          💬 ¿Qué reto quieres consultar?
         </p>
         <textarea
           value={consulta}
@@ -241,17 +198,14 @@ export default function Mentores({ onNavigate, currentPage }) {
             borderRadius: 'var(--radius-sm)', color: 'var(--text)',
             fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem',
             padding: '12px 14px', outline: 'none', resize: 'vertical',
-            minHeight: 110, marginBottom: 16
+            minHeight: 90, marginBottom: 16
           }}
         />
-
-        {/* Error */}
         {error && (
           <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: 'var(--radius-sm)', padding: '10px 14px', marginBottom: 14, fontSize: '0.85rem', color: 'var(--leo)' }}>
             ⚠️ {error}
           </div>
         )}
-
         <button
           onClick={obtenerConsejo}
           disabled={cargando || !consulta.trim()}
@@ -265,6 +219,50 @@ export default function Mentores({ onNavigate, currentPage }) {
           }}>
           {cargando ? '⏳ Consultando mentores...' : '🧭 Obtener consejo'}
         </button>
+      </div>
+
+      {/* ── Cards de mentores (compactas, expandibles) ───────────── */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+        {MENTORES.map(m => {
+          const abierto = mentorExpandido === m.key
+          return (
+            <div key={m.key} style={{
+              background: 'var(--surface)', border: `1px solid ${abierto ? m.color + '55' : 'var(--border)'}`,
+              borderLeft: `3px solid ${m.color}`,
+              borderRadius: 'var(--radius)', overflow: 'hidden',
+              transition: 'border-color 0.2s'
+            }}>
+              {/* Fila compacta — siempre visible */}
+              <button
+                onClick={() => setMentorExpandido(abierto ? null : m.key)}
+                style={{
+                  width: '100%', display: 'flex', alignItems: 'center', gap: 14,
+                  padding: '14px 18px', background: 'none', border: 'none',
+                  cursor: 'pointer', textAlign: 'left'
+                }}
+              >
+                <div style={{ width: 44, height: 44, borderRadius: '50%', border: `2px solid ${m.color}`, overflow: 'hidden', flexShrink: 0 }}>
+                  <img src={m.foto} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: m.color, marginBottom: 2 }}>{m.name}</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.frase}</div>
+                </div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', flexShrink: 0 }}>{abierto ? '▲' : '▼'}</span>
+              </button>
+
+              {/* Detalle expandido */}
+              {abierto && (
+                <div style={{ padding: '0 18px 18px' }}>
+                  <span style={{ display: 'inline-block', padding: '3px 12px', borderRadius: 99, fontSize: '0.72rem', fontWeight: 600, background: m.dim, color: m.color, border: `1px solid ${m.color}44`, marginBottom: 12 }}>
+                    {m.badge}
+                  </span>
+                  <p style={{ fontSize: '0.83rem', color: 'var(--text-muted)', lineHeight: 1.65 }}>{m.desc}</p>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
 
       {/* ── Loading ───────────────────────────────────────────────── */}

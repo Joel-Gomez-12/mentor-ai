@@ -14,13 +14,21 @@ const NAV_ITEMS = [
     { icon: '🗂️', label: 'Proyectos',           page: 'proyectos' },
     { icon: '📋', label: 'Plan del negocio',     page: 'plan' },
     { icon: '🧠', label: 'Mentores',             page: 'mentores' },
-    { icon: '📇', label: 'Contactos',            page: 'contactos' },
+    { icon: '📇', label: 'Red de contactos',     page: 'contactos' },
     { icon: '🎓', label: 'Formación',            page: 'formacion' },
   ]},
   { section: 'Tú', items: [
     { icon: '🏆', label: 'Mi progreso', page: 'progreso' },
     { icon: '⚙️', label: 'Ajustes',    page: 'ajustes' },
   ]},
+]
+
+const BOTTOM_NAV = [
+  { icon: '⚡', label: 'SISI',       page: 'sisi'      },
+  { icon: '🏠', label: 'Inicio',     page: 'home'      },
+  { icon: '💰', label: 'Finanzas',   page: 'finanzas'  },
+  { icon: '🗂️', label: 'Proyectos',  page: 'proyectos' },
+  { icon: '📇', label: 'Contactos',  page: 'contactos' },
 ]
 
 const CONDICIONES_NAMES = [
@@ -69,6 +77,29 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
 
   return (
     <>
+      {/* ── Bottom navigation (solo móvil) ── */}
+      <nav className="bottom-nav">
+        {BOTTOM_NAV.map(({ icon, label, page }) => {
+          const active = currentPage === page
+          return (
+            <button
+              key={page}
+              onClick={() => { onNavigate(page); onClose?.() }}
+              style={{
+                flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
+                justifyContent: 'center', gap: 3, padding: '8px 4px',
+                background: 'none', border: 'none', cursor: 'pointer',
+                color: active ? '#128c7e' : 'var(--text-muted)',
+              }}
+            >
+              <span style={{ fontSize: '1.3rem', lineHeight: 1 }}>{icon}</span>
+              <span style={{ fontSize: '0.62rem', fontWeight: active ? 700 : 400 }}>{label}</span>
+              {active && <div style={{ width: 16, height: 2, borderRadius: 99, background: '#128c7e', marginTop: 1 }} />}
+            </button>
+          )
+        })}
+      </nav>
+
       {isOpen && (
         <div
           onClick={onClose}

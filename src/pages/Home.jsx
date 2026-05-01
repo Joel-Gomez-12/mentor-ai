@@ -105,6 +105,35 @@ export default function Home({ onNavigate, currentPage }) {
         </div>
       </div>
 
+      {/* Quick actions */}
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 28 }}>
+        {[
+          { icon: '⚡', label: 'Potencia mi día',        sub: 'Consulta a SISI',           page: 'sisi',      color: '#128c7e' },
+          { icon: '🗂️', label: 'Vamos con el proyecto',  sub: 'Ver mis proyectos',          page: 'proyectos', color: '#3498DB' },
+          { icon: '📊', label: 'Ayúdame a crecer',       sub: 'Tomar el pulso del negocio', page: 'pulso',     color: '#F39C12' },
+        ].map(({ icon, label, sub, page, color }) => (
+          <button
+            key={page}
+            onClick={() => onNavigate(page)}
+            style={{
+              flex: '1 1 140px',
+              display: 'flex', alignItems: 'center', gap: 12,
+              padding: '13px 16px', borderRadius: 'var(--radius-sm)',
+              background: 'var(--surface)', border: `1px solid ${color}33`,
+              cursor: 'pointer', textAlign: 'left', transition: 'all 0.18s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = `${color}0d`; e.currentTarget.style.borderColor = `${color}66` }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface)'; e.currentTarget.style.borderColor = `${color}33` }}
+          >
+            <span style={{ fontSize: '1.3rem' }}>{icon}</span>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text)', marginBottom: 2 }}>{label}</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{sub}</div>
+            </div>
+          </button>
+        ))}
+      </div>
+
       {/* Stat cards — datos reales */}
       <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>
         Tu estado actual

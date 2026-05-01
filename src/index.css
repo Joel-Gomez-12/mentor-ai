@@ -106,6 +106,9 @@ body {
 /* Grid de 4 columnas → 2 en tablet, 1 en móvil */
 .rg-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
 
+/* ── Bottom navigation (oculto en desktop) ── */
+.bottom-nav { display: none; }
+
 /* ============================================================
    RESPONSIVE — MÓVIL (< 768px)
    ============================================================ */
@@ -124,8 +127,8 @@ body {
   /* El main no tiene margen izquierdo en móvil */
   main { margin-left: 0 !important; }
 
-  /* Padding más compacto */
-  main > div:last-child { padding: 16px !important; }
+  /* Padding compacto y espacio para bottom nav */
+  main > div:last-child { padding: 16px 16px 80px !important; }
 
   /* Grids legacy: 1 columna */
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
@@ -146,6 +149,19 @@ body {
   /* Tabs que desbordan: scroll horizontal */
   .tabs-scroll { overflow-x: auto; white-space: nowrap; padding-bottom: 4px; }
   .tabs-scroll::-webkit-scrollbar { height: 0; }
+
+  /* Bottom navigation */
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 62px;
+    background: #ffffff;
+    border-top: 1px solid var(--border);
+    z-index: 110;
+    align-items: stretch;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+  }
 }
 
 /* ============================================================

@@ -238,27 +238,55 @@ export default function Auth() {
   // ── LANDING ─────────────────────────────────────────────────────────────────
   if (mode === 'landing') return (
     <PageWrap center>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 36 }}>
+      {/* Logo */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
         {LOGO_SVG}
         <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: '1.2rem', color: '#0c2420', letterSpacing: '-0.02em' }}>
           Mentor<span style={{ color: '#128c7e' }}> AI</span>
         </span>
       </div>
 
-      <div style={{ textAlign: 'center', marginBottom: 30 }}>
-        <div style={{ width: 92, height: 92, borderRadius: '50%', overflow: 'hidden', border: '3px solid #128c7e', margin: '0 auto 14px', boxShadow: '0 0 28px rgba(18,140,126,0.16)' }}>
-          <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        </div>
-        <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#128c7e', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 3 }}>SISI</div>
-        <div style={{ fontSize: '0.75rem', color: '#72aaa1' }}>Tu asistente de inteligencia empresarial</div>
+      {/* Tagline */}
+      <div style={{ textAlign: 'center', marginBottom: 28 }}>
+        <h1 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: '1.7rem', color: '#0c2420', letterSpacing: '-0.03em', lineHeight: 1.2, marginBottom: 10 }}>
+          Potencia tu negocio<br /><span style={{ color: '#128c7e' }}>cada día.</span>
+        </h1>
+        <p style={{ fontSize: '0.88rem', color: '#72aaa1', lineHeight: 1.6 }}>
+          Tu asistente de inteligencia empresarial siempre disponible.
+        </p>
       </div>
 
-      <div style={{ background: '#ffffff', border: '1px solid rgba(18,140,126,0.12)', borderRadius: 18, padding: '22px 24px', boxShadow: '0 2px 14px rgba(18,140,126,0.06)', marginBottom: 26 }}>
-        <p style={{ fontSize: '0.95rem', color: '#0c2420', lineHeight: 1.72, margin: 0 }}>
-          <strong>Hola. Soy SISI.</strong><br /><br />
-          Antes de empezar, necesito hacerte unas preguntas para entender dónde estás y qué necesitas.<br /><br />
-          <span style={{ color: '#72aaa1', fontSize: '0.82rem' }}>Solo tardarás 2 minutos.</span>
-        </p>
+      {/* Quick actions */}
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 28 }}>
+        {[
+          { icon: '⚡', label: 'Potencia mi día' },
+          { icon: '🗂️', label: 'Vamos con el proyecto' },
+          { icon: '📊', label: 'Ayúdame a crecer' },
+        ].map(({ icon, label }) => (
+          <div key={label} style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            padding: '7px 14px', borderRadius: 99,
+            background: 'rgba(18,140,126,0.07)', border: '1px solid rgba(18,140,126,0.18)',
+            fontSize: '0.8rem', color: '#128c7e', fontWeight: 500,
+            cursor: 'default'
+          }}>
+            <span>{icon}</span> {label}
+          </div>
+        ))}
+      </div>
+
+      {/* SISI intro */}
+      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start', background: '#ffffff', border: '1px solid rgba(18,140,126,0.12)', borderRadius: 18, padding: '18px 20px', boxShadow: '0 2px 14px rgba(18,140,126,0.06)', marginBottom: 24 }}>
+        <div style={{ width: 48, height: 48, borderRadius: '50%', overflow: 'hidden', border: '2px solid #128c7e', flexShrink: 0, boxShadow: '0 0 14px rgba(18,140,126,0.16)' }}>
+          <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+        <div>
+          <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#128c7e', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>SISI — IA Principal</div>
+          <p style={{ fontSize: '0.9rem', color: '#0c2420', lineHeight: 1.65, margin: 0 }}>
+            Hola. Soy SISI. Antes de empezar, necesito hacerte unas preguntas para entender dónde estás y qué necesitas.{' '}
+            <span style={{ color: '#72aaa1', fontSize: '0.82rem' }}>Solo tardarás 2 minutos.</span>
+          </p>
+        </div>
       </div>
 
       <button
