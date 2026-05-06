@@ -142,7 +142,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
     setModalPlan('analizando')
     const contexto = PREGUNTAS_SISI.map(p => `${p.pregunta}\nRespuesta: ${resp[p.id] || '—'}`).join('\n\n')
     const idiomaInstruccion = idioma === 'en' ? '\nIMPORTANT: Write all text values inside the JSON in English.' : ''
-    const prompt = `Eres SISI, asistente de mentoría empresarial de Mentor AI. Un emprendedor acaba de crear un proyecto y ha respondido estas preguntas sobre su plan de negocio:\n\n${contexto}\n\nNombre del proyecto: ${proyectoNuevo?.nombre}\nObjetivo: ${proyectoNuevo?.objetivo || 'No definido'}\n\nAnaliza sus respuestas y devuelve ÚNICAMENTE un JSON válido con esta estructura exacta:\n{\n  "diagnostico": "2-3 oraciones directas sobre la viabilidad real del plan",\n  "fortaleza": "El punto más sólido del plan en una oración",\n  "riesgo_principal": "El mayor riesgo o debilidad en una oración",\n  "proximos_pasos": ["paso concreto 1", "paso concreto 2", "paso concreto 3"],\n  "viabilidad": "alta" | "media" | "baja"\n}${idiomaInstruccion}`
+    const prompt = `Eres SISI, asistente de mentoría empresarial de Mentor 1 Millón. Un emprendedor acaba de crear un proyecto y ha respondido estas preguntas sobre su plan de negocio:\n\n${contexto}\n\nNombre del proyecto: ${proyectoNuevo?.nombre}\nObjetivo: ${proyectoNuevo?.objetivo || 'No definido'}\n\nAnaliza sus respuestas y devuelve ÚNICAMENTE un JSON válido con esta estructura exacta:\n{\n  "diagnostico": "2-3 oraciones directas sobre la viabilidad real del plan",\n  "fortaleza": "El punto más sólido del plan en una oración",\n  "riesgo_principal": "El mayor riesgo o debilidad en una oración",\n  "proximos_pasos": ["paso concreto 1", "paso concreto 2", "paso concreto 3"],\n  "viabilidad": "alta" | "media" | "baja"\n}${idiomaInstruccion}`
 
     const fallback = {
       diagnostico: 'No pude generar el análisis en este momento. Tus respuestas han quedado guardadas y puedes continuar con el proyecto.',
@@ -258,7 +258,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
             <div>
               <label style={labelStyle}>Nombre del proyecto *</label>
               <input value={form.nombre} onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))}
-                placeholder="Ej: Mentor AI App" style={inputStyle} />
+                placeholder="Ej: Mi proyecto principal" style={inputStyle} />
             </div>
             <div>
               <label style={labelStyle}>Fecha de inicio</label>
@@ -566,7 +566,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
               <div className="fade-in">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
                   <div style={{ width: 52, height: 52, borderRadius: '50%', border: '2px solid rgba(18,140,126,0.5)', overflow: 'hidden', flexShrink: 0 }}>
-                    <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
                   </div>
                   <div>
                     <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1rem', marginBottom: 3 }}>SISI</div>
@@ -606,7 +606,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
                 {/* Avatar + pregunta */}
                 <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
                   <div style={{ width: 38, height: 38, borderRadius: '50%', border: '2px solid rgba(18,140,126,0.5)', overflow: 'hidden', flexShrink: 0 }}>
-                    <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
                   </div>
                   <div style={{ background: 'var(--surface2)', borderRadius: '0 var(--radius) var(--radius) var(--radius)', padding: '12px 16px', fontSize: '0.92rem', color: 'var(--text)', lineHeight: 1.6, flex: 1 }}>
                     {PREGUNTAS_SISI[paso].pregunta}
@@ -650,7 +650,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
             {modalPlan === 'analizando' && (
               <div className="fade-in" style={{ textAlign: 'center', padding: '20px 0' }}>
                 <div style={{ width: 64, height: 64, borderRadius: '50%', border: '2px solid rgba(18,140,126,0.5)', overflow: 'hidden', margin: '0 auto 20px' }}>
-                  <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
                 </div>
                 <p style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1rem', marginBottom: 8 }}>SISI está analizando tu plan...</p>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Evaluando viabilidad, riesgos y primeros pasos</p>
@@ -667,7 +667,7 @@ export default function Proyectos({ onNavigate, currentPage }) {
               <div className="fade-in">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
                   <div style={{ width: 42, height: 42, borderRadius: '50%', border: '2px solid rgba(18,140,126,0.5)', overflow: 'hidden', flexShrink: 0 }}>
-                    <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
                   </div>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>Análisis de SISI</div>

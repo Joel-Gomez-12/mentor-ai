@@ -262,7 +262,7 @@ Da un mensaje directo, cálido y accionable. Menciona algo específico de sus da
   const pctProgreso  = objMensual ? Math.min(Math.round((finanzasMes.ingresos / objMensual) * 100), 100) : 0
   const balance      = finanzasMes.ingresos - finanzasMes.gastos
 
-  const CONDICIONES_NAMES = ['Inexistencia', 'Nacimiento', 'Supervivencia', 'Estabilidad', 'Expansión', 'Dominio']
+  const CONDICIONES_NAMES = ['Idea Semilla', 'Nacimiento', 'Supervivencia', 'Estabilidad', 'Expansión', 'Dominio']
   const CONDICIONES_COLORS = ['#6B7280', '#16A34A', '#C0392B', '#F39C12', '#3498DB', '#27AE60']
   const condIdx    = Math.min((condicion || 1) - 1, 5)
   const condColor  = CONDICIONES_COLORS[condIdx]
@@ -290,7 +290,7 @@ Da un mensaje directo, cálido y accionable. Menciona algo específico de sus da
   const superavit       = ingresosMes - estructuraTotal
 
   const MODELO_ECONOMICO = {
-    1: { // Inexistencia
+    1: { // Idea Semilla
       titulo: 'Regla de oro: No gastes más de tu presupuesto',
       desc: 'En esta fase tu prioridad es validar la idea sin hundir el barco. Cada euro cuenta.',
       color: '#6B7280',
@@ -823,7 +823,7 @@ Da un mensaje directo, cálido y accionable. Menciona algo específico de sus da
             <p style={sectionTitle}>🗺️ Tu evolución empresarial</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {[
-                { num: 1, name: 'Inexistencia',  color: '#6B7280', regla: 'No gastes más de tu presupuesto' },
+                { num: 1, name: 'Idea Semilla',  color: '#6B7280', regla: 'No gastes más de tu presupuesto' },
                 { num: 2, name: 'Nacimiento',    color: '#16A34A', regla: 'Valida el modelo sin romper la caja' },
                 { num: 3, name: 'Supervivencia', color: '#C0392B', regla: 'Alcanza el breakeven + tu sueldo' },
                 { num: 4, name: 'Estabilidad',   color: '#F39C12', regla: 'Sistematiza y mantén margen positivo' },

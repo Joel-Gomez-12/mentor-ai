@@ -3,7 +3,7 @@ import Layout from '../components/layout/Layout'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 
-const CONDICIONES_NAMES = ['', 'Inexistencia', 'Nacimiento', 'Supervivencia', 'Estabilidad', 'Expansión', 'Dominio']
+const CONDICIONES_NAMES = ['', 'Idea Semilla', 'Nacimiento', 'Supervivencia', 'Estabilidad', 'Expansión', 'Dominio']
 const CONDICIONES_COLORS = ['', '#6B7280', '#16A34A', '#C0392B', '#F39C12', '#3498DB', '#27AE60']
 
 const MENTORES = [
@@ -149,7 +149,7 @@ export default function Ajustes({ onNavigate, currentPage }) {
         Ajustes
       </h1>
       <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: 28 }}>
-        Gestiona tu cuenta y preferencias de Mentor AI.
+        Gestiona tu cuenta y preferencias de Mentor 1 Millón.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, alignItems: 'start' }}>
@@ -396,7 +396,7 @@ export default function Ajustes({ onNavigate, currentPage }) {
               🚪 Cerrar sesión
             </button>
             <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textAlign: 'center' }}>
-              Mentor AI · MVP v1.0 · Datos en Supabase
+              Mentor 1 Millón · MVP v1.0 · Datos en Supabase
             </div>
           </div>
 

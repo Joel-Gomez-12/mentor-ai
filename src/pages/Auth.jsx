@@ -34,7 +34,7 @@ const SECTORS = [
 ]
 
 const FASES = [
-  { num: 1, icon: '💀', label: 'Inexistencia',  color: '#6B7280', desc: 'Tengo una idea pero aún no he empezado a facturar' },
+  { num: 1, icon: '🪴', label: 'Idea Semilla',  color: '#6B7280', desc: 'Tengo una idea pero aún no he empezado a facturar' },
   { num: 2, icon: '🌱', label: 'Nacimiento',    color: '#16A34A', desc: 'Acabo de empezar, buscando mis primeros clientes' },
   { num: 3, icon: '⚔️', label: 'Supervivencia', color: '#C0392B', desc: 'Tengo clientes pero el negocio aún no cubre todos sus costes' },
   { num: 4, icon: '📊', label: 'Estabilidad',   color: '#F39C12', desc: 'Ingresos estables y recurrentes, quiero consolidar' },
@@ -70,7 +70,7 @@ function SisiMessage({ text }) {
     <div style={{ marginBottom: 22 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
         <div style={{ width: 42, height: 42, borderRadius: '50%', overflow: 'hidden', border: '2px solid #128c7e', flexShrink: 0 }}>
-          <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
         </div>
         <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#128c7e', letterSpacing: '0.09em', textTransform: 'uppercase' }}>SISI</span>
       </div>
@@ -170,6 +170,8 @@ export default function Auth() {
   const [sector,      setSector]      = useState('')
   const [tipoNegocio, setTipoNegocio] = useState(null)
   const [fase,        setFase]        = useState(null)
+  const [diagnostico, setDiagnostico] = useState({ genera: null, cubren: null, break_even: null, margen: null, ingresos_rango: null, gastos_rango: null })
+  const [analizando,  setAnalizando]  = useState(false)
   const [bloqueo,     setBloqueo]     = useState(null)
   const [areaFoco,    setAreaFoco]    = useState(null)
   const [email,       setEmail]       = useState('')
@@ -201,6 +203,7 @@ export default function Auth() {
     try {
       const data = await signUp(email, password, fullName, {
         sector, condicion: fase, bloqueo, area_foco: areaFoco, tipo_negocio: tipoNegocio,
+        diagnostico_inicial: diagnostico,
       })
       if (data?.session) {
         window.location.href = '/'
@@ -211,6 +214,52 @@ export default function Auth() {
       setError(err.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const analizarConSISI = async () => {
+    setAnalizando(true)
+    try {
+      const prompt = `Eres un clasificador financiero de etapas empresariales. Analiza las respuestas económicas del emprendedor y determina su condición real hacia el millón de euros.
+
+Las condiciones posibles son:
+3 = Supervivencia: el negocio genera algo pero no cubre todos los costos reales. Margen negativo o cero.
+4 = Estabilidad: ingresos ≥ €5.000/mes con margen positivo consistente.
+5 = Expansión: ingresos ≥ €25.000/mes, negocio escalando activamente.
+6 = Dominio: ingresos ≥ €83.000/mes (camino al millón anual), sistema autónomo.
+
+REGLAS CRÍTICAS:
+- El mínimo SIEMPRE es 3. Nunca devuelvas 1 ni 2.
+- Basa la clasificación principalmente en los ingresos y el margen declarados.
+- Si los ingresos son "€0" o "Menos de €1.000", la condición es 3.
+- Si los ingresos son "€1.000 – €5.000" y el margen es positivo, la condición puede ser 3 o 4.
+- Si los ingresos son "€5.000 – €20.000" con buen margen, la condición es 4.
+- Si los ingresos son "€20.000 – €83.000", la condición es 5.
+- Si los ingresos son "Más de €83.000", la condición es 6.
+- Responde SOLO con el número (3, 4, 5 o 6). Sin texto adicional.
+
+Respuestas del diagnóstico:
+- ¿Genera ingresos?: ${diagnostico.genera}
+- ¿Ingresos cubren gastos y salario?: ${diagnostico.cubren}
+- ¿Conoce su break even?: ${diagnostico.break_even}
+- Margen mensual aproximado: ${diagnostico.margen}
+- Ingresos mensuales: ${diagnostico.ingresos_rango}
+- Gastos mensuales: ${diagnostico.gastos_rango}`
+
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
+        { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }
+      )
+      const json = await res.json()
+      const text = json.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '3'
+      const num = parseInt(text)
+      setFase(isNaN(num) ? 3 : Math.max(3, Math.min(6, num)))
+    } catch {
+      setFase(3)
+    } finally {
+      setAnalizando(false)
+      setStep(5)
     }
   }
 
@@ -242,7 +291,7 @@ export default function Auth() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
         {LOGO_SVG}
         <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: '1.2rem', color: '#0c2420', letterSpacing: '-0.02em' }}>
-          Mentor<span style={{ color: '#128c7e' }}> AI</span>
+          Mentor<span style={{ color: '#128c7e' }}> 1 Millón</span>
         </span>
       </div>
 
@@ -278,7 +327,7 @@ export default function Auth() {
       {/* SISI intro */}
       <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start', background: '#ffffff', border: '1px solid rgba(18,140,126,0.12)', borderRadius: 18, padding: '18px 20px', boxShadow: '0 2px 14px rgba(18,140,126,0.06)', marginBottom: 24 }}>
         <div style={{ width: 48, height: 48, borderRadius: '50%', overflow: 'hidden', border: '2px solid #128c7e', flexShrink: 0, boxShadow: '0 0 14px rgba(18,140,126,0.16)' }}>
-          <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
         </div>
         <div>
           <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#128c7e', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>SISI — IA Principal</div>
@@ -421,49 +470,58 @@ export default function Auth() {
         </>
       )}
 
-      {/* ── Paso 4: Fase ── */}
+      {/* ── Paso 4: Diagnóstico SISI ── */}
       {step === 4 && (
         <>
-          <SisiMessage text="Estas son las 6 fases por las que pasa todo negocio. ¿En cuál te encuentras ahora mismo?" />
+          <SisiMessage text="Vamos a ubicarte en el camino al millón. Necesito conocer tu situación económica real. Responde con honestidad." />
 
-          {/* Stepper de fases */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
-            {FASES.map((f, i) => (
-              <div key={f.num} style={{ display: 'flex', alignItems: 'center' }}>
-                <button
-                  onClick={() => setFase(f.num)}
-                  style={{ width: 28, height: 28, borderRadius: '50%', border: `2.5px solid ${f.color}`, background: fase === f.num ? f.color : '#ffffff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', padding: 0, flexShrink: 0, fontSize: fase === f.num ? '0.85rem' : '0.75rem', opacity: fase !== null && fase !== f.num ? 0.55 : 1 }}
-                >
-                  {f.icon}
-                </button>
-                {i < FASES.length - 1 && <div style={{ width: 12, height: 2, background: '#e2f5f0' }} />}
+          {[
+            {
+              key: 'genera',
+              label: '¿Tu negocio genera ingresos actualmente?',
+              ops: ['Sí, de forma consistente', 'Sí, pero de forma irregular', 'Estoy empezando a generarlos', 'No todavía'],
+            },
+            {
+              key: 'cubren',
+              label: '¿Tus ingresos cubren todos tus gastos operativos y tu salario?',
+              ops: ['Sí, siempre', 'A veces', 'No todavía'],
+            },
+            {
+              key: 'break_even',
+              label: '¿Sabes cuál es tu punto de break even mensual?',
+              ops: ['Sí, lo tengo calculado', 'Aproximadamente', 'No lo sé todavía'],
+            },
+            {
+              key: 'margen',
+              label: '¿Cuál es tu margen de beneficio mensual aproximado?',
+              ops: ['Negativo (pierdo dinero)', '0 – 5%', '5 – 15%', 'Más del 15%'],
+            },
+            {
+              key: 'ingresos_rango',
+              label: '¿Cuáles son tus ingresos mensuales aproximados?',
+              ops: ['€0 (sin ingresos)', 'Menos de €1.000', '€1.000 – €5.000', '€5.000 – €20.000', '€20.000 – €83.000', 'Más de €83.000'],
+            },
+            {
+              key: 'gastos_rango',
+              label: '¿Cuáles son tus gastos mensuales aproximados?',
+              ops: ['€0 o casi nada', 'Menos de €1.000', '€1.000 – €5.000', '€5.000 – €20.000', 'Más de €20.000'],
+            },
+          ].map(({ key, label, ops }) => (
+            <div key={key} style={{ marginBottom: 18 }}>
+              <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#4d8a82', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                {label}
               </div>
-            ))}
-          </div>
+              {ops.map(op => (
+                <OptionCard key={op} selected={diagnostico[key] === op} onClick={() => setDiagnostico(d => ({ ...d, [key]: op }))} label={op} />
+              ))}
+            </div>
+          ))}
 
-          <div style={{ marginBottom: 14 }}>
-            {FASES.map(f => (
-              <button
-                key={f.num} onClick={() => setFase(f.num)}
-                style={{ width: '100%', background: fase === f.num ? `${f.color}12` : '#ffffff', border: `1.5px solid ${fase === f.num ? f.color : 'rgba(18,140,126,0.1)'}`, borderRadius: 13, padding: '11px 13px', display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 8, textAlign: 'left', transition: 'all 0.15s' }}
-              >
-                <div style={{ width: 32, height: 32, borderRadius: 9, background: `${f.color}18`, border: `1.5px solid ${f.color}45`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0 }}>
-                  {f.icon}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '0.66rem', fontWeight: 700, color: f.color, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>FASE {f.num}</div>
-                  <div style={{ fontWeight: 700, fontSize: '0.87rem', color: '#0c2420', marginBottom: 1 }}>{f.label}</div>
-                  <div style={{ fontSize: '0.71rem', color: '#72aaa1' }}>{f.desc}</div>
-                </div>
-                {fase === f.num && (
-                  <div style={{ width: 20, height: 20, borderRadius: '50%', background: f.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '0.62rem', color: '#fff' }}>
-                    ✓
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
-          <PrimaryBtn label="Continuar →" disabled={fase === null} onClick={() => setStep(5)} />
+          <PrimaryBtn
+            label={analizando ? '⏳ SISI analizando tu perfil...' : 'Analizar con SISI →'}
+            disabled={!(diagnostico.genera && diagnostico.cubren && diagnostico.break_even && diagnostico.margen && diagnostico.ingresos_rango && diagnostico.gastos_rango) || analizando}
+            onClick={analizarConSISI}
+          />
         </>
       )}
 
@@ -538,7 +596,7 @@ export default function Auth() {
           </form>
 
           <p style={{ fontSize: '0.71rem', color: '#72aaa1', textAlign: 'center', marginTop: 20, lineHeight: 1.6 }}>
-            Al continuar aceptas los términos de uso de Mentor AI.
+            Al continuar aceptas los términos de uso de Mentor 1 Millón.
           </p>
         </>
       )}

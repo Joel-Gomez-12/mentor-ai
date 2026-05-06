@@ -32,7 +32,7 @@ const BOTTOM_NAV = [
 ]
 
 const CONDICIONES_NAMES = [
-  'Inexistencia', 'Nacimiento', 'Supervivencia',
+  'Idea Semilla', 'Nacimiento', 'Supervivencia',
   'Estabilidad', 'Expansión', 'Dominio'
 ]
 
@@ -133,10 +133,10 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
             fontFamily: 'Sora, sans-serif', fontWeight: 800,
             fontSize: '1.25rem', letterSpacing: '-0.02em', color: 'var(--text)'
           }}>
-            Mentor<span style={{ color: '#128c7e' }}> AI</span>
+            Mentor<span style={{ color: '#128c7e' }}> 1 Millón</span>
           </div>
           <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: 3, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Tu segundo cerebro empresarial
+            Tu guía empresarial
           </div>
         </div>
 
@@ -148,7 +148,7 @@ export default function Sidebar({ currentPage, onNavigate, isOpen, onClose }) {
             overflow: 'hidden', flexShrink: 0,
             boxShadow: '0 0 10px rgba(18,140,126,0.3)'
           }}>
-            <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
           </div>
           <div>
             <div style={{ fontSize: '0.82rem', fontWeight: 600 }}>SISI</div>

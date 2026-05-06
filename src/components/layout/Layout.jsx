@@ -34,7 +34,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
       transition: 'margin-left 0.3s ease'
     }}>
       <Topbar
-        title={PAGE_TITLES[currentPage] || 'Mentor AI'}
+        title={PAGE_TITLES[currentPage] || 'Mentor 1 Millón'}
         onMenuClick={() => setSidebarOpen(!sidebarOpen)}
       />
       <div style={{ 

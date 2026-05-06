@@ -1,14 +1,11 @@
 import { useAuth } from '../context/AuthContext'
 import Layout from '../components/layout/Layout'
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
 const CONDICIONES = [
   {
-    num: 1,
-    icon: '💀',
-    name: 'Inexistencia',
-    desc: 'El proyecto no existe en el mercado. Sin presencia, sin clientes, sin datos.',
-    color: '#6B7280',
-    colorDim: 'rgba(107,114,128,0.15)',
+    num: 1, icon: '🪴', name: 'Idea Semilla', color: '#6B7280', colorDim: 'rgba(107,114,128,0.15)',
+    desc: 'El proyecto vive en tu cabeza. Sin presencia real, sin clientes, sin datos.',
     xpMin: 0, xpMax: 100,
     formula: [
       'Crea tu canal: elige dónde vas a aparecer (Instagram, LinkedIn, YouTube...)',
@@ -18,12 +15,8 @@ const CONDICIONES = [
     ]
   },
   {
-    num: 2,
-    icon: '🌱',
-    name: 'Nacimiento',
+    num: 2, icon: '🌱', name: 'Nacimiento', color: '#16A34A', colorDim: 'rgba(22,163,74,0.15)',
     desc: 'Primeras señales reales de interés. Ya existen indicios de que el mercado responde.',
-    color: '#16A34A',
-    colorDim: 'rgba(22,163,74,0.15)',
     xpMin: 100, xpMax: 500,
     formula: [
       'Consigue tus primeros 3 clientes o usuarios reales, aunque sea gratis',
@@ -33,12 +26,8 @@ const CONDICIONES = [
     ]
   },
   {
-    num: 3,
-    icon: '⚔️',
-    name: 'Supervivencia',
+    num: 3, icon: '⚔️', name: 'Supervivencia', color: '#C0392B', colorDim: 'rgba(192,57,43,0.15)',
     desc: 'El negocio cubre o se acerca a cubrir sus costes. La batalla por el break-even.',
-    color: '#C0392B',
-    colorDim: 'rgba(192,57,43,0.15)',
     xpMin: 500, xpMax: 1500,
     formula: [
       'Calcula tu punto de equilibrio exacto: ¿cuánto necesitas facturar para no perder?',
@@ -49,12 +38,8 @@ const CONDICIONES = [
     ]
   },
   {
-    num: 4,
-    icon: '📊',
-    name: 'Estabilidad',
+    num: 4, icon: '📊', name: 'Estabilidad', color: '#F39C12', colorDim: 'rgba(243,156,18,0.15)',
     desc: 'El proyecto funciona con cierto orden y repetibilidad. Los ingresos son más predecibles.',
-    color: '#F39C12',
-    colorDim: 'rgba(243,156,18,0.15)',
     xpMin: 1500, xpMax: 4000,
     formula: [
       'Documenta tus procesos clave: que alguien más pueda ejecutarlos',
@@ -64,12 +49,8 @@ const CONDICIONES = [
     ]
   },
   {
-    num: 5,
-    icon: '🚀',
-    name: 'Expansión',
+    num: 5, icon: '🚀', name: 'Expansión', color: '#3498DB', colorDim: 'rgba(52,152,219,0.15)',
     desc: 'El sistema funciona bien. Es momento de crecer con intención y estructura.',
-    color: '#3498DB',
-    colorDim: 'rgba(52,152,219,0.15)',
     xpMin: 4000, xpMax: 10000,
     formula: [
       'Identifica el driver principal de crecimiento y multiplícalo',
@@ -79,12 +60,8 @@ const CONDICIONES = [
     ]
   },
   {
-    num: 6,
-    icon: '👑',
-    name: 'Dominio',
+    num: 6, icon: '👑', name: 'Dominio', color: '#27AE60', colorDim: 'rgba(39,174,96,0.15)',
     desc: 'Sistema autónomo. El negocio funciona con abundancia y sin depender del fundador.',
-    color: '#27AE60',
-    colorDim: 'rgba(39,174,96,0.15)',
     xpMin: 10000, xpMax: 99999,
     formula: [
       'Documenta todo el sistema: que funcione sin que estés tú presente',
@@ -95,19 +72,36 @@ const CONDICIONES = [
   },
 ]
 
-
 export default function Progreso({ onNavigate, currentPage }) {
   const { xp, condicion } = useAuth()
 
-  const condicionActual = CONDICIONES[Math.min((condicion || 1) - 1, 5)]
+  const condicionActual    = CONDICIONES[Math.min((condicion || 1) - 1, 5)]
   const condicionSiguiente = CONDICIONES[Math.min((condicion || 1), 5)]
 
-  const xpActual    = xp || 0
-  const xpMin       = condicionActual.xpMin
-  const xpMax       = condicionActual.xpMax
+  const xpActual = xp || 0
+  const xpMin    = condicionActual.xpMin
+  const xpMax    = condicionActual.xpMax
   const pct = xpMax > xpMin
     ? Math.min(Math.round(((xpActual - xpMin) / (xpMax - xpMin)) * 100), 100)
     : 0
+
+  const donutData = [
+    { value: pct,                    fill: condicionActual.color },
+    { value: Math.max(0, 100 - pct), fill: '#e2f5f0' },
+  ]
+
+  const barData = CONDICIONES.map(c => ({
+    name:     c.name.split(' ')[0].substring(0, 7),
+    progreso: c.num < condicion ? 100 : c.num === condicion ? pct : 0,
+    color:    c.color,
+  }))
+
+  const card = {
+    background: 'var(--surface)',
+    border: '1px solid var(--border)',
+    borderRadius: 'var(--radius)',
+    padding: 24,
+  }
 
   return (
     <Layout currentPage={currentPage} onNavigate={onNavigate}>
@@ -118,181 +112,206 @@ export default function Progreso({ onNavigate, currentPage }) {
         Tu evolución como emprendedor, visualizada.
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      {/* ── Fila 1: Condición actual + Donut XP ── */}
+      <div className="rg-2" style={{ gap: 16, marginBottom: 16 }}>
 
         {/* Card 1 — Condición actual */}
-        <div style={{ background: 'var(--surface)', border: `1px solid ${condicionActual.color}44`, borderRadius: 'var(--radius)', padding: 28, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ ...card, border: `1px solid ${condicionActual.color}44`, position: 'relative', overflow: 'hidden', textAlign: 'center' }}>
           <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(ellipse at center top, ${condicionActual.color}18 0%, transparent 60%)`, pointerEvents: 'none' }} />
 
-          {/* Badge condición */}
-          <div style={{
-            width: 90, height: 90, borderRadius: '50%',
-            background: condicionActual.colorDim,
-            border: `3px solid ${condicionActual.color}`,
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 18px',
-            boxShadow: `0 0 40px ${condicionActual.color}33`
-          }}>
-            <span style={{ fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: condicionActual.color, marginBottom: 2 }}>COND</span>
-            <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: '2rem', color: 'var(--text)', lineHeight: 1 }}>
-              {condicionActual.num}
-            </span>
+          <div style={{ width: 76, height: 76, borderRadius: '50%', background: condicionActual.colorDim, border: `3px solid ${condicionActual.color}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px', boxShadow: `0 0 32px ${condicionActual.color}33` }}>
+            <span style={{ fontSize: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.12em', color: condicionActual.color, marginBottom: 2 }}>COND</span>
+            <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: '1.9rem', color: 'var(--text)', lineHeight: 1 }}>{condicionActual.num}</span>
           </div>
 
           <div style={{ fontSize: '1.5rem', marginBottom: 6 }}>{condicionActual.icon}</div>
-          <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.3rem', color: condicionActual.color, marginBottom: 8 }}>
+          <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.25rem', color: condicionActual.color, marginBottom: 8 }}>
             {condicionActual.name}
           </div>
-          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 20 }}>
+          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 18 }}>
             {condicionActual.desc}
           </p>
+
           {condicion < 6 && (
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 16 }}>
-              Siguiente condición: <strong style={{ color: condicionSiguiente.color }}>{condicionSiguiente.icon} {condicionSiguiente.name}</strong>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 12 }}>
+              Siguiente: <strong style={{ color: condicionSiguiente.color }}>{condicionSiguiente.icon} {condicionSiguiente.name}</strong>
             </p>
           )}
 
-          {/* XP bar */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: 6 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.71rem', color: 'var(--text-muted)', marginBottom: 6 }}>
             <span>{xpActual} XP</span>
-            <span>{xpMax} XP siguiente condición</span>
+            <span>{xpMax} XP</span>
           </div>
           <div style={{ background: 'var(--surface3)', borderRadius: 99, height: 6, overflow: 'hidden' }}>
             <div style={{ width: `${pct}%`, height: '100%', borderRadius: 99, background: `linear-gradient(90deg, ${condicionActual.color}, ${condicionActual.color}99)`, transition: 'width 1s ease' }} />
           </div>
         </div>
 
-        {/* Card 2 — Próximo nivel */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 28 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-            <span style={{ fontSize: '1.2rem' }}>🎯</span>
-            <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Próximo nivel
-            </span>
+        {/* Card 2 — Donut XP al siguiente nivel */}
+        <div style={{ ...card, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 18 }}>
+            🎯 XP hacia el siguiente nivel
           </div>
+
+          <div style={{ position: 'relative', width: 168, height: 168, marginBottom: 20 }}>
+            <PieChart width={168} height={168}>
+              <Pie
+                data={donutData} cx={84} cy={84}
+                innerRadius={52} outerRadius={74}
+                startAngle={90} endAngle={-270}
+                dataKey="value" strokeWidth={0}
+              >
+                {donutData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+              </Pie>
+            </PieChart>
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', pointerEvents: 'none' }}>
+              <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: '1.8rem', color: condicionActual.color, lineHeight: 1 }}>{pct}%</div>
+              <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginTop: 3 }}>completado</div>
+            </div>
+          </div>
+
           {condicion < 6 ? (
-            <>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
-                <div style={{ fontSize: '2.5rem' }}>{condicionSiguiente.icon}</div>
-                <div>
-                  <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: '1.1rem', color: condicionSiguiente.color }}>
-                    {condicionSiguiente.name}
-                  </div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 2 }}>
-                    Faltan <strong style={{ color: 'var(--gold)' }}>{condicionSiguiente.xpMin - xpActual} XP</strong> para llegar
-                  </div>
-                </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, marginBottom: 6 }}>
+                <span style={{ fontSize: '1.4rem' }}>{condicionSiguiente.icon}</span>
+                <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, color: condicionSiguiente.color, fontSize: '1rem' }}>{condicionSiguiente.name}</span>
               </div>
-              <div style={{ background: 'var(--surface3)', borderRadius: 99, height: 8, overflow: 'hidden', marginBottom: 12 }}>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                Faltan <strong style={{ color: 'var(--gold)' }}>{Math.max(0, condicionSiguiente.xpMin - xpActual)} XP</strong> para llegar
+              </div>
+              <div style={{ background: 'var(--surface3)', borderRadius: 99, height: 5, overflow: 'hidden', marginTop: 10, width: '100%' }}>
                 <div style={{ width: `${pct}%`, height: '100%', borderRadius: 99, background: `linear-gradient(90deg, ${condicionActual.color}, ${condicionSiguiente.color})`, transition: 'width 1s ease' }} />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                <span>{xpActual} XP actuales</span>
-                <span>{condicionSiguiente.xpMin} XP objetivo</span>
-              </div>
-            </>
+            </div>
           ) : (
-            <div style={{ textAlign: 'center', padding: '20px 0' }}>
-              <div style={{ fontSize: '3rem', marginBottom: 10 }}>👑</div>
-              <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, color: '#27AE60' }}>
-                Nivel máximo alcanzado
-              </div>
-              <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 6 }}>
-                Eres Dominio. El sistema trabaja para ti.
-              </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '2.4rem', marginBottom: 8 }}>👑</div>
+              <div style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, color: '#27AE60' }}>Nivel máximo alcanzado</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 4 }}>El sistema trabaja para ti.</div>
             </div>
           )}
         </div>
+      </div>
 
-        {/* Card 3 — Fórmula de tu condición */}
-        <div style={{ background: 'var(--surface)', border: `1px solid ${condicionActual.color}44`, borderRadius: 'var(--radius)', padding: 28 }}>
+      {/* ── Fila 2: Mapa visual horizontal de condiciones (CAMBIO 5) ── */}
+      <div style={{ ...card, marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 22 }}>
+          <span>🗺️</span>
+          <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.74rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            Tu mapa de evolución empresarial
+          </span>
+        </div>
+
+        <div style={{ overflowX: 'auto', paddingBottom: 4 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', minWidth: 520 }}>
+            {CONDICIONES.flatMap((c, i) => {
+              const done   = c.num < condicion
+              const active = c.num === condicion
+              const future = c.num > condicion
+
+              const node = (
+                <div key={`n${c.num}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, flexShrink: 0, width: 72 }}>
+                  <div style={{
+                    width: active ? 52 : 40, height: active ? 52 : 40,
+                    borderRadius: '50%', flexShrink: 0,
+                    background: done ? '#27AE60' : active ? c.color : 'var(--surface3)',
+                    border: `2.5px solid ${done ? '#27AE60' : active ? c.color : 'var(--border)'}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: active ? '1.25rem' : done ? '0.85rem' : '1rem',
+                    opacity: future ? 0.35 : 1,
+                    transition: 'all 0.3s',
+                    boxShadow: active ? `0 0 22px ${c.color}55` : 'none',
+                    color: done ? 'white' : 'inherit',
+                  }}>
+                    {done ? '✓' : c.icon}
+                  </div>
+                  <div style={{
+                    fontSize: '0.58rem', fontWeight: active ? 700 : 500,
+                    color: active ? c.color : 'var(--text-muted)',
+                    textAlign: 'center', width: 66, lineHeight: 1.3,
+                    opacity: future ? 0.5 : 1,
+                  }}>
+                    {c.name}
+                  </div>
+                  {active && (
+                    <span style={{ fontSize: '0.55rem', padding: '2px 8px', borderRadius: 99, background: c.color, color: 'white', fontWeight: 700 }}>
+                      Aquí
+                    </span>
+                  )}
+                </div>
+              )
+
+              if (i < CONDICIONES.length - 1) {
+                const lineColor = i < condicion - 1 ? '#27AE60' : 'var(--border)'
+                const arrow = (
+                  <div key={`a${c.num}`} style={{ flex: 1, display: 'flex', alignItems: 'center', paddingBottom: 28, minWidth: 12 }}>
+                    <div style={{ flex: 1, height: 2, background: lineColor, opacity: future ? 0.25 : 1 }} />
+                    <span style={{ fontSize: '0.58rem', color: lineColor, opacity: future ? 0.25 : 1, lineHeight: 1 }}>▶</span>
+                  </div>
+                )
+                return [node, arrow]
+              }
+              return [node]
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Fila 3: Gráfico de barras + Fórmula ── */}
+      <div className="rg-2" style={{ gap: 16 }}>
+
+        {/* Card 3 — Gráfico de barras por condición */}
+        <div style={card}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18 }}>
+            <span>📈</span>
+            <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.74rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              Progreso por condición
+            </span>
+          </div>
+          <ResponsiveContainer width="100%" height={178}>
+            <BarChart data={barData} margin={{ top: 4, right: 4, left: -22, bottom: 4 }}>
+              <XAxis dataKey="name" tick={{ fontSize: 9, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
+              <Tooltip
+                formatter={(v) => [`${v}%`, 'Progreso']}
+                contentStyle={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, fontSize: '0.78rem', color: 'var(--text)' }}
+                cursor={{ fill: 'rgba(18,140,126,0.05)' }}
+              />
+              <Bar dataKey="progreso" radius={[5, 5, 0, 0]} maxBarSize={34}>
+                {barData.map((entry, i) => (
+                  <Cell key={i} fill={entry.color} fillOpacity={barData[i].progreso === 0 ? 0.18 : 1} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
+            {CONDICIONES.map(c => (
+              <div key={c.num} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.65rem', color: c.num <= condicion ? 'var(--text-soft)' : 'var(--text-muted)', opacity: c.num > condicion ? 0.45 : 1 }}>
+                <div style={{ width: 8, height: 8, borderRadius: 2, background: c.color }} />
+                {c.name.split(' ')[0]}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Card 4 — Fórmula de la condición actual */}
+        <div style={{ ...card, border: `1px solid ${condicionActual.color}44` }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-            <span style={{ fontSize: '1rem' }}>📋</span>
-            <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            <span>📋</span>
+            <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.74rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               Fórmula — {condicionActual.name}
             </span>
           </div>
-          <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 16 }}>
-            Estos son los pasos para avanzar a la siguiente condición:
+          <p style={{ fontSize: '0.77rem', color: 'var(--text-muted)', marginBottom: 14 }}>
+            Pasos para avanzar a la siguiente condición:
           </p>
           {condicionActual.formula.map((paso, i) => (
-            <div key={i} style={{
-              display: 'flex', alignItems: 'flex-start', gap: 12,
-              padding: '10px 0',
-              borderBottom: i < condicionActual.formula.length - 1 ? '1px solid var(--border)' : 'none'
-            }}>
-              <div style={{
-                width: 24, height: 24, borderRadius: '50%', flexShrink: 0,
-                background: condicionActual.colorDim,
-                border: `1px solid ${condicionActual.color}`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '0.7rem', fontWeight: 700, color: condicionActual.color
-              }}>
+            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 11, padding: '9px 0', borderBottom: i < condicionActual.formula.length - 1 ? '1px solid var(--border)' : 'none' }}>
+              <div style={{ width: 22, height: 22, borderRadius: '50%', flexShrink: 0, background: condicionActual.colorDim, border: `1px solid ${condicionActual.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.68rem', fontWeight: 700, color: condicionActual.color }}>
                 {i + 1}
               </div>
-              <p style={{ fontSize: '0.84rem', color: 'var(--text-soft)', lineHeight: 1.6, margin: 0 }}>
-                {paso}
-              </p>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-soft)', lineHeight: 1.6, margin: 0 }}>{paso}</p>
             </div>
           ))}
-        </div>
-
-        {/* Card 4 — Mapa de condiciones */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 28 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
-            <span style={{ fontSize: '1rem' }}>🗺️</span>
-            <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-              Mapa de condiciones
-            </span>
-          </div>
-
-          {CONDICIONES.map(c => {
-            const completado = c.num < condicion
-            const actual     = c.num === condicion
-            const futuro     = c.num > condicion
-
-            return (
-              <div key={c.num} style={{
-                display: 'flex', alignItems: 'center', gap: 12,
-                padding: '10px 12px', borderRadius: 'var(--radius-sm)',
-                background: actual ? `${c.color}15` : 'transparent',
-                border: actual ? `1px solid ${c.color}44` : '1px solid transparent',
-                marginBottom: 6, opacity: futuro ? 0.45 : 1,
-                transition: 'all var(--transition)'
-              }}>
-                {/* Badge */}
-                <div style={{
-                  width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                  background: completado ? 'rgba(39,174,96,0.15)' : actual ? c.colorDim : 'var(--surface3)',
-                  border: `2px solid ${completado ? '#27AE60' : actual ? c.color : 'var(--border)'}`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: completado ? '0.8rem' : '0.75rem', fontWeight: 700,
-                  color: completado ? '#27AE60' : actual ? c.color : 'var(--text-muted)'
-                }}>
-                  {completado ? '✓' : c.icon}
-                </div>
-
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: actual ? 700 : 500, fontSize: '0.88rem', color: actual ? c.color : 'var(--text-soft)' }}>
-                    {c.num}. {c.name}
-                  </div>
-                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
-                    {c.desc.substring(0, 55)}...
-                  </div>
-                </div>
-
-                {actual && (
-                  <span style={{
-                    padding: '2px 10px', borderRadius: 99,
-                    fontSize: '0.65rem', fontWeight: 700,
-                    background: c.color, color: 'white', flexShrink: 0
-                  }}>
-                    Actual
-                  </span>
-                )}
-              </div>
-            )
-          })}
         </div>
       </div>
     </Layout>

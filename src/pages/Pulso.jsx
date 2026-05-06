@@ -61,7 +61,7 @@ const PREGUNTAS = [
 ]
 
 const CONDICIONES_INFO = {
-  1: { icon: '💀', name: 'Inexistencia',  color: '#6B7280', bg: 'rgba(107,114,128,0.1)' },
+  1: { icon: '🪴', name: 'Idea Semilla',  color: '#6B7280', bg: 'rgba(107,114,128,0.1)' },
   2: { icon: '🌱', name: 'Nacimiento',    color: '#16A34A', bg: 'rgba(22,163,74,0.1)'   },
   3: { icon: '⚔️', name: 'Supervivencia', color: '#C0392B', bg: 'rgba(192,57,43,0.1)'   },
   4: { icon: '📊', name: 'Estabilidad',   color: '#F39C12', bg: 'rgba(243,156,18,0.1)'  },

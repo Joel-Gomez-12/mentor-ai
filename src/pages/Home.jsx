@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 
 const CONDICIONES = [
-  { num: 1, icon: '💀', name: 'Inexistencia', color: '#6B7280', xpMax: 100   },
+  { num: 1, icon: '🪴', name: 'Idea Semilla', color: '#6B7280', xpMax: 100   },
   { num: 2, icon: '🌱', name: 'Nacimiento',   color: '#16A34A', xpMax: 500   },
   { num: 3, icon: '⚔️', name: 'Supervivencia',color: '#C0392B', xpMax: 1500  },
   { num: 4, icon: '📊', name: 'Estabilidad',  color: '#F39C12', xpMax: 4000  },
@@ -90,7 +90,7 @@ export default function Home({ onNavigate, currentPage }) {
           flexShrink: 0, overflow: 'hidden',
           boxShadow: '0 0 30px rgba(18,140,126,0.3)'
         }}>
-          <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
         </div>
         <div>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.06em' }}>

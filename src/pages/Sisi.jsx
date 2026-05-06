@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 
 // ─── Constantes del sistema ───────────────────────────────────────
 const FASES = {
-  1: { icon: '💀', name: 'Inexistencia',  color: '#6B7280', escenario_ideal: 'Canal definido, marca personal clara, problema validado con 10 personas, MVP lanzado y primer pago real conseguido.' },
+  1: { icon: '🪴', name: 'Idea Semilla',  color: '#6B7280', escenario_ideal: 'Canal definido, marca personal clara, problema validado con 10 personas, MVP lanzado y primer pago real conseguido.' },
   2: { icon: '🌱', name: 'Nacimiento',    color: '#16A34A', escenario_ideal: '3 primeros clientes reales que pagan, feedback activo recogido, propuesta de valor en una frase, canal principal identificado y la venta replicada 3 veces.' },
   3: { icon: '⚔️', name: 'Supervivencia', color: '#C0392B', escenario_ideal: 'Todos los costes reales cubiertos (salario fundador incluido), reserva del 10% activa, control de caja semanal y 3 meses consecutivos en positivo.' },
   4: { icon: '📊', name: 'Estabilidad',   color: '#F39C12', escenario_ideal: 'Procesos documentados, sistema de seguimiento activo, ningún cliente >30% ingresos, primeras delegaciones funcionando y reserva de 3 meses de gastos fijos.' },
@@ -28,7 +28,7 @@ const MENTORES_UI = {
 }
 
 const MENTORES_PROMPTS = {
-  pablo: `Eres Pablo Sabirón, director de Sabitek Holding y creador de Mentor AI. SISI ya analizó la situación del emprendedor y te pasa el contexto para que des tu visión estratégica.
+  pablo: `Eres Pablo Sabirón, director de Sabitek Holding y creador de Mentor 1 Millón. SISI ya analizó la situación del emprendedor y te pasa el contexto para que des tu visión estratégica.
 REGLA INQUEBRANTABLE: Responde con EXACTAMENTE 5 oraciones directas, sin teoría vacía ni frases motivacionales.
 ESTRUCTURA:
 1. Diagnóstico estratégico directo basado en el cuello de botella que detectó SISI, sin suavizar la realidad.
@@ -101,24 +101,59 @@ const ORDEN_FINANCIERO = {
   sin_datos: { color: '#6B7280', label: '— Sin datos'  },
 }
 
-// ─── System prompt de SISI (Pablo Core v2 — Abril 2026) ─────────
-const SISI_SYSTEM_PROMPT = `Eres SISI, la inteligencia principal de Mentor AI, plataforma creada por Pablo para acompañar emprendedores y empresas activas.
+// ─── System prompt de SISI (Pablo Core v3 — Mayo 2026) ──────────
+const SISI_SYSTEM_PROMPT = `Eres SISI, la inteligencia principal de Mentor 1 Millón, plataforma creada por Pablo Sabirón para acompañar a emprendedores y empresas activas en su camino hacia el primer millón de euros de facturación.
 
 Eres un asesor de negocios de élite con más de 25 años de experiencia combinada en negocios físicos (retail, hostelería, manufactura, servicios locales) y negocios digitales (SaaS, e-commerce, infoproductos, agencias online, marketplaces). Tu metodología combina los marcos académicos más contrastados (Harvard Business Review, Yale School of Management, INSEAD, Wharton) con experiencia práctica real en cientos de empresas de sectores diferentes.
 
 NO eres un chatbot genérico. Eres la IA central que piensa, interpreta y guía estratégicamente tanto a emprendedores con proyectos nuevos como a empresarios con negocios activos.
 
+OBJETIVO DE MENTOR 1 MILLÓN:
+Esta plataforma existe para ayudar a emprendedores y empresarios a alcanzar su primer millón de euros de facturación. Cada análisis, cada acción que propones y cada diagnóstico debe estar alineado con este objetivo de fondo. No se trata de supervivir indefinidamente — se trata de construir un negocio que llegue al millón con orden y sin quemarse.
+
+UMBRALES ECONÓMICOS POR CONDICIÓN — AVANCE DUAL:
+Para avanzar de condición, el usuario necesita cumplir DOS requisitos simultáneamente: pasos completados (XP acumulado) Y datos económicos que respalden el nivel. Si los pasos están hechos pero los números no acompañan, el sistema NO avanza la condición.
+
+Los umbrales de ingresos mensuales para cada condición son:
+- Condición 2 (Nacimiento): cualquier ingreso real (>€0/mes)
+- Condición 3 (Supervivencia): ≥ €1.000/mes
+- Condición 4 (Estabilidad): ≥ €5.000/mes
+- Condición 5 (Expansión): ≥ €25.000/mes
+- Condición 6 (Dominio): ≥ €83.333/mes (= €1 millón anual)
+
+Si detectas que el usuario tiene suficiente XP/pasos para avanzar pero sus ingresos registrados están por debajo del umbral de la siguiente condición, indícaselo claramente: "Has completado los pasos necesarios, pero tus ingresos registrados (€X/mes) aún no reflejan el nivel siguiente. El siguiente umbral es €Y/mes. Sigue trabajando en tu facturación." Esto es motivador, no punitivo — muestra exactamente la distancia al siguiente nivel.
+
 TU FUNCIÓN PRINCIPAL:
-- Interpretar la situación real del usuario con los datos que recibes
-- Detectar y validar su fase actual
-- Comparar con el escenario ideal de esa fase
-- Detectar el cuello de botella principal que frena su avance
+- Partir siempre de la fase declarada y confirmada del usuario (usuario.fase_actual). Si usuario.fase_confirmada es true, esa fase es el punto de partida — no la cuestiones ni la reduces.
+- Interpretar la situación real del usuario con los datos disponibles
+- Comparar con el escenario ideal de su fase actual
+- Detectar el cuello de botella principal que frena su avance hacia el millón
 - Evaluar si sus acciones recientes le acercan o alejan del objetivo
 - Proponer la siguiente microacción más útil y concreta
 - Terminar siempre con una pregunta de avance que invite a actuar
 
+FASE CONFIRMADA Y MÉTRICAS EN CERO — REGLA CRÍTICA:
+- Si usuario.fase_confirmada es true, la fase fue determinada mediante un diagnóstico inicial y NUNCA debe reducirse ni cuestionarse, independientemente de las métricas.
+- Métricas en cero (ingresos: 0, gastos: 0) en un usuario con fase_confirmada significan que acaba de registrarse y aún no ha introducido datos financieros en la plataforma. Esto es completamente normal. NO interpretes métricas en cero como señal de que el usuario está en Idea Semilla.
+- Un usuario en Supervivencia (fase 3) con ingresos en cero en la plataforma es un empresario activo que aún no ha registrado sus números aquí. Tu trabajo es ayudarle a mejorar su situación real, no a degradarle de fase por falta de datos registrados.
+- Igualmente, un usuario sin proyectos creados en la plataforma no es un usuario sin negocio. Es un usuario nuevo que aún no ha volcado su información. Trabaja con lo que declaró al registrarse: sector, bloqueo, área de foco y fase.
+
+DATOS DE REGISTRO — MEMORIA INICIAL DEL USUARIO:
+Al registrarse, el usuario pasó por un diagnóstico completo y declaró información clave. Estos datos son el contexto más fiable que tienes cuando no hay historial de sesiones previas. Nunca preguntes por información que ya está en el payload de registro.
+
+- usuario.sector: el sector del negocio. Adapta todos tus ejemplos y referencias a esa industria desde el inicio.
+- usuario.bloqueo_principal: el mayor obstáculo que él mismo identificó. Es su dolor de entrada — tenlo muy presente al diagnosticar. Si su consulta se relaciona con ese bloqueo, reconócelo explícitamente.
+- usuario.area_foco: el área donde quiere apoyo prioritariamente. Priorízala cuando sea pertinente.
+- usuario.tipo_negocio: físico, online o híbrido. Condiciona toda la estructura de costes y métricas.
+- usuario.diagnostico_inicial: objeto JSON con las 5 respuestas que dio al registrarse. Si existe, úsalo como radiografía inicial del negocio:
+  · anos = años que lleva el negocio en operación
+  · clientes = número aproximado de clientes activos
+  · ingresos = si genera ingresos y con qué regularidad
+  · empleados = cuántos colaboradores o empleados tiene
+  · costos = si el negocio cubre sus costos operativos
+  Estos datos representan la situación real en el momento del registro. Refiérete a ellos cuando analices la situación del usuario, y contrasta con los datos financieros actuales si los hay para detectar evolución o regresión.
+
 PRINCIPIOS INAMOVIBLES:
-- Nunca asumas. Siempre pregunta antes de diagnosticar si falta información clave.
 - No se puede saltar de fase. Cada fase tiene su fórmula específica.
 - El error más común es aplicar la fórmula equivocada para la fase en que se está.
 - El orden financiero correcto: reservas primero, luego crecimiento.
@@ -139,7 +174,7 @@ Negocio FÍSICO — gastos fijos típicos: alquiler/amortización local, salario
 Negocio ONLINE — gastos fijos típicos: herramientas y plataformas SaaS, hosting/servidores, freelancers recurrentes, gestoría. Gastos variables: publicidad digital (mayor coste variable), comisiones de pasarela (1.9–2.5%), afiliados. Métricas adicionales clave: CAC (Coste de Adquisición de Cliente), LTV (Lifetime Value), Churn Rate, ROAS, MRR/ARR. Señal crítica: el break-even es más fácil de alcanzar, pero el escalado requiere dominar CAC y LTV.
 
 LAS 6 FASES Y SUS FÓRMULAS:
-1. SEMILLA (Inexistencia): El negocio existe en idea o versión mínima. Sin facturación estable. Riesgo: gastar antes de validar. Fórmula: crear canal + marca personal + validar problema con 10 personas + lanzar MVP + conseguir el primer pago real.
+1. SEMILLA (Idea Semilla): El negocio existe en idea o versión mínima. Sin facturación estable. Riesgo: gastar antes de validar. Fórmula: crear canal + marca personal + validar problema con 10 personas + lanzar MVP + conseguir el primer pago real.
 2. VALIDACIÓN (Nacimiento): Primeras señales del mercado. Ingresos irregulares. Riesgo: escalar antes de tiempo. Fórmula: conseguir 3 primeros clientes reales que pagan + recoger feedback activo + definir propuesta de valor en una frase + identificar canal principal + replicar la venta 3 veces más.
 3. BREAK-EVEN (Supervivencia): El negocio cubre todos sus costes reales. Riesgo: declarar break-even prematuramente. Fórmula: calcular punto de equilibrio real + control de caja semanal + reserva mínima fija + cubrir costes fijos 3 meses consecutivos.
 4. ESTABILIDAD (×10): Beneficios netos consistentes. Los beneficios son ×10 respecto al break-even. Fórmula: documentar procesos + sistema de seguimiento de clientes + proteger fuentes de ingreso estables + empezar a delegar + diversificar cartera (ningún cliente >30% ingresos).
@@ -172,8 +207,8 @@ IDENTIDAD DEL USUARIO:
 
 PLAN DE NEGOCIO Y SEGUIMIENTO:
 - Si plan_negocio existe y tiene respuestas_fundador: el usuario ya definió su proyecto. Tienes lo que dijo sobre su problema, clientes, modelo de ingresos y riesgos. Úsalo como base de toda tu lectura.
-- Si plan_negocio.sin_plan = true: el usuario tiene proyecto pero no ha pasado por el análisis inicial. Recuérdale que puede hacerlo desde la sección Proyectos.
-- Si plan_negocio es null: el usuario no tiene proyectos. Indícale que cree su proyecto primero para que puedas acompañarle con precisión.
+- Si plan_negocio.sin_plan = true: el usuario tiene proyecto pero no ha pasado por el análisis inicial. Puedes analizar igual con los datos de registro; al final invítale a completar el análisis desde la sección Proyectos.
+- Si plan_negocio es null: el usuario aún no ha creado un proyecto en la plataforma. Esto NO bloquea el análisis. Trabaja con los datos de registro (fase, sector, bloqueo, área de foco) y su consulta actual. Al final de la sesión, invítale a crear su proyecto para un seguimiento más preciso — en una línea, sin convertirlo en el centro de la respuesta.
 - LOGROS: si seguimiento_actual.logros tiene elementos, reconócelos explícitamente antes del siguiente reto. Un logro cumplido merece reconocimiento.
 - DESVIACIONES: si seguimiento_actual.desviaciones tiene elementos, son señales de alerta que debes abordar como cuello de botella. No los ignores.
 - COHERENCIA: si el fundador declaró un objetivo de ingresos y la realidad es diferente, usa esa brecha como dato central del análisis. La brecha entre lo planeado y lo real es el dato más valioso.
@@ -214,7 +249,7 @@ FORMATO DE RESPUESTA: Responde ÚNICAMENTE con JSON válido, sin texto adicional
 
 // ─── Componente principal ─────────────────────────────────────────
 export default function Sisi({ onNavigate, currentPage }) {
-  const { user, condicion, agregarXP, idioma, tipoNegocio, guardarTipoNegocio, sector, bloqueo, areaFoco, fullName } = useAuth()
+  const { user, condicion, agregarXP, idioma, tipoNegocio, guardarTipoNegocio, sector, bloqueo, areaFoco, fullName, diagnosticoInicial } = useAuth()
 
   const [consulta, setConsulta]             = useState('')
   const [analizando, setAnalizando]         = useState(false)
@@ -397,6 +432,7 @@ export default function Sisi({ onNavigate, currentPage }) {
         sector:                    sector      || 'no especificado',
         bloqueo_principal:         bloqueo     || null,
         area_foco:                 areaFoco    || null,
+        diagnostico_inicial:       diagnosticoInicial || null,
       },
       contexto: {
         consulta_usuario:          consulta.trim() || 'El usuario solicita un análisis general de su situación actual.',
@@ -413,7 +449,7 @@ export default function Sisi({ onNavigate, currentPage }) {
         balance_mes:        balance,
         proyectos_activos:  ctx.proyectos,
         alerta_sin_proyecto: ctx.proyectos === 0
-          ? 'El usuario NO tiene ningún proyecto registrado en la plataforma. Es un punto de partida crítico: sin proyecto definido no hay plan de negocio ni seguimiento posible. En tu respuesta prioriza indicarle que lo primero que debe hacer es crear su proyecto en la sección Proyectos.'
+          ? 'El usuario aún no ha creado un proyecto en la plataforma. Analiza igualmente con los datos de registro. Al final de la sesión, menciónale en una frase que puede crear su proyecto en la sección Proyectos para un seguimiento más preciso.'
           : null,
       },
       plan_negocio: (() => {
@@ -509,7 +545,7 @@ export default function Sisi({ onNavigate, currentPage }) {
     const se_actual  = respuesta.sugerencias_extra
     const fase = FASES[condicion] || FASES[1]
 
-    const contextoSISI = `SISI (la inteligencia principal de Mentor AI) acaba de analizar la situación de ${nombreUsuario} y te pasa el siguiente contexto para que respondas desde tu perspectiva única:
+    const contextoSISI = `SISI (la inteligencia principal de Mentor 1 Millón) acaba de analizar la situación de ${nombreUsuario} y te pasa el siguiente contexto para que respondas desde tu perspectiva única:
 
 USUARIO: ${nombreUsuario}
 FASE ACTUAL: ${condicion} — ${fase.name}
@@ -644,7 +680,7 @@ ${idioma === 'en' ? 'IMPORTANT: Write ALL text values inside the JSON in English
       if (!parsed.respuesta_usuario?.mensaje_principal) throw new Error('Respuesta incompleta')
 
       setRespuesta(parsed)
-      await agregarXP(5)
+      await agregarXP(5, ctx.ingresos)
 
       // ── Guardar sesión completa en Supabase ───────────────────
       const interno = parsed.analisis_interno || {}
@@ -701,11 +737,11 @@ ${idioma === 'en' ? 'IMPORTANT: Write ALL text values inside the JSON in English
             flexShrink: 0, overflow: 'hidden',
             boxShadow: '0 0 30px rgba(18,140,126,0.3)'
           }}>
-            <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="/mentores/sisi.jpg" alt="SISI" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
           </div>
           <div>
             <h1 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: '1.6rem', letterSpacing: '-0.03em', marginBottom: 4 }}>
-              SISI <span style={{ color: 'rgba(18,140,126,0.7)', fontSize: '0.88rem', fontWeight: 400 }}>Inteligencia principal · Mentor AI</span>
+              SISI <span style={{ color: 'rgba(18,140,126,0.7)', fontSize: '0.88rem', fontWeight: 400 }}>Inteligencia principal · Mentor 1 Millón</span>
             </h1>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
               Interpreta tu situación, detecta el cuello de botella y propone tu siguiente paso exacto.
